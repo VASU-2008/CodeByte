@@ -2,16 +2,17 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { 
     Stethoscope, 
-    Save, 
     ArrowRight, 
     ArrowLeft,
-    CheckCircle2
+    CheckCircle2,
+    Sparkles,
+    User
 } from 'lucide-react';
 import { saveConsultationNotes } from '../../../api/doctorApi';
 
 /**
- * ConsultationNotes Component (Aura HealthTech Theme)
- * Clean clinical findings, diagnostic impression, and progress notes.
+ * ConsultationNotes Component (Simple, Clean & Focused)
+ * Streamlined clinician notes interface with patient banner and quick diagnostic chips.
  */
 export default function ConsultationNotes() {
     const navigate = useNavigate();
@@ -20,23 +21,22 @@ export default function ConsultationNotes() {
     const params = new URLSearchParams(location.search);
     const encounterId = params.get('encounterId') || 'P-001';
 
-    const [diagnosis, setDiagnosis] = useState('Acute Viral Upper Respiratory Infection (URTI) with Reactive Myalgia');
-    const [clinicalFindings, setClinicalFindings] = useState('Throat congested, tonsils non-enlarged. Clear breath sounds bilaterally, no crepitations. Normal S1/S2 heart sounds. Temperature 101.2°F.');
-    const [clinicalNotes, setClinicalNotes] = useState('Patient presents with 2-day history of moderate grade fever, generalized body aches, and dry cough. No respiratory distress or chest pain. Advised oral hydration, rest, and antipyretics.');
-    const [lifestyleAdvice, setLifestyleAdvice] = useState('Warm saline gargles twice daily. Adequate fluid intake (2.5L/day). Return if high fever persists >3 days.');
+    const [diagnosis, setDiagnosis] = useState('Acute Viral URTI with Reactive Myalgia');
+    const [clinicalFindings, setClinicalFindings] = useState('Throat congested, tonsils non-enlarged. Clear breath sounds bilaterally. Normal heart sounds. Temperature 101.2°F.');
+    const [clinicalNotes, setClinicalNotes] = useState('Patient presents with moderate fever, headache, and body aches for 2 days. No respiratory distress. Prescribed symptomatic antipyretics and advised oral hydration.');
+    const [lifestyleAdvice, setLifestyleAdvice] = useState('Warm saline gargles twice daily. Increase oral fluids (2.5L/day). Rest for 48 hours.');
     const [saving, setSaving] = useState(false);
     const [saveStatus, setSaveStatus] = useState('');
 
-    const commonDiagnoses = [
+    const quickDiagnoses = [
         'Acute Viral URTI',
         'Acute Bronchitis',
         'Essential Hypertension',
-        'Gastroenteritis',
-        'Type 2 Diabetes'
+        'Type 2 Diabetes',
+        'Gastroenteritis'
     ];
 
-    const handleSave = async (e) => {
-        if (e) e.preventDefault();
+    const handleContinue = async () => {
         setSaving(true);
         try {
             await saveConsultationNotes(encounterId, {
@@ -45,17 +45,11 @@ export default function ConsultationNotes() {
                 clinicalNotes,
                 lifestyleAdvice
             });
-            setSaveStatus('Consultation saved');
-            setTimeout(() => setSaveStatus(''), 2500);
         } catch (err) {
             console.error(err);
         } finally {
             setSaving(false);
         }
-    };
-
-    const handleContinue = async () => {
-        await handleSave();
         navigate(`/doctor/prescription?encounterId=${encounterId}`);
     };
 
@@ -71,7 +65,7 @@ export default function ConsultationNotes() {
     const textareaStyle = {
         width: '100%',
         padding: '0.85rem 1rem',
-        borderRadius: '10px',
+        borderRadius: '12px',
         border: '1px solid #e2e8f0',
         background: '#f8fafc',
         fontSize: '0.9rem',
@@ -84,54 +78,62 @@ export default function ConsultationNotes() {
 
     return (
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-            {/* Back button */}
-            <button
-                onClick={() => navigate(`/doctor/briefing?encounterId=${encounterId}`)}
-                style={{
+            {/* Top Bar: Back & Patient Badge */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                <button
+                    onClick={() => navigate(`/doctor/briefing?encounterId=${encounterId}`)}
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.4rem',
+                        background: 'none',
+                        border: 'none',
+                        color: '#64748b',
+                        fontSize: '0.88rem',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        padding: 0
+                    }}
+                >
+                    <ArrowLeft size={16} />
+                    <span>Back to Briefing</span>
+                </button>
+
+                {/* Patient Name at Top Right */}
+                <div style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '0.4rem',
-                    background: 'none',
-                    border: 'none',
-                    color: '#64748b',
-                    fontSize: '0.88rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    marginBottom: '1rem',
-                    padding: 0
-                }}
-            >
-                <ArrowLeft size={16} />
-                <span>Back to Briefing</span>
-            </button>
+                    gap: '0.5rem',
+                    background: '#f1f5f9',
+                    padding: '0.35rem 0.75rem',
+                    borderRadius: '20px',
+                    fontSize: '0.82rem',
+                    fontWeight: '700',
+                    color: '#0f172a'
+                }}>
+                    <User size={14} color="#044e42" />
+                    <span>Patient 1 (42 / M) · Token: {encounterId}</span>
+                </div>
+            </div>
 
             <div style={cardStyle}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                        <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#e6f7f2', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#044e42' }}>
-                            <Stethoscope size={20} />
-                        </div>
-                        <div>
-                            <h2 style={{ margin: 0, fontSize: '1.2rem', fontWeight: '800', color: '#0f172a' }}>
-                                Consultation Notes & Findings
-                            </h2>
-                            <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b' }}>
-                                Encounter: {encounterId} · Patient 1 (42 / M)
-                            </p>
-                        </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
+                    <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#e6f7f2', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#044e42' }}>
+                        <Stethoscope size={20} />
                     </div>
-
-                    {saveStatus && (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#059669', fontSize: '0.82rem', fontWeight: '600' }}>
-                            <CheckCircle2 size={15} />
-                            {saveStatus}
-                        </div>
-                    )}
+                    <div>
+                        <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '800', color: '#0f172a' }}>
+                            Consultation Notes & Clinical Impression
+                        </h2>
+                        <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b' }}>
+                            Record primary diagnosis, physical findings, and medical advice
+                        </p>
+                    </div>
                 </div>
 
-                {/* Primary Diagnosis */}
-                <div style={{ marginBottom: '1.25rem' }}>
-                    <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.4rem' }}>
+                {/* Primary Diagnosis with Quick Tag Chips */}
+                <div style={{ marginBottom: '1.35rem' }}>
+                    <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '800', color: '#0f172a', marginBottom: '0.45rem' }}>
                         Provisional Clinical Diagnosis
                     </label>
                     <input
@@ -141,7 +143,7 @@ export default function ConsultationNotes() {
                         style={{
                             width: '100%',
                             padding: '0.75rem 1rem',
-                            borderRadius: '10px',
+                            borderRadius: '12px',
                             border: '1.5px solid #044e42',
                             background: '#f8fafc',
                             fontSize: '0.95rem',
@@ -151,19 +153,21 @@ export default function ConsultationNotes() {
                             boxSizing: 'border-box'
                         }}
                     />
-                    <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.5rem', flexWrap: 'wrap' }}>
-                        {commonDiagnoses.map(d => (
+                    <div style={{ display: 'flex', gap: '0.45rem', marginTop: '0.55rem', flexWrap: 'wrap' }}>
+                        <span style={{ fontSize: '0.75rem', color: '#64748b', alignSelf: 'center' }}>Quick Select:</span>
+                        {quickDiagnoses.map(d => (
                             <button
                                 key={d}
                                 type="button"
                                 onClick={() => setDiagnosis(d)}
                                 style={{
-                                    background: '#f1f5f9',
-                                    border: '1px solid #e2e8f0',
-                                    borderRadius: '14px',
+                                    background: diagnosis === d ? '#e6f7f2' : '#f1f5f9',
+                                    border: diagnosis === d ? '1px solid #044e42' : '1px solid #e2e8f0',
+                                    color: diagnosis === d ? '#044e42' : '#475569',
+                                    borderRadius: '16px',
                                     padding: '0.2rem 0.65rem',
                                     fontSize: '0.74rem',
-                                    color: '#475569',
+                                    fontWeight: '700',
                                     cursor: 'pointer'
                                 }}
                             >
@@ -173,46 +177,49 @@ export default function ConsultationNotes() {
                     </div>
                 </div>
 
-                {/* Physical Examination */}
-                <div style={{ marginBottom: '1.25rem' }}>
-                    <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.4rem' }}>
+                {/* Physical Examination Findings */}
+                <div style={{ marginBottom: '1.35rem' }}>
+                    <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '800', color: '#0f172a', marginBottom: '0.45rem' }}>
                         Physical Examination & Systemic Findings
                     </label>
                     <textarea
                         rows={3}
                         value={clinicalFindings}
                         onChange={(e) => setClinicalFindings(e.target.value)}
+                        placeholder="Chest sounds, throat, abdomen, pulse regular..."
                         style={textareaStyle}
                     />
                 </div>
 
-                {/* Doctor's Notes */}
-                <div style={{ marginBottom: '1.25rem' }}>
-                    <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.4rem' }}>
-                        Doctor's Clinical Notes & Assessment
+                {/* Clinical Assessment Notes */}
+                <div style={{ marginBottom: '1.35rem' }}>
+                    <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '800', color: '#0f172a', marginBottom: '0.45rem' }}>
+                        Doctor's Clinical Notes
                     </label>
                     <textarea
                         rows={3}
                         value={clinicalNotes}
                         onChange={(e) => setClinicalNotes(e.target.value)}
+                        placeholder="Clinical summary and assessment..."
                         style={textareaStyle}
                     />
                 </div>
 
-                {/* Lifestyle & Dietary Advice */}
-                <div style={{ marginBottom: '1.75rem' }}>
-                    <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.4rem' }}>
-                        Lifestyle & Dietary Guidance
+                {/* Patient Lifestyle Advice */}
+                <div style={{ marginBottom: '2rem' }}>
+                    <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '800', color: '#0f172a', marginBottom: '0.45rem' }}>
+                        Patient Advice & Lifestyle Recommendations
                     </label>
                     <textarea
                         rows={2}
                         value={lifestyleAdvice}
                         onChange={(e) => setLifestyleAdvice(e.target.value)}
+                        placeholder="Dietary instructions, hydration, rest..."
                         style={textareaStyle}
                     />
                 </div>
 
-                {/* Continue button */}
+                {/* Big Clean Action Button */}
                 <button
                     onClick={handleContinue}
                     disabled={saving}
@@ -221,15 +228,16 @@ export default function ConsultationNotes() {
                         background: '#044e42',
                         color: '#ffffff',
                         border: 'none',
-                        padding: '0.9rem',
+                        padding: '0.95rem',
                         borderRadius: '12px',
-                        fontWeight: '700',
+                        fontWeight: '800',
                         fontSize: '0.95rem',
                         cursor: 'pointer',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        gap: '0.5rem'
+                        gap: '0.5rem',
+                        boxShadow: '0 4px 14px rgba(4, 78, 66, 0.25)'
                     }}
                 >
                     Continue to Prescription →

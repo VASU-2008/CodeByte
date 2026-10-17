@@ -8,7 +8,6 @@ import CoordinatorPortal from './portals/coordinator/CoordinatorPortal';
 export default function App() {
     return (
         <Router>
-            <Navbar />
             <Routes>
                 <Route path="/" element={
                     <div style={{ padding: '2rem', textAlign: 'center' }}>

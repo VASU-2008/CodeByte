@@ -4,13 +4,17 @@ import {
     Lock, 
     ShieldCheck, 
     ArrowLeft, 
-    Printer 
+    Printer, 
+    User,
+    CheckCircle2,
+    Calendar,
+    Stethoscope,
+    FileCheck
 } from 'lucide-react';
 import { signOffEncounter } from '../../../api/doctorApi';
 
 /**
- * SignOffHandoff Component (Aura HealthTech Theme)
- * Digital sign-off, encounter locking, and handoff receipt in crisp white aesthetic.
+ * SignOffHandoff Component (Clean, Focused & Patient Info at Top Right)
  */
 export default function SignOffHandoff() {
     const navigate = useNavigate();
@@ -53,33 +57,53 @@ export default function SignOffHandoff() {
     };
 
     return (
-        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-            <button
-                onClick={() => navigate(`/doctor/plan?encounterId=${encounterId}`)}
-                style={{
+        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+            {/* Top Bar: Back & Patient Badge at Top Right */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                <button
+                    onClick={() => navigate(`/doctor/plan?encounterId=${encounterId}`)}
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.4rem',
+                        background: 'none',
+                        border: 'none',
+                        color: '#64748b',
+                        fontSize: '0.88rem',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        padding: 0
+                    }}
+                >
+                    <ArrowLeft size={16} />
+                    <span>Back to Plan & Follow-up</span>
+                </button>
+
+                {/* Patient's Name at Top Right */}
+                <div style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '0.4rem',
-                    background: 'none',
-                    border: 'none',
-                    color: '#64748b',
-                    fontSize: '0.88rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    marginBottom: '1rem',
-                    padding: 0
-                }}
-            >
-                <ArrowLeft size={16} />
-                <span>Back to Plan & Follow-up</span>
-            </button>
+                    gap: '0.55rem',
+                    background: '#f1f5f9',
+                    padding: '0.4rem 0.9rem',
+                    borderRadius: '20px',
+                    fontSize: '0.84rem',
+                    fontWeight: '700',
+                    color: '#0f172a',
+                    border: '1px solid #e2e8f0'
+                }}>
+                    <User size={15} color="#044e42" />
+                    <span>Patient: <strong>Patient 1</strong> (42 / M) · Token: <strong>{encounterId}</strong></span>
+                </div>
+            </div>
 
             {signed ? (
+                /* Post Sign-off Success Screen */
                 <div style={cardStyle}>
-                    <div style={{ textAlign: 'center', padding: '1.5rem 0' }}>
+                    <div style={{ textAlign: 'center', padding: '2rem 1rem' }}>
                         <div style={{
-                            width: '64px',
-                            height: '64px',
+                            width: '68px',
+                            height: '68px',
                             borderRadius: '50%',
                             background: '#e6f7f2',
                             color: '#044e42',
@@ -88,44 +112,63 @@ export default function SignOffHandoff() {
                             justifyContent: 'center',
                             margin: '0 auto 1.25rem auto'
                         }}>
-                            <ShieldCheck size={36} />
+                            <ShieldCheck size={38} />
                         </div>
-                        <h2 style={{ margin: 0, fontSize: '1.4rem', fontWeight: '800', color: '#0f172a' }}>
-                            Encounter Signed & Locked
+                        <h2 style={{ margin: 0, fontSize: '1.45rem', fontWeight: '800', color: '#0f172a' }}>
+                            Clinical Record Signed & Permanently Locked
                         </h2>
-                        <p style={{ margin: '0.4rem 0 1.5rem 0', fontSize: '0.86rem', color: '#64748b' }}>
-                            Encounter #{encounterId} · Patient 1 has been committed to permanent clinical record.
+                        <p style={{ margin: '0.4rem 0 1.5rem 0', fontSize: '0.88rem', color: '#64748b' }}>
+                            Encounter #{encounterId} · <strong>Patient 1</strong> has been committed to permanent health record.
                         </p>
+
+                        <div style={{
+                            maxWidth: '480px',
+                            margin: '0 auto 1.75rem auto',
+                            background: '#f8fafc',
+                            borderRadius: '12px',
+                            padding: '1rem',
+                            border: '1px solid #e2e8f0',
+                            fontSize: '0.84rem',
+                            color: '#334155',
+                            textAlign: 'left',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '0.4rem'
+                        }}>
+                            <div><strong>Attending Clinician:</strong> Doctor 1 (Reg: MCI-98442)</div>
+                            <div><strong>Signed Timestamp:</strong> {new Date().toLocaleString()}</div>
+                            <div><strong>Audit Status:</strong> Sealed (Tamper-Proof)</div>
+                        </div>
 
                         <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
                             <button
                                 onClick={() => window.print()}
                                 style={{
                                     background: '#ffffff',
-                                    border: '1px solid #e2e8f0',
-                                    padding: '0.65rem 1.25rem',
+                                    border: '1.5px solid #e2e8f0',
+                                    padding: '0.7rem 1.35rem',
                                     borderRadius: '10px',
-                                    fontWeight: '600',
+                                    fontWeight: '700',
                                     fontSize: '0.88rem',
                                     color: '#0f172a',
                                     cursor: 'pointer',
                                     display: 'flex',
                                     alignItems: 'center',
-                                    gap: '0.4rem'
+                                    gap: '0.45rem'
                                 }}
                             >
                                 <Printer size={16} />
                                 Print e-Rx Summary
                             </button>
                             <button
-                                onClick={() => navigate('/doctor/dashboard')}
+                                onClick={() => navigate('/doctor/queue')}
                                 style={{
                                     background: '#044e42',
                                     color: '#ffffff',
                                     border: 'none',
-                                    padding: '0.65rem 1.35rem',
+                                    padding: '0.7rem 1.45rem',
                                     borderRadius: '10px',
-                                    fontWeight: '700',
+                                    fontWeight: '800',
                                     fontSize: '0.88rem',
                                     cursor: 'pointer'
                                 }}
@@ -136,6 +179,7 @@ export default function SignOffHandoff() {
                     </div>
                 </div>
             ) : (
+                /* Pre Sign-off Form */
                 <form onSubmit={handleSignOff}>
                     <div style={cardStyle}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
@@ -143,11 +187,11 @@ export default function SignOffHandoff() {
                                 <Lock size={20} />
                             </div>
                             <div>
-                                <h2 style={{ margin: 0, fontSize: '1.2rem', fontWeight: '800', color: '#0f172a' }}>
-                                    Sign Off & Encounter Lock
+                                <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '800', color: '#0f172a' }}>
+                                    Clinical Sign-Off & Lock
                                 </h2>
                                 <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b' }}>
-                                    Encounter: {encounterId} · Patient 1 (42 / M)
+                                    Review consultation summary and affirm statutory clinician digital signature
                                 </p>
                             </div>
                         </div>
@@ -155,23 +199,37 @@ export default function SignOffHandoff() {
                         {/* Summary breakdown */}
                         <div style={{
                             background: '#f8fafc',
-                            borderRadius: '12px',
-                            padding: '1rem',
-                            border: '1px solid #f1f5f9',
+                            borderRadius: '14px',
+                            padding: '1.25rem',
+                            border: '1px solid #eef2f6',
                             marginBottom: '1.5rem',
-                            fontSize: '0.86rem',
+                            fontSize: '0.88rem',
                             display: 'flex',
                             flexDirection: 'column',
-                            gap: '0.5rem'
+                            gap: '0.65rem'
                         }}>
-                            <div><strong>Diagnosis:</strong> Acute Viral URTI with Reactive Myalgia</div>
-                            <div><strong>Vitals:</strong> BP 120/80 mmHg · Temp 101.2°F · Pulse 98 bpm · SpO2 97%</div>
-                            <div><strong>Prescription:</strong> Paracetamol 500mg, Cetirizine 10mg, ORS</div>
+                            <div>
+                                <span style={{ color: '#64748b', fontSize: '0.78rem', fontWeight: '700' }}>DIAGNOSIS: </span>
+                                <strong>Acute Viral URTI with Reactive Myalgia</strong>
+                            </div>
+                            <div>
+                                <span style={{ color: '#64748b', fontSize: '0.78rem', fontWeight: '700' }}>VITALS: </span>
+                                <span>BP: 120/80 mmHg · Temp: 101.2°F · Pulse: 98 bpm · SpO2: 97%</span>
+                            </div>
+                            <div>
+                                <span style={{ color: '#64748b', fontSize: '0.78rem', fontWeight: '700' }}>PRESCRIPTION: </span>
+                                <span>Paracetamol 500mg, Cetirizine 10mg, Oral Rehydration Salts (ORS)</span>
+                            </div>
+                            <div>
+                                <span style={{ color: '#64748b', fontSize: '0.78rem', fontWeight: '700' }}>NEXT FOLLOW-UP: </span>
+                                <span>In 5 Days · Review symptoms and fever resolution</span>
+                            </div>
                         </div>
 
+                        {/* Clinician inputs */}
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.4rem' }}>
+                                <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '800', color: '#0f172a', marginBottom: '0.4rem' }}>
                                     Attending Clinician
                                 </label>
                                 <input
@@ -193,8 +251,8 @@ export default function SignOffHandoff() {
                             </div>
 
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.4rem' }}>
-                                    Registration Number
+                                <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '800', color: '#0f172a', marginBottom: '0.4rem' }}>
+                                    Medical Registration Number
                                 </label>
                                 <input
                                     type="text"
@@ -215,20 +273,28 @@ export default function SignOffHandoff() {
                             </div>
                         </div>
 
-                        <div style={{ marginBottom: '1.75rem' }}>
+                        {/* Affirmation checkbox */}
+                        <div style={{
+                            background: '#f8fafc',
+                            border: '1px solid #eef2f6',
+                            borderRadius: '12px',
+                            padding: '1rem',
+                            marginBottom: '1.75rem'
+                        }}>
                             <label style={{ display: 'flex', alignItems: 'flex-start', gap: '0.65rem', cursor: 'pointer' }}>
                                 <input
                                     type="checkbox"
                                     checked={affirmation}
                                     onChange={(e) => setAffirmation(e.target.checked)}
-                                    style={{ marginTop: '2px' }}
+                                    style={{ width: '18px', height: '18px', marginTop: '2px', cursor: 'pointer' }}
                                 />
-                                <span style={{ fontSize: '0.84rem', color: '#475569', lineHeight: '1.45' }}>
-                                    I hereby confirm that I have reviewed the consultation notes, vitals, and e-prescription. Affixing my digital signature permanently seals this clinical encounter.
+                                <span style={{ fontSize: '0.85rem', color: '#334155', lineHeight: '1.45' }}>
+                                    I hereby confirm that I have evaluated the clinical findings, provisional diagnosis, e-prescription, and follow-up plan for <strong>Patient 1</strong>. By submitting, I affix my digital signature to permanently seal this encounter.
                                 </span>
                             </label>
                         </div>
 
+                        {/* Sign Off Button */}
                         <button
                             type="submit"
                             disabled={signing || !affirmation}
@@ -237,14 +303,20 @@ export default function SignOffHandoff() {
                                 background: affirmation ? '#044e42' : '#94a3b8',
                                 color: '#ffffff',
                                 border: 'none',
-                                padding: '0.9rem',
+                                padding: '1rem',
                                 borderRadius: '12px',
-                                fontWeight: '700',
-                                fontSize: '0.95rem',
-                                cursor: affirmation ? 'pointer' : 'not-allowed'
+                                fontWeight: '800',
+                                fontSize: '0.96rem',
+                                cursor: affirmation ? 'pointer' : 'not-allowed',
+                                boxShadow: affirmation ? '0 4px 14px rgba(4, 78, 66, 0.25)' : 'none',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '0.5rem'
                             }}
                         >
-                            {signing ? 'Sealing Record...' : 'Sign Off & Permanently Lock'}
+                            <FileCheck size={18} />
+                            {signing ? 'Sealing Clinical Record...' : 'Digitally Sign Off & Lock Encounter'}
                         </button>
                     </div>
                 </form>

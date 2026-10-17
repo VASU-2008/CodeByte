@@ -9,10 +9,7 @@ import {
     Pill, 
     CalendarCheck, 
     Lock, 
-    LogOut,
-    ChevronDown,
-    Search,
-    Bell
+    LogOut
 } from 'lucide-react';
 
 /**
@@ -96,83 +93,6 @@ export default function DoctorLayout({ children }) {
                     </div>
                 </div>
 
-                {/* Search & Doctor Profile */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-                    {/* Global search */}
-                    <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem',
-                        background: '#f8fafc',
-                        border: '1px solid #e2e8f0',
-                        borderRadius: '24px',
-                        padding: '0.5rem 1rem',
-                        width: '260px'
-                    }}>
-                        <Search size={16} color="#94a3b8" />
-                        <input
-                            type="text"
-                            placeholder="Search patients, tasks, or anything..."
-                            style={{
-                                border: 'none',
-                                outline: 'none',
-                                background: 'transparent',
-                                fontSize: '0.84rem',
-                                color: '#1e293b',
-                                width: '100%'
-                            }}
-                        />
-                    </div>
-
-                    {/* Bell notification */}
-                    <button style={{
-                        width: '38px',
-                        height: '38px',
-                        borderRadius: '50%',
-                        border: '1px solid #e2e8f0',
-                        background: '#ffffff',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer',
-                        color: '#64748b',
-                        position: 'relative'
-                    }}>
-                        <Bell size={18} />
-                        <span style={{ position: 'absolute', top: '7px', right: '8px', width: '7px', height: '7px', borderRadius: '50%', background: '#ef4444' }}></span>
-                    </button>
-
-                    {/* Doctor Info Card */}
-                    <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.65rem',
-                        background: '#ffffff',
-                        padding: '0.35rem 0.65rem',
-                        borderRadius: '12px',
-                        cursor: 'pointer'
-                    }}>
-                        <div style={{
-                            width: '38px',
-                            height: '38px',
-                            borderRadius: '50%',
-                            background: '#044e42',
-                            color: '#ffffff',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontWeight: '700',
-                            fontSize: '0.85rem'
-                        }}>
-                            D1
-                        </div>
-                        <div>
-                            <div style={{ fontSize: '0.86rem', fontWeight: '700', color: '#0f172a' }}>Doctor 1</div>
-                            <div style={{ fontSize: '0.72rem', color: '#64748b' }}>General Physician</div>
-                        </div>
-                        <ChevronDown size={14} color="#94a3b8" style={{ marginLeft: '4px' }} />
-                    </div>
-                </div>
             </header>
 
             {/* Main Layout Container */}

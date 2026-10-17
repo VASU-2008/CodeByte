@@ -77,7 +77,7 @@ export default function ClinicalBriefing() {
                         </div>
                         <div>
                             <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '800', color: '#0f172a' }}>
-                                Ravi Kumar
+                                Patient 1
                             </h2>
                             <p style={{ margin: 0, fontSize: '0.82rem', color: '#64748b' }}>
                                 42 years | Male | Token: {encounterId}

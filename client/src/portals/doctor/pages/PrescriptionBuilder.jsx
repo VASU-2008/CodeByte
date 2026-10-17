@@ -143,7 +143,7 @@ export default function PrescriptionBuilder() {
                             Prescription Builder
                         </h2>
                         <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b' }}>
-                            Add multi-drug items to Ravi Kumar's e-prescription
+                            Add multi-drug items to Patient 1's e-prescription
                         </p>
                     </div>
                 </div>

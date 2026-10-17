@@ -20,11 +20,11 @@ export default function DoctorDashboard() {
     const [statusFilter, setStatusFilter] = useState('ALL');
 
     const patientQueue = [
-        { id: 1, name: 'Ravi Kumar', ageGender: '42 / M', token: 'P-001', status: 'Waiting' },
-        { id: 2, name: 'Sunita Devi', ageGender: '36 / F', token: 'P-002', status: 'In Consultation' },
-        { id: 3, name: 'Mohan Singh', ageGender: '28 / M', token: 'P-003', status: 'Waiting' },
-        { id: 4, name: 'Asha Patel', ageGender: '55 / F', token: 'P-004', status: 'Completed' },
-        { id: 5, name: 'Imran Khan', ageGender: '31 / M', token: 'P-005', status: 'Waiting' }
+        { id: 1, name: 'Patient 1', ageGender: '42 / M', token: 'P-001', status: 'Waiting' },
+        { id: 2, name: 'Patient 2', ageGender: '36 / F', token: 'P-002', status: 'In Consultation' },
+        { id: 3, name: 'Patient 3', ageGender: '28 / M', token: 'P-003', status: 'Waiting' },
+        { id: 4, name: 'Patient 4', ageGender: '55 / F', token: 'P-004', status: 'Completed' },
+        { id: 5, name: 'Patient 5', ageGender: '31 / M', token: 'P-005', status: 'Waiting' }
     ];
 
     const filteredPatients = patientQueue.filter(p => {

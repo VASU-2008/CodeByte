@@ -116,7 +116,7 @@ export default function ConsultationNotes() {
                                 Consultation Notes & Findings
                             </h2>
                             <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b' }}>
-                                Encounter: {encounterId} · Ravi Kumar (42 / M)
+                                Encounter: {encounterId} · Patient 1 (42 / M)
                             </p>
                         </div>
                     </div>

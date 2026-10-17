@@ -19,7 +19,7 @@ export default function SignOffHandoff() {
     const params = new URLSearchParams(location.search);
     const encounterId = params.get('encounterId') || 'P-001';
 
-    const [doctorName, setDoctorName] = useState('Dr. Shreyas');
+    const [doctorName, setDoctorName] = useState('Doctor 1');
     const [regNumber, setRegNumber] = useState('MCI-98442');
     const [affirmation, setAffirmation] = useState(false);
     const [signed, setSigned] = useState(false);
@@ -94,7 +94,7 @@ export default function SignOffHandoff() {
                             Encounter Signed & Locked
                         </h2>
                         <p style={{ margin: '0.4rem 0 1.5rem 0', fontSize: '0.86rem', color: '#64748b' }}>
-                            Encounter #{encounterId} · Ravi Kumar has been committed to permanent clinical record.
+                            Encounter #{encounterId} · Patient 1 has been committed to permanent clinical record.
                         </p>
 
                         <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
@@ -147,7 +147,7 @@ export default function SignOffHandoff() {
                                     Sign Off & Encounter Lock
                                 </h2>
                                 <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b' }}>
-                                    Encounter: {encounterId} · Ravi Kumar (42 / M)
+                                    Encounter: {encounterId} · Patient 1 (42 / M)
                                 </p>
                             </div>
                         </div>

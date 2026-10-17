@@ -161,10 +161,10 @@ export default function DoctorLayout({ children }) {
                             fontWeight: '700',
                             fontSize: '0.85rem'
                         }}>
-                            DS
+                            D1
                         </div>
                         <div>
-                            <div style={{ fontSize: '0.86rem', fontWeight: '700', color: '#0f172a' }}>Dr. Shreyas</div>
+                            <div style={{ fontSize: '0.86rem', fontWeight: '700', color: '#0f172a' }}>Doctor 1</div>
                             <div style={{ fontSize: '0.72rem', color: '#64748b' }}>General Physician</div>
                         </div>
                         <ChevronDown size={14} color="#94a3b8" style={{ marginLeft: '4px' }} />

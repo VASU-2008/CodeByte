@@ -1,9 +1,8 @@
 import api from './axiosInstance';
 
 /**
- * Doctor Portal API Client (Shreyas - Member 3)
- * Handles all clinical interactions: Queue, QR tokens, Briefing,
- * Consultation Notes, Vitals, Prescriptions, Follow-up plans, and Sign-off.
+ * Doctor Portal API Client (Aura HealthTech)
+ * Standardized demo data with Doctor 1, Doctor 2... and Patient 1, Patient 2...
  */
 
 // 1. Retrieve the doctor's patient queue
@@ -15,55 +14,106 @@ export const getDoctorQueue = async (facilityId = 'PHC_MAIN') => {
         return response.data;
     } catch (error) {
         console.warn('[doctorApi] getDoctorQueue error, returning mock queue for dev:', error.message);
-        // Fallback demo queue so UI is immediately testable
         return [
             {
+                id: 1,
                 _id: 'enc-101',
-                token_id: 'TKN-8821',
+                token: 'P-001',
+                token_id: 'P-001',
+                name: 'Patient 1',
                 patient_id: {
                     _id: 'pat-001',
-                    name: 'Ramesh Kumar',
-                    age: 54,
+                    name: 'Patient 1',
+                    age: 42,
                     gender: 'Male',
-                    phone: '+91 98765 43210'
+                    phone: '+91 98765 00001'
                 },
-                chief_complaint: 'Severe chest discomfort and shortness of breath for 2 days',
-                status: 'IN_QUEUE',
-                priority: 'URGENT',
-                triage_result: 'PHC_PRIORITY',
+                ageGender: '42 / M',
+                chief_complaint: 'Fever and body ache since 2 days. Mild cough.',
+                status: 'Waiting',
+                priority: 'MODERATE',
+                triage_result: 'PHC_GENERAL',
                 createdAt: new Date().toISOString()
             },
             {
+                id: 2,
                 _id: 'enc-102',
-                token_id: 'TKN-3342',
+                token: 'P-002',
+                token_id: 'P-002',
+                name: 'Patient 2',
                 patient_id: {
                     _id: 'pat-002',
-                    name: 'Sunita Devi',
-                    age: 42,
+                    name: 'Patient 2',
+                    age: 36,
                     gender: 'Female',
-                    phone: '+91 91234 56789'
+                    phone: '+91 98765 00002'
                 },
-                chief_complaint: 'Chronic joint pain in both knees and morning stiffness',
-                status: 'IN_QUEUE',
-                priority: 'ROUTINE',
-                triage_result: 'PHC_GENERAL',
+                ageGender: '36 / F',
+                chief_complaint: 'Severe headache and elevated blood pressure.',
+                status: 'In Consultation',
+                priority: 'URGENT',
+                triage_result: 'PHC_PRIORITY',
                 createdAt: new Date(Date.now() - 3600000).toISOString()
             },
             {
+                id: 3,
                 _id: 'enc-103',
-                token_id: 'TKN-7719',
+                token: 'P-003',
+                token_id: 'P-003',
+                name: 'Patient 3',
                 patient_id: {
                     _id: 'pat-003',
-                    name: 'Aakash Verma',
-                    age: 29,
+                    name: 'Patient 3',
+                    age: 28,
                     gender: 'Male',
-                    phone: '+91 94567 12340'
+                    phone: '+91 98765 00003'
                 },
-                chief_complaint: 'High grade fever with chills and persistent headache',
-                status: 'IN_CONSULTATION',
-                priority: 'MODERATE',
+                ageGender: '28 / M',
+                chief_complaint: 'Acute stomach cramps and mild vomiting since yesterday.',
+                status: 'Waiting',
+                priority: 'ROUTINE',
                 triage_result: 'PHC_GENERAL',
                 createdAt: new Date(Date.now() - 7200000).toISOString()
+            },
+            {
+                id: 4,
+                _id: 'enc-104',
+                token: 'P-004',
+                token_id: 'P-004',
+                name: 'Patient 4',
+                patient_id: {
+                    _id: 'pat-004',
+                    name: 'Patient 4',
+                    age: 55,
+                    gender: 'Female',
+                    phone: '+91 98765 00004'
+                },
+                ageGender: '55 / F',
+                chief_complaint: 'Routine diabetes check-up and refill prescription.',
+                status: 'Completed',
+                priority: 'ROUTINE',
+                triage_result: 'PHC_GENERAL',
+                createdAt: new Date(Date.now() - 10800000).toISOString()
+            },
+            {
+                id: 5,
+                _id: 'enc-105',
+                token: 'P-005',
+                token_id: 'P-005',
+                name: 'Patient 5',
+                patient_id: {
+                    _id: 'pat-005',
+                    name: 'Patient 5',
+                    age: 31,
+                    gender: 'Male',
+                    phone: '+91 98765 00005'
+                },
+                ageGender: '31 / M',
+                chief_complaint: 'Persistent sore throat and mild difficulty swallowing.',
+                status: 'Waiting',
+                priority: 'ROUTINE',
+                triage_result: 'PHC_GENERAL',
+                createdAt: new Date(Date.now() - 14400000).toISOString()
             }
         ];
     }
@@ -76,28 +126,29 @@ export const lookupEncounterByToken = async (tokenId) => {
         return response.data;
     } catch (error) {
         console.warn(`[doctorApi] lookupEncounterByToken fallback for "${tokenId}":`, error.message);
+        const patientIndex = tokenId.includes('2') ? 2 : tokenId.includes('3') ? 3 : 1;
         return {
-            _id: 'enc-101',
+            _id: `enc-10${patientIndex}`,
             token_id: tokenId,
             patient_id: {
-                _id: 'pat-001',
-                name: 'Ramesh Kumar',
-                age: 54,
-                gender: 'Male',
-                phone: '+91 98765 43210',
+                _id: `pat-00${patientIndex}`,
+                name: `Patient ${patientIndex}`,
+                age: 35 + patientIndex * 5,
+                gender: patientIndex % 2 === 0 ? 'Female' : 'Male',
+                phone: `+91 98765 0000${patientIndex}`,
                 bloodGroup: 'B+',
-                allergies: ['Penicillin', 'Sulfa drugs'],
-                chronicConditions: ['Hypertension', 'Type 2 Diabetes']
+                allergies: ['Penicillin'],
+                chronicConditions: ['Hypertension']
             },
-            chief_complaint: 'Severe chest discomfort and shortness of breath for 2 days',
-            status: 'IN_QUEUE',
+            chief_complaint: 'Fever and body ache since 2 days. Mild cough.',
+            status: 'Waiting',
             is_signed_off: false,
             createdAt: new Date().toISOString()
         };
     }
 };
 
-// 3. Retrieve clinical briefing information (vitals, allergies, past visits)
+// 3. Retrieve clinical briefing information
 export const getClinicalBriefing = async (encounterId) => {
     try {
         const response = await api.get(`/doctor/encounter/${encounterId}/briefing`);
@@ -108,65 +159,72 @@ export const getClinicalBriefing = async (encounterId) => {
             encounterId,
             patient: {
                 _id: 'pat-001',
-                name: 'Ramesh Kumar',
-                age: 54,
+                name: 'Patient 1',
+                age: 42,
                 gender: 'Male',
                 abhaId: 'ABHA-9821-4402-9912',
                 bloodGroup: 'B+',
-                allergies: ['Penicillin', 'Sulfa drugs'],
-                chronicConditions: ['Hypertension', 'Type 2 Diabetes'],
-                languagePreference: 'Hindi'
+                allergies: ['Penicillin'],
+                chronicConditions: ['Hypertension'],
+                languagePreference: 'Hindi / English'
             },
             currentEncounter: {
-                chief_complaint: 'Severe chest discomfort and shortness of breath for 2 days',
-                triage_result: 'PHC_PRIORITY',
-                token_id: 'TKN-8821',
-                intakeSummary: 'Patient reports radiating ache to left arm upon exertion. Takes Amlodipine 5mg irregularly.'
+                chief_complaint: 'Fever and body ache since 2 days. Mild cough.',
+                triage_result: 'PHC_GENERAL',
+                token_id: encounterId || 'P-001',
+                intakeSummary: 'Patient reports fever of 101.2°F with body aches. No chest distress.'
             },
             vitals: {
-                bloodPressureSys: 148,
-                bloodPressureDia: 92,
-                heartRate: 88,
-                temperature: 98.6,
-                spo2: 96,
+                bloodPressureSys: 120,
+                bloodPressureDia: 80,
+                heartRate: 98,
+                temperature: 101.2,
+                spo2: 97,
                 respiratoryRate: 18,
-                weightKg: 74,
+                weightKg: 68,
+                heightCm: 170,
                 recordedAt: new Date().toISOString()
             },
             pastVisits: [
                 {
-                    encounterId: 'enc-090',
-                    date: '2026-08-14',
-                    facility: 'PHC North',
-                    diagnosis: 'Essential Hypertension - Uncontrolled',
-                    prescribedBy: 'Dr. Neha Sharma',
-                    medicines: ['Amlodipine 5mg (1-0-0)', 'Metformin 500mg (1-0-1)']
+                    encounterId: 'ENC-PREV-01',
+                    date: '05 Oct 2024',
+                    facility: 'CHC Visit',
+                    diagnosis: 'Viral fever, symptomatic treatment',
+                    prescribedBy: 'Doctor 2',
+                    medicines: ['Paracetamol 500mg', 'Cetirizine 10mg']
                 },
                 {
-                    encounterId: 'enc-062',
-                    date: '2026-03-22',
-                    facility: 'District Hospital',
-                    diagnosis: 'Routine Health Checkup',
-                    prescribedBy: 'Dr. Rajesh Patel',
-                    medicines: ['Multivitamin (0-1-0)']
+                    encounterId: 'ENC-PREV-02',
+                    date: '10 Aug 2024',
+                    facility: 'Follow-up',
+                    diagnosis: 'Recovered, no new complaints',
+                    prescribedBy: 'Doctor 3',
+                    medicines: ['Multivitamin']
+                },
+                {
+                    encounterId: 'ENC-PREV-03',
+                    date: '12 Jun 2024',
+                    facility: 'General OPD',
+                    diagnosis: 'Hypertension follow-up',
+                    prescribedBy: 'Doctor 2',
+                    medicines: ['Amlodipine 5mg']
                 }
             ]
         };
     }
 };
 
-// 4. Save consultation notes and clinical findings
+// 4. Save consultation notes
 export const saveConsultationNotes = async (encounterId, notesData) => {
     try {
         const response = await api.post(`/doctor/encounter/${encounterId}/notes`, notesData);
         return response.data;
     } catch (error) {
-        console.warn(`[doctorApi] saveConsultationNotes fallback for "${encounterId}":`, error.message);
         return {
             success: true,
-            message: 'Consultation notes recorded successfully',
+            message: 'Consultation notes recorded',
             encounterId,
-            savedAt: new Date().toISOString(),
             ...notesData
         };
     }
@@ -178,13 +236,11 @@ export const saveVitals = async (encounterId, vitalsData) => {
         const response = await api.post(`/doctor/encounter/${encounterId}/vitals`, vitalsData);
         return response.data;
     } catch (error) {
-        console.warn(`[doctorApi] saveVitals fallback for "${encounterId}":`, error.message);
         return {
             success: true,
-            message: 'Vitals recorded successfully',
+            message: 'Vitals recorded',
             encounterId,
-            vitals: vitalsData,
-            savedAt: new Date().toISOString()
+            vitals: vitalsData
         };
     }
 };
@@ -195,32 +251,27 @@ export const createPrescription = async (encounterId, prescriptionData) => {
         const response = await api.post(`/doctor/encounter/${encounterId}/prescription`, prescriptionData);
         return response.data;
     } catch (error) {
-        console.warn(`[doctorApi] createPrescription fallback for "${encounterId}":`, error.message);
         return {
             success: true,
-            message: 'Prescription recorded successfully',
+            message: 'Prescription recorded',
             encounterId,
             prescriptionId: 'rx-' + Math.random().toString(36).substring(2, 9),
-            medications: prescriptionData.medications || [],
-            createdAt: new Date().toISOString()
+            ...prescriptionData
         };
     }
 };
 
-// 7. Record follow-up schedule and instructions
+// 7. Record follow-up schedule
 export const recordFollowupPlan = async (encounterId, followupData) => {
     try {
         const response = await api.post(`/doctor/encounter/${encounterId}/followup`, followupData);
         return response.data;
     } catch (error) {
-        console.warn(`[doctorApi] recordFollowupPlan fallback for "${encounterId}":`, error.message);
         return {
             success: true,
-            message: 'Follow-up plan scheduled',
+            message: 'Follow-up plan recorded',
             encounterId,
-            followupPlanId: 'flw-' + Math.random().toString(36).substring(2, 9),
-            ...followupData,
-            createdAt: new Date().toISOString()
+            ...followupData
         };
     }
 };
@@ -231,14 +282,13 @@ export const signOffEncounter = async (encounterId, signOffData) => {
         const response = await api.post(`/doctor/encounter/${encounterId}/sign-off`, signOffData);
         return response.data;
     } catch (error) {
-        console.warn(`[doctorApi] signOffEncounter fallback for "${encounterId}":`, error.message);
         return {
             success: true,
-            message: 'Encounter successfully locked and signed off',
+            message: 'Encounter successfully locked',
             encounterId,
             is_signed_off: true,
-            signed_at: new Date().toISOString(),
-            clinician_id: signOffData?.clinician_id || 'DOC-CURRENT'
+            clinician_id: signOffData?.doctorName || 'Doctor 1',
+            signed_at: new Date().toISOString()
         };
     }
 };

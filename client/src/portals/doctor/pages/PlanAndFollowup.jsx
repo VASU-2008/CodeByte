@@ -54,9 +54,9 @@ export default function PlanAndFollowup() {
 
     const cardStyle = {
         background: '#ffffff',
-        borderRadius: '18px',
-        border: '1px solid #eef2f6',
-        boxShadow: '0 2px 12px rgba(0, 0, 0, 0.03)',
+        borderRadius: '22px',
+        border: '1px solid #f1f5f9',
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)',
         padding: '1.75rem',
         marginBottom: '1.5rem'
     };
@@ -89,22 +89,22 @@ export default function PlanAndFollowup() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.55rem',
-                    background: '#f1f5f9',
-                    padding: '0.4rem 0.9rem',
+                    background: '#edf2fe',
+                    padding: '0.4rem 0.95rem',
                     borderRadius: '20px',
                     fontSize: '0.84rem',
                     fontWeight: '700',
                     color: '#0f172a',
-                    border: '1px solid #e2e8f0'
+                    border: '1px solid #bfdbfe'
                 }}>
-                    <User size={15} color="#044e42" />
-                    <span>Patient: <strong>{patient.name}</strong> ({patient.age} / {patient.gender === 'Female' ? 'F' : 'M'}) · Token: <strong>{patient.token}</strong></span>
+                    <User size={15} color="#2563eb" />
+                    <span>Patient: <strong>{patient.name}</strong> ({patient.age} / {patient.gender === 'Female' ? 'F' : 'M'}) · Token: <strong style={{ color: '#2563eb' }}>{patient.token}</strong></span>
                 </div>
             </div>
 
             <div style={cardStyle}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
-                    <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#e6f7f2', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#044e42' }}>
+                    <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: '#edf2fe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2563eb' }}>
                         <Calendar size={20} />
                     </div>
                     <div>
@@ -136,14 +136,15 @@ export default function PlanAndFollowup() {
                                 type="button"
                                 onClick={() => handleQuickPreset(p.days)}
                                 style={{
-                                    background: selectedDays === p.days ? '#e6f7f2' : '#f8fafc',
-                                    border: selectedDays === p.days ? '1.5px solid #044e42' : '1px solid #e2e8f0',
-                                    color: selectedDays === p.days ? '#044e42' : '#475569',
+                                    background: selectedDays === p.days ? '#edf2fe' : '#f8fafc',
+                                    border: selectedDays === p.days ? '1.5px solid #2563eb' : '1px solid #e2e8f0',
+                                    color: selectedDays === p.days ? '#2563eb' : '#475569',
                                     padding: '0.45rem 0.85rem',
                                     borderRadius: '10px',
                                     fontSize: '0.82rem',
                                     fontWeight: '700',
-                                    cursor: 'pointer'
+                                    cursor: 'pointer',
+                                    transition: 'all 0.15s ease'
                                 }}
                             >
                                 {p.label}
@@ -210,7 +211,7 @@ export default function PlanAndFollowup() {
                                 id="adherenceCall"
                                 checked={adherenceCall}
                                 onChange={(e) => setAdherenceCall(e.target.checked)}
-                                style={{ width: '17px', height: '17px', cursor: 'pointer' }}
+                                style={{ width: '17px', height: '17px', cursor: 'pointer', accentColor: '#2563eb' }}
                             />
                             <label htmlFor="adherenceCall" style={{ fontSize: '0.86rem', color: '#1e293b', fontWeight: '600', cursor: 'pointer' }}>
                                 Schedule Medication Adherence Reminder Calls (30-min window alerts)
@@ -231,7 +232,7 @@ export default function PlanAndFollowup() {
                                 id="transportHelp"
                                 checked={transportAssistance}
                                 onChange={(e) => setTransportAssistance(e.target.checked)}
-                                style={{ width: '17px', height: '17px', cursor: 'pointer' }}
+                                style={{ width: '17px', height: '17px', cursor: 'pointer', accentColor: '#2563eb' }}
                             />
                             <label htmlFor="transportHelp" style={{ fontSize: '0.86rem', color: '#1e293b', fontWeight: '600', cursor: 'pointer' }}>
                                 Flag for Transport Assistance (Patient needs travel support to PHC)
@@ -245,11 +246,11 @@ export default function PlanAndFollowup() {
                     onClick={handleContinue}
                     style={{
                         width: '100%',
-                        background: '#044e42',
+                        background: '#2563eb',
                         color: '#ffffff',
                         border: 'none',
                         padding: '0.95rem',
-                        borderRadius: '12px',
+                        borderRadius: '14px',
                         fontWeight: '800',
                         fontSize: '0.95rem',
                         cursor: 'pointer',
@@ -257,7 +258,7 @@ export default function PlanAndFollowup() {
                         alignItems: 'center',
                         justifyContent: 'center',
                         gap: '0.5rem',
-                        boxShadow: '0 4px 14px rgba(4, 78, 66, 0.25)'
+                        boxShadow: '0 4px 14px rgba(37, 99, 235, 0.25)'
                     }}
                 >
                     Continue to Sign Off & Handoff →

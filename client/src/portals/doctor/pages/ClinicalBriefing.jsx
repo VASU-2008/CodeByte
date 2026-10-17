@@ -54,9 +54,9 @@ export default function ClinicalBriefing() {
 
     const cardStyle = {
         background: '#ffffff',
-        borderRadius: '18px',
-        border: '1px solid #eef2f6',
-        boxShadow: '0 2px 12px rgba(0, 0, 0, 0.03)',
+        borderRadius: '22px',
+        border: '1px solid #f1f5f9',
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)',
         padding: '1.75rem',
         marginBottom: '1.5rem'
     };
@@ -92,9 +92,9 @@ export default function ClinicalBriefing() {
             {/* Quick Patient Switcher Bar */}
             <div style={{
                 background: '#ffffff',
-                borderRadius: '16px',
-                border: '1px solid #eef2f6',
-                boxShadow: '0 2px 10px rgba(0, 0, 0, 0.02)',
+                borderRadius: '18px',
+                border: '1px solid #f1f5f9',
+                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.02)',
                 padding: '0.85rem 1.25rem',
                 marginBottom: '1.25rem',
                 display: 'flex',
@@ -104,7 +104,7 @@ export default function ClinicalBriefing() {
                 gap: '0.75rem'
             }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <Users size={16} color="#044e42" />
+                    <Users size={16} color="#2563eb" />
                     <span style={{ fontSize: '0.82rem', fontWeight: '700', color: '#475569' }}>
                         Patient Dossier Switcher:
                     </span>
@@ -120,9 +120,9 @@ export default function ClinicalBriefing() {
                                 type="button"
                                 onClick={() => handleSelectPatient(p.token)}
                                 style={{
-                                    background: isSelected ? '#044e42' : '#f8fafc',
+                                    background: isSelected ? '#2563eb' : '#f8fafc',
                                     color: isSelected ? '#ffffff' : '#334155',
-                                    border: isSelected ? '1.5px solid #044e42' : '1px solid #e2e8f0',
+                                    border: isSelected ? '1.5px solid #2563eb' : '1px solid #e2e8f0',
                                     padding: '0.35rem 0.75rem',
                                     borderRadius: '20px',
                                     fontSize: '0.78rem',
@@ -131,6 +131,7 @@ export default function ClinicalBriefing() {
                                     display: 'flex',
                                     alignItems: 'center',
                                     gap: '0.35rem',
+                                    boxShadow: isSelected ? '0 2px 8px rgba(37, 99, 235, 0.2)' : 'none',
                                     transition: 'all 0.15s ease'
                                 }}
                             >
@@ -139,13 +140,13 @@ export default function ClinicalBriefing() {
                                         width: '6px',
                                         height: '6px',
                                         borderRadius: '50%',
-                                        background: isSelected ? '#34d399' : '#1d4ed8'
+                                        background: isSelected ? '#ffffff' : '#2563eb'
                                     }}></span>
                                 )}
                                 <span>{p.name}</span>
                                 <span style={{
                                     fontSize: '0.7rem',
-                                    opacity: isSelected ? 0.85 : 0.65
+                                    opacity: isSelected ? 0.9 : 0.65
                                 }}>
                                     ({p.token.startsWith('P-') ? p.token : 'QR Pass'})
                                 </span>
@@ -164,8 +165,8 @@ export default function ClinicalBriefing() {
                             width: '56px',
                             height: '56px',
                             borderRadius: '16px',
-                            background: '#e6f7f2',
-                            color: '#044e42',
+                            background: '#edf2fe',
+                            color: '#2563eb',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -195,8 +196,8 @@ export default function ClinicalBriefing() {
                                 </span>
                                 <span style={{
                                     fontSize: '0.74rem',
-                                    background: patient.token === 'P-002' ? '#dbeafe' : patient.token === 'P-004' ? '#dcfce7' : '#fef3c7',
-                                    color: patient.token === 'P-002' ? '#1d4ed8' : patient.token === 'P-004' ? '#15803d' : '#b45309',
+                                    background: patient.token === 'P-002' ? '#edf2fe' : patient.token === 'P-004' ? '#dcfce7' : '#fef3c7',
+                                    color: patient.token === 'P-002' ? '#2563eb' : patient.token === 'P-004' ? '#15803d' : '#b45309',
                                     padding: '0.2rem 0.6rem',
                                     borderRadius: '10px',
                                     fontWeight: '700'
@@ -212,8 +213,8 @@ export default function ClinicalBriefing() {
 
                     <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                         <span style={{
-                            background: patient.hasAllergy ? '#fee2e2' : '#e6f7f2',
-                            color: patient.hasAllergy ? '#b91c1c' : '#044e42',
+                            background: patient.hasAllergy ? '#fee2e2' : '#edf2fe',
+                            color: patient.hasAllergy ? '#dc2626' : '#2563eb',
                             padding: '0.35rem 0.75rem',
                             borderRadius: '10px',
                             fontSize: '0.78rem',
@@ -230,13 +231,14 @@ export default function ClinicalBriefing() {
                             onClick={() => setActiveTab('Past Visits')}
                             style={{
                                 background: '#ffffff',
-                                border: '1.5px solid #e2e8f0',
-                                borderRadius: '10px',
+                                border: '1.5px solid #bfdbfe',
+                                borderRadius: '12px',
                                 padding: '0.5rem 0.95rem',
                                 fontSize: '0.82rem',
                                 fontWeight: '700',
-                                color: '#044e42',
-                                cursor: 'pointer'
+                                color: '#2563eb',
+                                cursor: 'pointer',
+                                transition: 'all 0.15s ease'
                             }}
                         >
                             View Full History
@@ -248,7 +250,7 @@ export default function ClinicalBriefing() {
                 <div style={{
                     display: 'flex',
                     gap: '1.75rem',
-                    borderBottom: '1px solid #e2e8f0',
+                    borderBottom: '1px solid #eef2f6',
                     marginBottom: '1.75rem',
                     fontSize: '0.9rem'
                 }}>
@@ -259,8 +261,8 @@ export default function ClinicalBriefing() {
                             style={{
                                 background: 'none',
                                 border: 'none',
-                                borderBottom: activeTab === tab ? '2.5px solid #044e42' : '2.5px solid transparent',
-                                color: activeTab === tab ? '#044e42' : '#64748b',
+                                borderBottom: activeTab === tab ? '2.5px solid #2563eb' : '2.5px solid transparent',
+                                color: activeTab === tab ? '#2563eb' : '#64748b',
                                 fontWeight: activeTab === tab ? '800' : '500',
                                 paddingBottom: '0.75rem',
                                 cursor: 'pointer',
@@ -323,7 +325,7 @@ export default function ClinicalBriefing() {
                                                 gap: '0.3rem',
                                                 background: 'none',
                                                 border: 'none',
-                                                color: '#044e42',
+                                                color: '#2563eb',
                                                 fontSize: '0.82rem',
                                                 fontWeight: '700',
                                                 cursor: 'pointer'
@@ -338,7 +340,7 @@ export default function ClinicalBriefing() {
                                         <div style={{ background: '#f8fafc', borderRadius: '12px', padding: '0.85rem', border: '1px solid #f1f5f9' }}>
                                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                 <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: '600' }}>BP</span>
-                                                <Heart size={14} color="#044e42" />
+                                                <Heart size={14} color="#2563eb" />
                                             </div>
                                             <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#0f172a', marginTop: '0.25rem' }}>{patient.bp}</div>
                                             <span style={{ fontSize: '0.68rem', background: '#dcfce7', color: '#15803d', padding: '0.1rem 0.4rem', borderRadius: '4px', fontWeight: '700' }}>Normal</span>
@@ -356,7 +358,7 @@ export default function ClinicalBriefing() {
                                         <div style={{ background: '#f8fafc', borderRadius: '12px', padding: '0.85rem', border: '1px solid #f1f5f9' }}>
                                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                 <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: '600' }}>Pulse</span>
-                                                <Activity size={14} color="#044e42" />
+                                                <Activity size={14} color="#2563eb" />
                                             </div>
                                             <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#0f172a', marginTop: '0.25rem' }}>{patient.pulse}</div>
                                             <span style={{ fontSize: '0.68rem', background: '#dcfce7', color: '#15803d', padding: '0.1rem 0.4rem', borderRadius: '4px', fontWeight: '700' }}>Normal</span>
@@ -413,7 +415,7 @@ export default function ClinicalBriefing() {
                                                     {visit.diagnosis} · <strong>{visit.doctor}</strong>
                                                 </p>
                                             </div>
-                                            <span onClick={() => setActiveTab('Past Visits')} style={{ color: '#044e42', fontSize: '0.82rem', fontWeight: '700', cursor: 'pointer' }}>View →</span>
+                                            <span onClick={() => setActiveTab('Past Visits')} style={{ color: '#2563eb', fontSize: '0.82rem', fontWeight: '700', cursor: 'pointer' }}>View →</span>
                                         </div>
                                     ))}
                                 </div>
@@ -433,14 +435,14 @@ export default function ClinicalBriefing() {
                                 <div key={i} style={{ background: '#f8fafc', borderRadius: '14px', padding: '1.25rem', border: '1px solid #eef2f6' }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                                            <Calendar size={16} color="#044e42" />
+                                            <Calendar size={16} color="#2563eb" />
                                             <span style={{ fontWeight: '800', color: '#0f172a', fontSize: '0.95rem' }}>{v.date}</span>
-                                            <span style={{ fontSize: '0.75rem', background: '#e6f7f2', color: '#044e42', padding: '0.15rem 0.5rem', borderRadius: '6px', fontWeight: '700' }}>{v.facility}</span>
+                                            <span style={{ fontSize: '0.75rem', background: '#edf2fe', color: '#2563eb', padding: '0.15rem 0.5rem', borderRadius: '6px', fontWeight: '700' }}>{v.facility}</span>
                                         </div>
                                         <span style={{ fontSize: '0.8rem', color: '#64748b' }}>Attending: <strong>{v.doctor}</strong></span>
                                     </div>
                                     <div style={{ fontSize: '0.86rem', color: '#334155', marginBottom: '0.35rem' }}><strong>Diagnosis:</strong> {v.diagnosis}</div>
-                                    <div style={{ fontSize: '0.82rem', color: '#044e42' }}><strong>Prescribed:</strong> {v.rx}</div>
+                                    <div style={{ fontSize: '0.82rem', color: '#2563eb' }}><strong>Prescribed:</strong> {v.rx}</div>
                                 </div>
                             ))}
                         </div>
@@ -450,7 +452,7 @@ export default function ClinicalBriefing() {
                     {activeTab === 'Vitals Trend' && (
                         <div style={{ marginBottom: '1.5rem' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-                                <TrendingUp size={18} color="#044e42" />
+                                <TrendingUp size={18} color="#2563eb" />
                                 <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: '800', color: '#0f172a' }}>
                                     Physiological Vitals Trend ({patient.name})
                                 </h3>
@@ -472,7 +474,7 @@ export default function ClinicalBriefing() {
                                 <div style={{ background: '#f8fafc', padding: '1.25rem', borderRadius: '14px', border: '1px solid #e2e8f0' }}>
                                     <div style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: '600' }}>Pulse Rate & Rhythm</div>
                                     <div style={{ fontSize: '1.35rem', fontWeight: '800', color: '#0f172a', margin: '0.35rem 0' }}>{patient.pulse}</div>
-                                    <div style={{ fontSize: '0.75rem', color: '#044e42', fontWeight: '700' }}>Regular Sinus Rhythm</div>
+                                    <div style={{ fontSize: '0.75rem', color: '#2563eb', fontWeight: '700' }}>Regular Sinus Rhythm</div>
                                 </div>
                             </div>
                         </div>
@@ -495,7 +497,7 @@ export default function ClinicalBriefing() {
                                             <div style={{ fontWeight: '800', color: '#0f172a', fontSize: '0.92rem' }}>{med.name}</div>
                                             <div style={{ fontSize: '0.78rem', color: '#64748b', marginTop: '0.2rem' }}>{med.strength} · {med.frequency} · {med.timing} ({med.duration})</div>
                                         </div>
-                                        <span style={{ fontSize: '0.75rem', background: '#e6f7f2', color: '#044e42', padding: '0.2rem 0.55rem', borderRadius: '6px', fontWeight: '700' }}>
+                                        <span style={{ fontSize: '0.75rem', background: '#dcfce7', color: '#16a34a', padding: '0.2rem 0.55rem', borderRadius: '6px', fontWeight: '700' }}>
                                             Active
                                         </span>
                                     </div>
@@ -520,7 +522,7 @@ export default function ClinicalBriefing() {
                                             <div style={{ fontWeight: '700', color: '#0f172a', fontSize: '0.88rem' }}>{doc.title}</div>
                                             <div style={{ fontSize: '0.74rem', color: '#64748b', marginTop: '0.15rem' }}>{doc.date} · {doc.status}</div>
                                         </div>
-                                        <button style={{ background: '#ffffff', border: '1px solid #e2e8f0', color: '#044e42', padding: '0.35rem 0.65rem', borderRadius: '8px', fontSize: '0.75rem', fontWeight: '700', cursor: 'pointer' }}>
+                                        <button style={{ background: '#ffffff', border: '1.5px solid #bfdbfe', color: '#2563eb', padding: '0.35rem 0.65rem', borderRadius: '8px', fontSize: '0.75rem', fontWeight: '700', cursor: 'pointer' }}>
                                             View
                                         </button>
                                     </div>
@@ -535,11 +537,11 @@ export default function ClinicalBriefing() {
                     onClick={handleContinue}
                     style={{
                         width: '100%',
-                        background: '#044e42',
+                        background: '#2563eb',
                         color: '#ffffff',
                         border: 'none',
                         padding: '0.95rem',
-                        borderRadius: '12px',
+                        borderRadius: '14px',
                         fontWeight: '800',
                         fontSize: '0.95rem',
                         cursor: 'pointer',
@@ -547,7 +549,7 @@ export default function ClinicalBriefing() {
                         alignItems: 'center',
                         justifyContent: 'center',
                         gap: '0.5rem',
-                        boxShadow: '0 4px 14px rgba(4, 78, 66, 0.25)',
+                        boxShadow: '0 4px 14px rgba(37, 99, 235, 0.25)',
                         transition: 'all 0.15s ease'
                     }}
                 >

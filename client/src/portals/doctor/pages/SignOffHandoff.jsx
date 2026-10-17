@@ -53,9 +53,9 @@ export default function SignOffHandoff() {
 
     const cardStyle = {
         background: '#ffffff',
-        borderRadius: '18px',
-        border: '1px solid #eef2f6',
-        boxShadow: '0 2px 12px rgba(0, 0, 0, 0.03)',
+        borderRadius: '22px',
+        border: '1px solid #f1f5f9',
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)',
         padding: '1.75rem',
         marginBottom: '1.5rem'
     };
@@ -88,16 +88,16 @@ export default function SignOffHandoff() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.55rem',
-                    background: '#f1f5f9',
-                    padding: '0.4rem 0.9rem',
+                    background: '#edf2fe',
+                    padding: '0.4rem 0.95rem',
                     borderRadius: '20px',
                     fontSize: '0.84rem',
                     fontWeight: '700',
                     color: '#0f172a',
-                    border: '1px solid #e2e8f0'
+                    border: '1px solid #bfdbfe'
                 }}>
-                    <User size={15} color="#044e42" />
-                    <span>Patient: <strong>{patient.name}</strong> ({patient.age} / {patient.gender === 'Female' ? 'F' : 'M'}) · Token: <strong>{patient.token}</strong></span>
+                    <User size={15} color="#2563eb" />
+                    <span>Patient: <strong>{patient.name}</strong> ({patient.age} / {patient.gender === 'Female' ? 'F' : 'M'}) · Token: <strong style={{ color: '#2563eb' }}>{patient.token}</strong></span>
                 </div>
             </div>
 
@@ -109,8 +109,8 @@ export default function SignOffHandoff() {
                             width: '68px',
                             height: '68px',
                             borderRadius: '50%',
-                            background: '#e6f7f2',
-                            color: '#044e42',
+                            background: '#edf2fe',
+                            color: '#2563eb',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -149,12 +149,12 @@ export default function SignOffHandoff() {
                                 onClick={() => window.print()}
                                 style={{
                                     background: '#ffffff',
-                                    border: '1.5px solid #e2e8f0',
+                                    border: '1.5px solid #bfdbfe',
                                     padding: '0.7rem 1.35rem',
-                                    borderRadius: '10px',
+                                    borderRadius: '12px',
                                     fontWeight: '700',
                                     fontSize: '0.88rem',
-                                    color: '#0f172a',
+                                    color: '#2563eb',
                                     cursor: 'pointer',
                                     display: 'flex',
                                     alignItems: 'center',
@@ -167,14 +167,15 @@ export default function SignOffHandoff() {
                             <button
                                 onClick={() => navigate('/doctor/queue')}
                                 style={{
-                                    background: '#044e42',
+                                    background: '#2563eb',
                                     color: '#ffffff',
                                     border: 'none',
                                     padding: '0.7rem 1.45rem',
-                                    borderRadius: '10px',
+                                    borderRadius: '14px',
                                     fontWeight: '800',
                                     fontSize: '0.88rem',
-                                    cursor: 'pointer'
+                                    cursor: 'pointer',
+                                    boxShadow: '0 4px 14px rgba(37, 99, 235, 0.25)'
                                 }}
                             >
                                 Return to Patient Queue
@@ -187,7 +188,7 @@ export default function SignOffHandoff() {
                 <form onSubmit={handleSignOff}>
                     <div style={cardStyle}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
-                            <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#e6f7f2', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#044e42' }}>
+                            <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: '#edf2fe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2563eb' }}>
                                 <Lock size={20} />
                             </div>
                             <div>
@@ -290,7 +291,7 @@ export default function SignOffHandoff() {
                                     type="checkbox"
                                     checked={affirmation}
                                     onChange={(e) => setAffirmation(e.target.checked)}
-                                    style={{ width: '18px', height: '18px', marginTop: '2px', cursor: 'pointer' }}
+                                    style={{ width: '18px', height: '18px', marginTop: '2px', cursor: 'pointer', accentColor: '#2563eb' }}
                                 />
                                 <span style={{ fontSize: '0.85rem', color: '#334155', lineHeight: '1.45' }}>
                                     I hereby confirm that I have evaluated the clinical findings, provisional diagnosis, e-prescription, and follow-up plan for <strong>{patient.name}</strong>. By submitting, I affix my digital signature to permanently seal this encounter.
@@ -304,15 +305,15 @@ export default function SignOffHandoff() {
                             disabled={signing || !affirmation}
                             style={{
                                 width: '100%',
-                                background: affirmation ? '#044e42' : '#94a3b8',
+                                background: affirmation ? '#2563eb' : '#94a3b8',
                                 color: '#ffffff',
                                 border: 'none',
                                 padding: '1rem',
-                                borderRadius: '12px',
+                                borderRadius: '14px',
                                 fontWeight: '800',
                                 fontSize: '0.96rem',
                                 cursor: affirmation ? 'pointer' : 'not-allowed',
-                                boxShadow: affirmation ? '0 4px 14px rgba(4, 78, 66, 0.25)' : 'none',
+                                boxShadow: affirmation ? '0 4px 14px rgba(37, 99, 235, 0.25)' : 'none',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',

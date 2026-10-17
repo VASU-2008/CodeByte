@@ -65,9 +65,9 @@ export default function PatientQueue() {
 
     const cardStyle = {
         background: '#ffffff',
-        borderRadius: '18px',
-        border: '1px solid #eef2f6',
-        boxShadow: '0 2px 12px rgba(0, 0, 0, 0.03)',
+        borderRadius: '22px',
+        border: '1px solid #f1f5f9',
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)',
         padding: '1.75rem',
         marginBottom: '1.5rem'
     };
@@ -82,7 +82,7 @@ export default function PatientQueue() {
                             <h2 style={{ margin: 0, fontSize: '1.35rem', fontWeight: '800', color: '#0f172a' }}>
                                 Today's Patient Queue
                             </h2>
-                            <span style={{ fontSize: '0.72rem', background: '#e6f7f2', color: '#044e42', padding: '0.15rem 0.55rem', borderRadius: '10px', fontWeight: '700' }}>
+                            <span style={{ fontSize: '0.72rem', background: '#edf2fe', color: '#2563eb', padding: '0.15rem 0.55rem', borderRadius: '10px', fontWeight: '700' }}>
                                 Live Stream
                             </span>
                         </div>
@@ -110,9 +110,9 @@ export default function PatientQueue() {
                             type="button"
                             onClick={() => setActiveTab(tab.key)}
                             style={{
-                                background: activeTab === tab.key ? '#044e42' : '#f8fafc',
+                                background: activeTab === tab.key ? '#2563eb' : '#f8fafc',
                                 color: activeTab === tab.key ? '#ffffff' : '#475569',
-                                border: activeTab === tab.key ? '1px solid #044e42' : '1px solid #e2e8f0',
+                                border: activeTab === tab.key ? '1px solid #2563eb' : '1px solid #e2e8f0',
                                 padding: '0.45rem 0.95rem',
                                 borderRadius: '20px',
                                 fontSize: '0.82rem',
@@ -184,8 +184,8 @@ export default function PatientQueue() {
                             const isInConsult = patient.status === 'In Consultation';
                             const isCompleted = patient.status === 'Completed';
 
-                            const statusBg = isWaiting ? '#fef3c7' : isInConsult ? '#dbeafe' : '#dcfce7';
-                            const statusColor = isWaiting ? '#b45309' : isInConsult ? '#1d4ed8' : '#15803d';
+                            const statusBg = isWaiting ? '#fef3c7' : isInConsult ? '#edf2fe' : '#dcfce7';
+                            const statusColor = isWaiting ? '#b45309' : isInConsult ? '#2563eb' : '#15803d';
 
                             return (
                                 <tr 
@@ -231,15 +231,16 @@ export default function PatientQueue() {
                                             <button
                                                 onClick={() => handleAction(patient)}
                                                 style={{
-                                                    background: '#044e42',
+                                                    background: '#2563eb',
                                                     color: '#ffffff',
                                                     border: 'none',
-                                                    padding: '0.45rem 1.15rem',
-                                                    borderRadius: '8px',
+                                                    padding: '0.5rem 1.25rem',
+                                                    borderRadius: '10px',
                                                     fontWeight: '700',
                                                     fontSize: '0.82rem',
                                                     cursor: 'pointer',
-                                                    boxShadow: '0 2px 8px rgba(4, 78, 66, 0.2)'
+                                                    boxShadow: '0 4px 12px rgba(37, 99, 235, 0.25)',
+                                                    transition: 'all 0.15s ease'
                                                 }}
                                             >
                                                 Start
@@ -249,13 +250,14 @@ export default function PatientQueue() {
                                                 onClick={() => handleAction(patient)}
                                                 style={{
                                                     background: '#ffffff',
-                                                    color: '#044e42',
-                                                    border: '1.5px solid #e2e8f0',
-                                                    padding: '0.45rem 1.15rem',
-                                                    borderRadius: '8px',
+                                                    color: '#2563eb',
+                                                    border: '1.5px solid #bfdbfe',
+                                                    padding: '0.5rem 1.25rem',
+                                                    borderRadius: '10px',
                                                     fontWeight: '700',
                                                     fontSize: '0.82rem',
-                                                    cursor: 'pointer'
+                                                    cursor: 'pointer',
+                                                    transition: 'all 0.15s ease'
                                                 }}
                                             >
                                                 View

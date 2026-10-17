@@ -127,9 +127,9 @@ export default function TokenLookupScan() {
 
     const cardStyle = {
         background: '#ffffff',
-        borderRadius: '18px',
-        border: '1px solid #eef2f6',
-        boxShadow: '0 2px 12px rgba(0, 0, 0, 0.03)',
+        borderRadius: '22px',
+        border: '1px solid #f1f5f9',
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)',
         padding: '1.75rem',
         marginBottom: '1.5rem'
     };
@@ -138,7 +138,7 @@ export default function TokenLookupScan() {
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
             <div style={cardStyle}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
-                    <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#e6f7f2', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#044e42' }}>
+                    <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: '#edf2fe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2563eb' }}>
                         <QrCode size={20} />
                     </div>
                     <div>
@@ -175,7 +175,7 @@ export default function TokenLookupScan() {
 
                     {!isCameraActive && (
                         <div>
-                            <Camera size={42} color="#044e42" style={{ margin: '0 auto 0.75rem auto' }} />
+                            <Camera size={42} color="#2563eb" style={{ margin: '0 auto 0.75rem auto' }} />
                             <div style={{ fontSize: '0.95rem', fontWeight: '700', color: '#0f172a' }}>
                                 Optical QR Scanner Ready
                             </div>
@@ -188,17 +188,18 @@ export default function TokenLookupScan() {
                                     type="button"
                                     onClick={startCamera}
                                     style={{
-                                        background: '#044e42',
+                                        background: '#2563eb',
                                         color: '#ffffff',
                                         border: 'none',
                                         padding: '0.65rem 1.25rem',
-                                        borderRadius: '10px',
-                                        fontWeight: '600',
+                                        borderRadius: '12px',
+                                        fontWeight: '700',
                                         fontSize: '0.85rem',
                                         cursor: 'pointer',
                                         display: 'flex',
                                         alignItems: 'center',
-                                        gap: '0.45rem'
+                                        gap: '0.45rem',
+                                        boxShadow: '0 4px 14px rgba(37, 99, 235, 0.25)'
                                     }}
                                 >
                                     <Camera size={16} />
@@ -207,11 +208,11 @@ export default function TokenLookupScan() {
 
                                 <label style={{
                                     background: '#ffffff',
-                                    color: '#044e42',
-                                    border: '1px solid #cceee5',
+                                    color: '#2563eb',
+                                    border: '1.5px solid #bfdbfe',
                                     padding: '0.65rem 1.25rem',
-                                    borderRadius: '10px',
-                                    fontWeight: '600',
+                                    borderRadius: '12px',
+                                    fontWeight: '700',
                                     fontSize: '0.85rem',
                                     cursor: 'pointer',
                                     display: 'flex',
@@ -240,11 +241,11 @@ export default function TokenLookupScan() {
                                         type="button"
                                         onClick={() => { setTokenId(tok); handleLookup(tok); }}
                                         style={{
-                                            background: '#e6f7f2',
-                                            border: '1px solid #cceee5',
-                                            color: '#044e42',
+                                            background: '#edf2fe',
+                                            border: '1px solid #bfdbfe',
+                                            color: '#2563eb',
                                             padding: '0.35rem 0.85rem',
-                                            borderRadius: '8px',
+                                            borderRadius: '10px',
                                             fontSize: '0.8rem',
                                             fontWeight: '700',
                                             cursor: 'pointer'
@@ -315,14 +316,15 @@ export default function TokenLookupScan() {
                         onClick={() => handleLookup()}
                         disabled={loading}
                         style={{
-                            background: '#044e42',
+                            background: '#2563eb',
                             color: '#ffffff',
                             border: 'none',
                             padding: '0.75rem 1.4rem',
-                            borderRadius: '10px',
+                            borderRadius: '12px',
                             fontWeight: '700',
                             fontSize: '0.88rem',
-                            cursor: 'pointer'
+                            cursor: 'pointer',
+                            boxShadow: '0 4px 14px rgba(37, 99, 235, 0.25)'
                         }}
                     >
                         {loading ? 'Verifying...' : 'Lookup'}
@@ -332,14 +334,14 @@ export default function TokenLookupScan() {
                 {/* Verified Patient Result Card */}
                 {patientResult && (
                     <div style={{
-                        background: '#e6f7f2',
-                        border: '1px solid #cceee5',
-                        borderRadius: '14px',
+                        background: '#edf2fe',
+                        border: '1px solid #bfdbfe',
+                        borderRadius: '16px',
                         padding: '1.25rem'
                     }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                                <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: '#044e42', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: '#2563eb', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                     <User size={18} />
                                 </div>
                                 <div>
@@ -365,18 +367,19 @@ export default function TokenLookupScan() {
                             onClick={handleProceed}
                             style={{
                                 width: '100%',
-                                background: '#044e42',
+                                background: '#2563eb',
                                 color: '#ffffff',
                                 border: 'none',
                                 padding: '0.85rem',
-                                borderRadius: '10px',
+                                borderRadius: '14px',
                                 fontWeight: '700',
                                 fontSize: '0.92rem',
                                 cursor: 'pointer',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                gap: '0.5rem'
+                                gap: '0.5rem',
+                                boxShadow: '0 4px 14px rgba(37, 99, 235, 0.25)'
                             }}
                         >
                             Open Clinical Briefing

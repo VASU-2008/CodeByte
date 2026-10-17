@@ -3,7 +3,16 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import PatientPortal from './portals/patient/PatientPortal';
 import DoctorPortal from './portals/doctor/DoctorPortal';
-import CoordinatorPortal from './portals/coordinator/CoordinatorPortal';
+
+// Coordinator Portal layout & pages
+import CoordinatorLayout from './portals/coordinator/CoordinatorLayout';
+import OperationsOverview from './portals/coordinator/pages/OperationsOverview';
+import ReminderQueue from './portals/coordinator/pages/ReminderQueue';
+import TransportBarriers from './portals/coordinator/pages/TransportBarriers';
+import MedicationAdherence from './portals/coordinator/pages/MedicationAdherence';
+import FollowupTracking from './portals/coordinator/pages/FollowupTracking';
+import EscalationsTasks from './portals/coordinator/pages/EscalationsTasks';
+import RulesAndAuditLog from './portals/coordinator/pages/RulesAndAuditLog';
 
 export default function App() {
     return (
@@ -23,8 +32,19 @@ export default function App() {
                 } />
                 <Route path="/patient/*" element={<PatientPortal />} />
                 <Route path="/doctor/*" element={<DoctorPortal />} />
-                <Route path="/coordinator/*" element={<CoordinatorPortal />} />
+                
+                {/* Coordinator Portal Nested Routes */}
+                <Route path="/coordinator" element={<CoordinatorLayout />}>
+                    <Route index element={<OperationsOverview />} />
+                    <Route path="operations" element={<OperationsOverview />} />
+                    <Route path="reminders" element={<ReminderQueue />} />
+                    <Route path="transport" element={<TransportBarriers />} />
+                    <Route path="medication" element={<MedicationAdherence />} />
+                    <Route path="followups" element={<FollowupTracking />} />
+                    <Route path="escalations" element={<EscalationsTasks />} />
+                    <Route path="audit" element={<RulesAndAuditLog />} />
+                </Route>
             </Routes>
         </Router>
     );
-}
+}

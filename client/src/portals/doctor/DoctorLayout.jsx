@@ -167,36 +167,6 @@ export default function DoctorLayout({ children }) {
                         </div>
                     </div>
 
-                    {/* Language Selector Pill (matching the screenshot) */}
-                    <div style={{
-                        display: 'inline-flex',
-                        background: 'rgba(241, 245, 249, 0.8)',
-                        borderRadius: '20px',
-                        padding: '0.2rem',
-                        gap: '0.2rem',
-                        marginBottom: '1.25rem',
-                        border: '1px solid rgba(226, 232, 240, 0.5)'
-                    }}>
-                        <span style={{
-                            background: '#2563eb',
-                            color: '#ffffff',
-                            borderRadius: '16px',
-                            padding: '0.2rem 0.75rem',
-                            fontSize: '0.74rem',
-                            fontWeight: '700',
-                            boxShadow: '0 2px 6px rgba(37, 99, 235, 0.25)'
-                        }}>
-                            EN
-                        </span>
-                        <span style={{
-                            color: '#64748b',
-                            padding: '0.2rem 0.65rem',
-                            fontSize: '0.74rem',
-                            fontWeight: '600'
-                        }}>
-                            हि
-                        </span>
-                    </div>
 
                     {/* Navigation Items */}
                     <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>

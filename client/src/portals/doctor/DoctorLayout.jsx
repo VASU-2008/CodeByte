@@ -41,8 +41,11 @@ export default function DoctorLayout({ children }) {
 
     const isCurrentPath = (path) => {
         const basePath = path.split('?')[0];
-        if (basePath === '/doctor/dashboard' || basePath === '/doctor/queue') {
-            return location.pathname === '/doctor' || location.pathname === '/doctor/dashboard' || location.pathname === '/doctor/queue';
+        if (basePath === '/doctor/dashboard') {
+            return location.pathname === '/doctor' || location.pathname === '/doctor/dashboard';
+        }
+        if (basePath === '/doctor/queue') {
+            return location.pathname === '/doctor/queue';
         }
         return location.pathname.startsWith(basePath);
     };

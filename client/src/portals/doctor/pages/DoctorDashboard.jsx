@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
     User, 
@@ -14,17 +14,45 @@ import {
     ShieldCheck,
     CheckCircle2
 } from 'lucide-react';
-import { getPatientByToken } from '../../../api/doctorApi';
+import { getPatientByToken, getLoggedInDoctor, getDoctorQueue } from '../../../api/doctorApi';
 
 /**
- * DoctorDashboard Component (Minimal & Professional Home)
- * Simple and clean: Doctor username, hospital affiliation, quick metrics,
+ * DoctorDashboard Component (Minimal & Dynamic Professional Home)
+ * Doctor username, hospital affiliation, live patient queue metrics,
  * dynamic next patient spotlight, and logout.
  */
 export default function DoctorDashboard() {
     const navigate = useNavigate();
 
-    const activeToken = localStorage.getItem('activeDoctorEncounterId') || 'P-001';
+    // Dynamic Doctor Identity
+    const doctor = getLoggedInDoctor();
+
+    // Dynamic Patient Queue & Counts
+    const [queue, setQueue] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        let isMounted = true;
+        getDoctorQueue().then(data => {
+            if (isMounted) {
+                setQueue(data || []);
+                setLoading(false);
+            }
+        }).catch(err => {
+            console.error(err);
+            if (isMounted) setLoading(false);
+        });
+        return () => { isMounted = false; };
+    }, []);
+
+    const totalCount = queue.length;
+    const completedCount = queue.filter(p => p.status === 'Completed').length;
+    const inConsultCount = queue.filter(p => p.status === 'In Consultation').length;
+    const waitingCount = queue.filter(p => p.status === 'Waiting').length;
+
+    // Resolve next patient spotlight dynamically
+    const nextWaiting = queue.find(p => p.status === 'In Consultation') || queue.find(p => p.status === 'Waiting') || queue[0];
+    const activeToken = localStorage.getItem('activeDoctorEncounterId') || nextWaiting?.token || 'P-001';
     const activePatient = getPatientByToken(activeToken);
 
     const handleLogout = () => {
@@ -62,12 +90,12 @@ export default function DoctorDashboard() {
                             fontWeight: '800',
                             boxShadow: '0 4px 14px rgba(4, 78, 66, 0.25)'
                         }}>
-                            D1
+                            {doctor.avatar}
                         </div>
                         <div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
                                 <h1 style={{ margin: 0, fontSize: '1.45rem', fontWeight: '800', color: '#0f172a' }}>
-                                    Doctor 1
+                                    {doctor.name}
                                 </h1>
                                 <span style={{
                                     background: '#e6f7f2',
@@ -87,11 +115,11 @@ export default function DoctorDashboard() {
 
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#475569', fontSize: '0.88rem', marginTop: '0.35rem' }}>
                                 <Building2 size={16} color="#044e42" />
-                                <span><strong>Primary Health Centre (PHC North Main)</strong> · OPD Cabin #104</span>
+                                <span><strong>{doctor.hospital}</strong> · {doctor.cabin}</span>
                             </div>
 
                             <div style={{ fontSize: '0.78rem', color: '#64748b', marginTop: '0.2rem' }}>
-                                Department of General Medicine · Reg ID: <strong>MCI-98442</strong>
+                                {doctor.department} · Reg ID: <strong>{doctor.regNumber}</strong>
                             </div>
                         </div>
                     </div>
@@ -122,7 +150,7 @@ export default function DoctorDashboard() {
                 </div>
             </div>
 
-            {/* 3 Simple Metric Cards */}
+            {/* 3 Simple Metric Cards - Dynamic Counts */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem', marginBottom: '1.5rem' }}>
                 <div style={{
                     background: '#e8f7f2',
@@ -133,9 +161,9 @@ export default function DoctorDashboard() {
                     justifyContent: 'space-between'
                 }}>
                     <div>
-                        <div style={{ fontSize: '2rem', fontWeight: '800', color: '#044e42', lineHeight: '1' }}>12</div>
+                        <div style={{ fontSize: '2rem', fontWeight: '800', color: '#044e42', lineHeight: '1' }}>{totalCount}</div>
                         <div style={{ fontSize: '0.85rem', fontWeight: '700', color: '#044e42', marginTop: '0.4rem' }}>Total Patients Today</div>
-                        <div style={{ fontSize: '0.72rem', color: '#065f46', marginTop: '0.15rem' }}>Completed: 8 · Scheduled: 4</div>
+                        <div style={{ fontSize: '0.72rem', color: '#065f46', marginTop: '0.15rem' }}>Completed: {completedCount} · In Consultation: {inConsultCount}</div>
                     </div>
                     <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#cceee5', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#044e42' }}>
                         <Users size={22} />
@@ -151,7 +179,7 @@ export default function DoctorDashboard() {
                     justifyContent: 'space-between'
                 }}>
                     <div>
-                        <div style={{ fontSize: '2rem', fontWeight: '800', color: '#1d4ed8', lineHeight: '1' }}>5</div>
+                        <div style={{ fontSize: '2rem', fontWeight: '800', color: '#1d4ed8', lineHeight: '1' }}>{inConsultCount}</div>
                         <div style={{ fontSize: '0.85rem', fontWeight: '700', color: '#1d4ed8', marginTop: '0.4rem' }}>In Consultation</div>
                         <div style={{ fontSize: '0.72rem', color: '#2563eb', marginTop: '0.15rem' }}>Active Clinical Sessions</div>
                     </div>
@@ -169,9 +197,11 @@ export default function DoctorDashboard() {
                     justifyContent: 'space-between'
                 }}>
                     <div>
-                        <div style={{ fontSize: '2rem', fontWeight: '800', color: '#b45309', lineHeight: '1' }}>3</div>
+                        <div style={{ fontSize: '2rem', fontWeight: '800', color: '#b45309', lineHeight: '1' }}>{waitingCount}</div>
                         <div style={{ fontSize: '0.85rem', fontWeight: '700', color: '#b45309', marginTop: '0.4rem' }}>Waiting in Queue</div>
-                        <div style={{ fontSize: '0.72rem', color: '#92400e', marginTop: '0.15rem' }}>Active: {activePatient.name} ({activePatient.token})</div>
+                        <div style={{ fontSize: '0.72rem', color: '#92400e', marginTop: '0.15rem' }}>
+                            Next: {nextWaiting?.name || activePatient.name} ({nextWaiting?.token || activePatient.token})
+                        </div>
                     </div>
                     <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#fef3c7', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#b45309' }}>
                         <Clock size={22} />
@@ -210,8 +240,15 @@ export default function DoctorDashboard() {
                     </div>
                     <div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <span style={{ fontSize: '0.72rem', background: '#fef3c7', color: '#b45309', padding: '0.15rem 0.55rem', borderRadius: '8px', fontWeight: '700' }}>
-                                ACTIVE SPOTLIGHT
+                            <span style={{
+                                fontSize: '0.72rem',
+                                background: inConsultCount > 0 ? '#dbeafe' : '#fef3c7',
+                                color: inConsultCount > 0 ? '#1d4ed8' : '#b45309',
+                                padding: '0.15rem 0.55rem',
+                                borderRadius: '8px',
+                                fontWeight: '700'
+                            }}>
+                                {activePatient.token === nextWaiting?.token && nextWaiting?.status === 'In Consultation' ? 'CURRENTLY ATTENDING' : 'NEXT IN LINE'}
                             </span>
                             <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Token: <strong>{activePatient.token}</strong></span>
                         </div>
@@ -226,7 +263,10 @@ export default function DoctorDashboard() {
 
                 <div style={{ display: 'flex', gap: '0.75rem' }}>
                     <button
-                        onClick={() => navigate(`/doctor/briefing?encounterId=${activePatient.token}`)}
+                        onClick={() => {
+                            localStorage.setItem('activeDoctorEncounterId', activePatient.token);
+                            navigate(`/doctor/briefing?encounterId=${activePatient.token}`);
+                        }}
                         style={{
                             background: '#044e42',
                             color: '#ffffff',

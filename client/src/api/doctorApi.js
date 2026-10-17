@@ -191,34 +191,62 @@ export const getPatientByToken = (tokenId) => {
     };
 };
 
+// 0. Dynamic Doctor Identity Resolver
+export const getLoggedInDoctor = () => {
+    try {
+        const userStr = localStorage.getItem('user');
+        if (userStr) {
+            const user = JSON.parse(userStr);
+            if (user && (user.name || user.role === 'doctor')) {
+                const name = user.name || 'Doctor 1';
+                const idMatch = name.match(/\d+/);
+                const docNumber = idMatch ? idMatch[0] : '1';
+                return {
+                    name: name.startsWith('Doctor') ? name : `Doctor ${docNumber}`,
+                    cabin: user.cabin || user.room || `OPD Cabin #${100 + parseInt(docNumber, 10)}`,
+                    hospital: user.hospital || 'Primary Health Centre (PHC North Main)',
+                    department: user.department || 'Department of General Medicine',
+                    regNumber: user.regNumber || `MCI-9844${docNumber}`,
+                    avatar: `D${docNumber}`
+                };
+            }
+        }
+    } catch (e) {
+        console.warn('[doctorApi] Could not parse user session:', e);
+    }
+
+    return {
+        name: 'Doctor 1',
+        cabin: 'OPD Cabin #104',
+        hospital: 'Primary Health Centre (PHC North Main)',
+        department: 'Department of General Medicine',
+        regNumber: 'MCI-98442',
+        avatar: 'D1'
+    };
+};
+
 // 1. Retrieve the doctor's patient queue
 export const getDoctorQueue = async (facilityId = 'PHC_MAIN') => {
+    let rawList = [];
     try {
         const response = await api.get('/doctor/queue', {
             params: { facilityId }
         });
-        return response.data;
+        rawList = response.data;
     } catch (error) {
         console.warn('[doctorApi] getDoctorQueue error, returning mock queue for dev:', error.message);
-        return [
+        rawList = [
             {
                 id: 1,
                 _id: 'enc-101',
                 token: 'P-001',
                 token_id: 'P-001',
                 name: 'Patient 1',
-                patient_id: {
-                    _id: 'pat-001',
-                    name: 'Patient 1',
-                    age: 42,
-                    gender: 'Male',
-                    phone: '+91 98765 00001'
-                },
                 ageGender: '42 / M',
+                complaint: 'Fever and body ache since 2 days. Mild cough.',
                 chief_complaint: 'Fever and body ache since 2 days. Mild cough.',
                 status: 'Waiting',
-                priority: 'MODERATE',
-                triage_result: 'PHC_GENERAL',
+                priority: 'Moderate',
                 createdAt: new Date().toISOString()
             },
             {
@@ -227,18 +255,11 @@ export const getDoctorQueue = async (facilityId = 'PHC_MAIN') => {
                 token: 'P-002',
                 token_id: 'P-002',
                 name: 'Patient 2',
-                patient_id: {
-                    _id: 'pat-002',
-                    name: 'Patient 2',
-                    age: 36,
-                    gender: 'Female',
-                    phone: '+91 98765 00002'
-                },
                 ageGender: '36 / F',
+                complaint: 'Severe headache and elevated blood pressure.',
                 chief_complaint: 'Severe headache and elevated blood pressure.',
                 status: 'In Consultation',
-                priority: 'URGENT',
-                triage_result: 'PHC_PRIORITY',
+                priority: 'High',
                 createdAt: new Date(Date.now() - 3600000).toISOString()
             },
             {
@@ -247,18 +268,11 @@ export const getDoctorQueue = async (facilityId = 'PHC_MAIN') => {
                 token: 'P-003',
                 token_id: 'P-003',
                 name: 'Patient 3',
-                patient_id: {
-                    _id: 'pat-003',
-                    name: 'Patient 3',
-                    age: 28,
-                    gender: 'Male',
-                    phone: '+91 98765 00003'
-                },
                 ageGender: '28 / M',
+                complaint: 'Acute stomach cramps and mild vomiting since yesterday.',
                 chief_complaint: 'Acute stomach cramps and mild vomiting since yesterday.',
                 status: 'Waiting',
-                priority: 'ROUTINE',
-                triage_result: 'PHC_GENERAL',
+                priority: 'Routine',
                 createdAt: new Date(Date.now() - 7200000).toISOString()
             },
             {
@@ -267,18 +281,11 @@ export const getDoctorQueue = async (facilityId = 'PHC_MAIN') => {
                 token: 'P-004',
                 token_id: 'P-004',
                 name: 'Patient 4',
-                patient_id: {
-                    _id: 'pat-004',
-                    name: 'Patient 4',
-                    age: 55,
-                    gender: 'Female',
-                    phone: '+91 98765 00004'
-                },
                 ageGender: '55 / F',
+                complaint: 'Routine diabetes check-up and refill prescription.',
                 chief_complaint: 'Routine diabetes check-up and refill prescription.',
                 status: 'Completed',
-                priority: 'ROUTINE',
-                triage_result: 'PHC_GENERAL',
+                priority: 'Routine',
                 createdAt: new Date(Date.now() - 10800000).toISOString()
             },
             {
@@ -287,22 +294,39 @@ export const getDoctorQueue = async (facilityId = 'PHC_MAIN') => {
                 token: 'P-005',
                 token_id: 'P-005',
                 name: 'Patient 5',
-                patient_id: {
-                    _id: 'pat-005',
-                    name: 'Patient 5',
-                    age: 31,
-                    gender: 'Male',
-                    phone: '+91 98765 00005'
-                },
                 ageGender: '31 / M',
+                complaint: 'Persistent sore throat and mild difficulty swallowing.',
                 chief_complaint: 'Persistent sore throat and mild difficulty swallowing.',
                 status: 'Waiting',
-                priority: 'ROUTINE',
-                triage_result: 'PHC_GENERAL',
+                priority: 'Routine',
                 createdAt: new Date(Date.now() - 14400000).toISOString()
             }
         ];
     }
+
+    // Standardize all patient objects so components receive consistent fields
+    return (Array.isArray(rawList) ? rawList : []).map((item, index) => {
+        const id = item.id || index + 1;
+        const token = item.token || item.token_id || `P-00${id}`;
+        const patientName = item.name || item.patient_id?.name || (token.startsWith('P-') ? `Patient ${token.replace(/\D/g, '').replace(/^0+/, '')}` : `Patient ${id}`);
+        const ageGender = item.ageGender || (item.patient_id ? `${item.patient_id.age || '40'} / ${item.patient_id.gender?.charAt(0) || 'M'}` : '40 / M');
+        const complaint = item.complaint || item.chief_complaint || 'Routine clinical consultation.';
+        const status = item.status || 'Waiting';
+        const priority = item.priority || 'Routine';
+
+        return {
+            ...item,
+            id,
+            token,
+            token_id: token,
+            name: patientName,
+            ageGender,
+            complaint,
+            chief_complaint: complaint,
+            status,
+            priority
+        };
+    });
 };
 
 // 2. Look up authorized encounters using QR tokens
@@ -454,6 +478,8 @@ export const signOffEncounter = async (encounterId, signOffData) => {
 };
 
 export default {
+    getPatientByToken,
+    getLoggedInDoctor,
     getDoctorQueue,
     lookupEncounterByToken,
     getClinicalBriefing,

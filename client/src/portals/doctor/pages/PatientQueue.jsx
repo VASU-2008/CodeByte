@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
     Users, 
@@ -11,6 +11,7 @@ import {
     ChevronDown, 
     Eye 
 } from 'lucide-react';
+import { getDoctorQueue } from '../../../api/doctorApi';
 
 /**
  * PatientQueue Component (Aura HealthTech Theme)
@@ -21,6 +22,7 @@ export default function PatientQueue() {
     const navigate = useNavigate();
     const [searchTerm, setSearchTerm] = useState('');
     const [activeTab, setActiveTab] = useState('ALL');
+    const [loading, setLoading] = useState(true);
 
     const [patients, setPatients] = useState([
         { id: 1, name: 'Patient 1', ageGender: '42 / M', token: 'P-001', status: 'Waiting', priority: 'Moderate', complaint: 'Fever and body ache since 2 days' },
@@ -29,6 +31,20 @@ export default function PatientQueue() {
         { id: 4, name: 'Patient 4', ageGender: '55 / F', token: 'P-004', status: 'Completed', priority: 'Routine', complaint: 'Diabetes routine check-up & refill' },
         { id: 5, name: 'Patient 5', ageGender: '31 / M', token: 'P-005', status: 'Waiting', priority: 'Routine', complaint: 'Sore throat and mild cough' }
     ]);
+
+    useEffect(() => {
+        let isMounted = true;
+        getDoctorQueue().then(data => {
+            if (isMounted && data && data.length > 0) {
+                setPatients(data);
+                setLoading(false);
+            }
+        }).catch(err => {
+            console.error(err);
+            if (isMounted) setLoading(false);
+        });
+        return () => { isMounted = false; };
+    }, []);
 
     const filteredPatients = patients.filter(p => {
         const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase()) || 

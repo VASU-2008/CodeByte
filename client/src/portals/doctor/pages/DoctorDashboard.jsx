@@ -66,18 +66,25 @@ export default function DoctorDashboard() {
     };
 
     const cardStyle = {
-        background: '#ffffff',
-        borderRadius: '22px',
-        border: '1px solid #f1f5f9',
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)',
+        background: 'rgba(255, 255, 255, 0.85)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+        borderRadius: '24px',
+        border: '1px solid rgba(255, 255, 255, 0.9)',
+        boxShadow: '0 10px 30px rgba(37, 99, 235, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02)',
         padding: '1.75rem',
         marginBottom: '1.5rem'
     };
 
     return (
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-            {/* Top Clinician Header Card */}
-            <div style={cardStyle}>
+            {/* Top Clinician Header Card with Glassy Glow */}
+            <div style={{
+                ...cardStyle,
+                background: 'radial-gradient(circle at top right, rgba(219, 234, 254, 0.65), transparent 60%), rgba(255, 255, 255, 0.88)',
+                border: '1px solid rgba(255, 255, 255, 0.95)',
+                boxShadow: '0 12px 35px rgba(37, 99, 235, 0.07)'
+            }}>
                 <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '1.25rem' }}>
                     {/* Doctor Info & Hospital Affiliation */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
@@ -85,14 +92,14 @@ export default function DoctorDashboard() {
                             width: '64px',
                             height: '64px',
                             borderRadius: '50%',
-                            background: '#2563eb',
+                            background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
                             color: '#ffffff',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             fontSize: '1.4rem',
                             fontWeight: '800',
-                            boxShadow: '0 4px 14px rgba(37, 99, 235, 0.25)'
+                            boxShadow: '0 6px 18px rgba(37, 99, 235, 0.3)'
                         }}>
                             {doctor.avatar}
                         </div>
@@ -102,7 +109,7 @@ export default function DoctorDashboard() {
                                     {doctor.name}
                                 </h1>
                                 <span style={{
-                                    background: '#edf2fe',
+                                    background: 'rgba(237, 242, 254, 0.9)',
                                     color: '#2563eb',
                                     padding: '0.2rem 0.65rem',
                                     borderRadius: '12px',
@@ -110,9 +117,10 @@ export default function DoctorDashboard() {
                                     fontWeight: '700',
                                     display: 'flex',
                                     alignItems: 'center',
-                                    gap: '0.3rem'
+                                    gap: '0.3rem',
+                                    border: '1px solid rgba(191, 219, 254, 0.6)'
                                 }}>
-                                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981' }}></span>
+                                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 6px #10b981' }}></span>
                                     On Duty
                                 </span>
                             </div>
@@ -136,7 +144,9 @@ export default function DoctorDashboard() {
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: '0.5rem',
-                                background: '#ffffff',
+                                background: 'rgba(255, 255, 255, 0.9)',
+                                backdropFilter: 'blur(8px)',
+                                WebkitBackdropFilter: 'blur(8px)',
                                 border: '1.5px solid #fee2e2',
                                 color: '#ef4444',
                                 padding: '0.65rem 1.25rem',
@@ -154,14 +164,16 @@ export default function DoctorDashboard() {
                 </div>
             </div>
 
-            {/* 3 Simple Metric Cards - Dynamic Counts (matching the 4-card pastel aesthetic) */}
+            {/* 3 Simple Metric Cards - Dynamic Counts (Glassy Pastel Aesthetic) */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem', marginBottom: '1.5rem' }}>
                 <div style={{
-                    background: '#ffffff',
-                    borderRadius: '20px',
-                    border: '1px solid #f1f5f9',
-                    boxShadow: '0 4px 18px rgba(0, 0, 0, 0.02)',
-                    padding: '1.4rem',
+                    background: 'rgba(255, 255, 255, 0.82)',
+                    backdropFilter: 'blur(16px)',
+                    WebkitBackdropFilter: 'blur(16px)',
+                    borderRadius: '22px',
+                    border: '1px solid rgba(255, 255, 255, 0.9)',
+                    boxShadow: '0 8px 25px rgba(37, 99, 235, 0.04)',
+                    padding: '1.5rem',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between'
@@ -177,11 +189,13 @@ export default function DoctorDashboard() {
                 </div>
 
                 <div style={{
-                    background: '#ffffff',
-                    borderRadius: '20px',
-                    border: '1px solid #f1f5f9',
-                    boxShadow: '0 4px 18px rgba(0, 0, 0, 0.02)',
-                    padding: '1.4rem',
+                    background: 'rgba(255, 255, 255, 0.82)',
+                    backdropFilter: 'blur(16px)',
+                    WebkitBackdropFilter: 'blur(16px)',
+                    borderRadius: '22px',
+                    border: '1px solid rgba(255, 255, 255, 0.9)',
+                    boxShadow: '0 8px 25px rgba(37, 99, 235, 0.04)',
+                    padding: '1.5rem',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between'
@@ -199,11 +213,13 @@ export default function DoctorDashboard() {
                 </div>
 
                 <div style={{
-                    background: '#ffffff',
-                    borderRadius: '20px',
-                    border: '1px solid #f1f5f9',
-                    boxShadow: '0 4px 18px rgba(0, 0, 0, 0.02)',
-                    padding: '1.4rem',
+                    background: 'rgba(255, 255, 255, 0.82)',
+                    backdropFilter: 'blur(16px)',
+                    WebkitBackdropFilter: 'blur(16px)',
+                    borderRadius: '22px',
+                    border: '1px solid rgba(255, 255, 255, 0.9)',
+                    boxShadow: '0 8px 25px rgba(37, 99, 235, 0.04)',
+                    padding: '1.5rem',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between'
@@ -223,10 +239,12 @@ export default function DoctorDashboard() {
 
             {/* Next Up Patient Spotlight Card */}
             <div style={{
-                background: '#ffffff',
-                borderRadius: '22px',
-                border: isCurrentlyAttending ? '2px solid #bfdbfe' : '1px solid #f1f5f9',
-                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)',
+                background: 'rgba(255, 255, 255, 0.85)',
+                backdropFilter: 'blur(16px)',
+                WebkitBackdropFilter: 'blur(16px)',
+                borderRadius: '24px',
+                border: isCurrentlyAttending ? '1.5px solid rgba(37, 99, 235, 0.4)' : '1px solid rgba(255, 255, 255, 0.9)',
+                boxShadow: isCurrentlyAttending ? '0 10px 30px rgba(37, 99, 235, 0.08)' : '0 10px 30px rgba(37, 99, 235, 0.04)',
                 padding: '1.75rem',
                 marginBottom: '1.5rem',
                 display: 'flex',
@@ -280,18 +298,18 @@ export default function DoctorDashboard() {
                             navigate(`/doctor/briefing?encounterId=${activePatient.token}`);
                         }}
                         style={{
-                            background: '#2563eb',
+                            background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
                             color: '#ffffff',
                             border: 'none',
-                            padding: '0.75rem 1.4rem',
-                            borderRadius: '14px',
+                            padding: '0.85rem 1.6rem',
+                            borderRadius: '16px',
                             fontWeight: '700',
-                            fontSize: '0.88rem',
+                            fontSize: '0.9rem',
                             cursor: 'pointer',
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '0.45rem',
-                            boxShadow: '0 4px 14px rgba(37, 99, 235, 0.25)',
+                            gap: '0.5rem',
+                            boxShadow: '0 8px 24px rgba(37, 99, 235, 0.35)',
                             transition: 'all 0.15s ease'
                         }}
                     >
@@ -307,7 +325,7 @@ export default function DoctorDashboard() {
                     onClick={() => navigate('/doctor/queue')}
                     style={{
                         ...cardStyle,
-                        borderRadius: '20px',
+                        borderRadius: '22px',
                         marginBottom: 0,
                         cursor: 'pointer',
                         display: 'flex',
@@ -336,7 +354,7 @@ export default function DoctorDashboard() {
                     onClick={() => navigate('/doctor/scan')}
                     style={{
                         ...cardStyle,
-                        borderRadius: '20px',
+                        borderRadius: '22px',
                         marginBottom: 0,
                         cursor: 'pointer',
                         display: 'flex',

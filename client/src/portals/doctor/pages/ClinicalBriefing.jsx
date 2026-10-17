@@ -53,10 +53,12 @@ export default function ClinicalBriefing() {
     };
 
     const cardStyle = {
-        background: '#ffffff',
-        borderRadius: '22px',
-        border: '1px solid #f1f5f9',
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)',
+        background: 'rgba(255, 255, 255, 0.85)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+        borderRadius: '24px',
+        border: '1px solid rgba(255, 255, 255, 0.9)',
+        boxShadow: '0 10px 30px rgba(37, 99, 235, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02)',
         padding: '1.75rem',
         marginBottom: '1.5rem'
     };
@@ -91,10 +93,12 @@ export default function ClinicalBriefing() {
 
             {/* Quick Patient Switcher Bar */}
             <div style={{
-                background: '#ffffff',
-                borderRadius: '18px',
-                border: '1px solid #f1f5f9',
-                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.02)',
+                background: 'rgba(255, 255, 255, 0.82)',
+                backdropFilter: 'blur(16px)',
+                WebkitBackdropFilter: 'blur(16px)',
+                borderRadius: '20px',
+                border: '1px solid rgba(255, 255, 255, 0.9)',
+                boxShadow: '0 6px 20px rgba(37, 99, 235, 0.04)',
                 padding: '0.85rem 1.25rem',
                 marginBottom: '1.25rem',
                 display: 'flex',
@@ -120,10 +124,10 @@ export default function ClinicalBriefing() {
                                 type="button"
                                 onClick={() => handleSelectPatient(p.token)}
                                 style={{
-                                    background: isSelected ? '#2563eb' : '#f8fafc',
+                                    background: isSelected ? 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)' : 'rgba(248, 250, 252, 0.8)',
                                     color: isSelected ? '#ffffff' : '#334155',
-                                    border: isSelected ? '1.5px solid #2563eb' : '1px solid #e2e8f0',
-                                    padding: '0.35rem 0.75rem',
+                                    border: isSelected ? 'none' : '1px solid rgba(226, 232, 240, 0.8)',
+                                    padding: '0.35rem 0.85rem',
                                     borderRadius: '20px',
                                     fontSize: '0.78rem',
                                     fontWeight: '700',
@@ -131,7 +135,7 @@ export default function ClinicalBriefing() {
                                     display: 'flex',
                                     alignItems: 'center',
                                     gap: '0.35rem',
-                                    boxShadow: isSelected ? '0 2px 8px rgba(37, 99, 235, 0.2)' : 'none',
+                                    boxShadow: isSelected ? '0 4px 10px rgba(37, 99, 235, 0.25)' : 'none',
                                     transition: 'all 0.15s ease'
                                 }}
                             >
@@ -537,19 +541,19 @@ export default function ClinicalBriefing() {
                     onClick={handleContinue}
                     style={{
                         width: '100%',
-                        background: '#2563eb',
+                        background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
                         color: '#ffffff',
                         border: 'none',
-                        padding: '0.95rem',
-                        borderRadius: '14px',
+                        padding: '1rem',
+                        borderRadius: '16px',
                         fontWeight: '800',
-                        fontSize: '0.95rem',
+                        fontSize: '0.96rem',
                         cursor: 'pointer',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         gap: '0.5rem',
-                        boxShadow: '0 4px 14px rgba(37, 99, 235, 0.25)',
+                        boxShadow: '0 8px 24px rgba(37, 99, 235, 0.35)',
                         transition: 'all 0.15s ease'
                     }}
                 >

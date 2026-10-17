@@ -66,10 +66,12 @@ export default function ConsultationNotes() {
     };
 
     const cardStyle = {
-        background: '#ffffff',
-        borderRadius: '22px',
-        border: '1px solid #f1f5f9',
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)',
+        background: 'rgba(255, 255, 255, 0.85)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+        borderRadius: '24px',
+        border: '1px solid rgba(255, 255, 255, 0.9)',
+        boxShadow: '0 10px 30px rgba(37, 99, 235, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02)',
         padding: '1.75rem',
         marginBottom: '1.5rem'
     };
@@ -77,9 +79,11 @@ export default function ConsultationNotes() {
     const textareaStyle = {
         width: '100%',
         padding: '0.85rem 1rem',
-        borderRadius: '12px',
-        border: '1px solid #e2e8f0',
-        background: '#f8fafc',
+        borderRadius: '14px',
+        border: '1px solid rgba(226, 232, 240, 0.8)',
+        background: 'rgba(248, 250, 252, 0.8)',
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
         fontSize: '0.9rem',
         color: '#1e293b',
         outline: 'none',
@@ -116,13 +120,15 @@ export default function ConsultationNotes() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.55rem',
-                    background: '#edf2fe',
+                    background: 'rgba(237, 242, 254, 0.9)',
+                    backdropFilter: 'blur(8px)',
+                    WebkitBackdropFilter: 'blur(8px)',
                     padding: '0.4rem 0.95rem',
                     borderRadius: '20px',
                     fontSize: '0.84rem',
                     fontWeight: '700',
                     color: '#0f172a',
-                    border: '1px solid #bfdbfe'
+                    border: '1px solid rgba(191, 219, 254, 0.6)'
                 }}>
                     <User size={15} color="#2563eb" />
                     <span>Patient: <strong>{patient.name}</strong> ({patient.age} / {patient.gender === 'Female' ? 'F' : 'M'}) · Token: <strong style={{ color: '#2563eb' }}>{patient.token}</strong></span>
@@ -239,19 +245,19 @@ export default function ConsultationNotes() {
                     disabled={saving}
                     style={{
                         width: '100%',
-                        background: '#2563eb',
+                        background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
                         color: '#ffffff',
                         border: 'none',
-                        padding: '0.95rem',
-                        borderRadius: '14px',
+                        padding: '1rem',
+                        borderRadius: '16px',
                         fontWeight: '800',
-                        fontSize: '0.95rem',
+                        fontSize: '0.96rem',
                         cursor: 'pointer',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         gap: '0.5rem',
-                        boxShadow: '0 4px 14px rgba(37, 99, 235, 0.25)',
+                        boxShadow: '0 8px 24px rgba(37, 99, 235, 0.35)',
                         transition: 'all 0.15s ease'
                     }}
                 >

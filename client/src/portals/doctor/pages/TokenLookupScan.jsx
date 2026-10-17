@@ -126,10 +126,12 @@ export default function TokenLookupScan() {
     };
 
     const cardStyle = {
-        background: '#ffffff',
-        borderRadius: '22px',
-        border: '1px solid #f1f5f9',
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)',
+        background: 'rgba(255, 255, 255, 0.85)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+        borderRadius: '24px',
+        border: '1px solid rgba(255, 255, 255, 0.9)',
+        boxShadow: '0 10px 30px rgba(37, 99, 235, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02)',
         padding: '1.75rem',
         marginBottom: '1.5rem'
     };
@@ -153,9 +155,11 @@ export default function TokenLookupScan() {
 
                 {/* Camera / Optical Viewfinder Box */}
                 <div style={{
-                    background: '#f8fafc',
-                    border: '2px dashed #cbd5e1',
-                    borderRadius: '14px',
+                    background: 'rgba(248, 250, 252, 0.8)',
+                    backdropFilter: 'blur(8px)',
+                    WebkitBackdropFilter: 'blur(8px)',
+                    border: '2px dashed rgba(203, 213, 225, 0.8)',
+                    borderRadius: '16px',
                     padding: isCameraActive ? '1rem' : '2rem',
                     textAlign: 'center',
                     marginBottom: '1.5rem'
@@ -188,18 +192,19 @@ export default function TokenLookupScan() {
                                     type="button"
                                     onClick={startCamera}
                                     style={{
-                                        background: '#2563eb',
+                                        background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
                                         color: '#ffffff',
                                         border: 'none',
-                                        padding: '0.65rem 1.25rem',
-                                        borderRadius: '12px',
+                                        padding: '0.7rem 1.4rem',
+                                        borderRadius: '14px',
                                         fontWeight: '700',
-                                        fontSize: '0.85rem',
+                                        fontSize: '0.86rem',
                                         cursor: 'pointer',
                                         display: 'flex',
                                         alignItems: 'center',
                                         gap: '0.45rem',
-                                        boxShadow: '0 4px 14px rgba(37, 99, 235, 0.25)'
+                                        boxShadow: '0 6px 18px rgba(37, 99, 235, 0.28)',
+                                        transition: 'all 0.15s ease'
                                     }}
                                 >
                                     <Camera size={16} />
@@ -207,17 +212,21 @@ export default function TokenLookupScan() {
                                 </button>
 
                                 <label style={{
-                                    background: '#ffffff',
+                                    background: 'rgba(255, 255, 255, 0.9)',
+                                    backdropFilter: 'blur(8px)',
+                                    WebkitBackdropFilter: 'blur(8px)',
                                     color: '#2563eb',
-                                    border: '1.5px solid #bfdbfe',
-                                    padding: '0.65rem 1.25rem',
-                                    borderRadius: '12px',
+                                    border: '1.5px solid rgba(191, 219, 254, 0.8)',
+                                    padding: '0.7rem 1.4rem',
+                                    borderRadius: '14px',
                                     fontWeight: '700',
-                                    fontSize: '0.85rem',
+                                    fontSize: '0.86rem',
                                     cursor: 'pointer',
                                     display: 'flex',
                                     alignItems: 'center',
-                                    gap: '0.45rem'
+                                    gap: '0.45rem',
+                                    boxShadow: '0 2px 8px rgba(37, 99, 235, 0.04)',
+                                    transition: 'all 0.15s ease'
                                 }}>
                                     <Upload size={16} />
                                     Upload QR Image
@@ -241,14 +250,17 @@ export default function TokenLookupScan() {
                                         type="button"
                                         onClick={() => { setTokenId(tok); handleLookup(tok); }}
                                         style={{
-                                            background: '#edf2fe',
-                                            border: '1px solid #bfdbfe',
+                                            background: 'rgba(237, 242, 254, 0.9)',
+                                            backdropFilter: 'blur(8px)',
+                                            WebkitBackdropFilter: 'blur(8px)',
+                                            border: '1px solid rgba(191, 219, 254, 0.6)',
                                             color: '#2563eb',
                                             padding: '0.35rem 0.85rem',
                                             borderRadius: '10px',
                                             fontSize: '0.8rem',
                                             fontWeight: '700',
-                                            cursor: 'pointer'
+                                            cursor: 'pointer',
+                                            transition: 'all 0.15s ease'
                                         }}
                                     >
                                         {tok}
@@ -305,9 +317,11 @@ export default function TokenLookupScan() {
                         style={{
                             flex: 1,
                             padding: '0.75rem 1rem',
-                            borderRadius: '10px',
-                            border: '1px solid #e2e8f0',
-                            background: '#f8fafc',
+                            borderRadius: '12px',
+                            border: '1px solid rgba(226, 232, 240, 0.8)',
+                            background: 'rgba(248, 250, 252, 0.8)',
+                            backdropFilter: 'blur(8px)',
+                            WebkitBackdropFilter: 'blur(8px)',
                             fontSize: '0.9rem',
                             outline: 'none'
                         }}
@@ -316,15 +330,16 @@ export default function TokenLookupScan() {
                         onClick={() => handleLookup()}
                         disabled={loading}
                         style={{
-                            background: '#2563eb',
+                            background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
                             color: '#ffffff',
                             border: 'none',
-                            padding: '0.75rem 1.4rem',
+                            padding: '0.75rem 1.5rem',
                             borderRadius: '12px',
                             fontWeight: '700',
                             fontSize: '0.88rem',
                             cursor: 'pointer',
-                            boxShadow: '0 4px 14px rgba(37, 99, 235, 0.25)'
+                            boxShadow: '0 4px 14px rgba(37, 99, 235, 0.25)',
+                            transition: 'all 0.15s ease'
                         }}
                     >
                         {loading ? 'Verifying...' : 'Lookup'}
@@ -334,14 +349,16 @@ export default function TokenLookupScan() {
                 {/* Verified Patient Result Card */}
                 {patientResult && (
                     <div style={{
-                        background: '#edf2fe',
-                        border: '1px solid #bfdbfe',
-                        borderRadius: '16px',
-                        padding: '1.25rem'
+                        background: 'rgba(237, 242, 254, 0.85)',
+                        backdropFilter: 'blur(10px)',
+                        WebkitBackdropFilter: 'blur(10px)',
+                        border: '1px solid rgba(191, 219, 254, 0.6)',
+                        borderRadius: '18px',
+                        padding: '1.35rem'
                     }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                                <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: '#2563eb', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: '#2563eb', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 10px rgba(37, 99, 235, 0.25)' }}>
                                     <User size={18} />
                                 </div>
                                 <div>
@@ -367,19 +384,20 @@ export default function TokenLookupScan() {
                             onClick={handleProceed}
                             style={{
                                 width: '100%',
-                                background: '#2563eb',
+                                background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
                                 color: '#ffffff',
                                 border: 'none',
-                                padding: '0.85rem',
-                                borderRadius: '14px',
+                                padding: '0.95rem',
+                                borderRadius: '16px',
                                 fontWeight: '700',
-                                fontSize: '0.92rem',
+                                fontSize: '0.94rem',
                                 cursor: 'pointer',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 gap: '0.5rem',
-                                boxShadow: '0 4px 14px rgba(37, 99, 235, 0.25)'
+                                boxShadow: '0 8px 24px rgba(37, 99, 235, 0.35)',
+                                transition: 'all 0.15s ease'
                             }}
                         >
                             Open Clinical Briefing

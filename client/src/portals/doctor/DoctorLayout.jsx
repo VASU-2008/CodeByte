@@ -68,255 +68,254 @@ export default function DoctorLayout({ children }) {
         <div style={{
             minHeight: '100vh',
             display: 'flex',
-            flexDirection: 'column',
-            background: '#f5f7fb',
+            background: 'radial-gradient(at 0% 0%, rgba(224, 238, 255, 0.7) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(238, 242, 255, 0.8) 0px, transparent 50%), radial-gradient(at 50% 100%, rgba(240, 249, 255, 0.7) 0px, transparent 50%), #f8faff',
             fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
             color: '#0f172a'
         }}>
-            {/* Top Global Bar */}
-            <header style={{
-                height: '70px',
-                background: '#ffffff',
-                borderBottom: '1px solid #f1f5f9',
+            {/* Clean Full-Height Light Glassy Sidebar */}
+            <aside style={{
+                width: '270px',
+                background: 'rgba(255, 255, 255, 0.82)',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                borderRight: '1px solid rgba(226, 232, 240, 0.7)',
                 display: 'flex',
-                alignItems: 'center',
+                flexDirection: 'column',
                 justifyContent: 'space-between',
-                padding: '0 2rem',
+                padding: '1.75rem 1.25rem',
+                boxSizing: 'border-box',
                 position: 'sticky',
                 top: 0,
-                zIndex: 40
+                height: '100vh',
+                overflowY: 'auto'
             }}>
-                {/* Brand / Portal Title */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+                <div>
+                    {/* Brand / Logo (matching the screenshot) */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginBottom: '1.75rem' }}>
+                        <div style={{
+                            width: '44px',
+                            height: '44px',
+                            borderRadius: '50%',
+                            background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: '#ffffff',
+                            boxShadow: '0 6px 16px rgba(37, 99, 235, 0.3)'
+                        }}>
+                            <Heart size={22} fill="#ffffff" />
+                        </div>
+                        <div>
+                            <div style={{ fontSize: '1.3rem', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
+                                Veyora
+                            </div>
+                            <div style={{ fontSize: '0.68rem', fontWeight: '800', color: '#94a3b8', letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: '0.15rem' }}>
+                                Healthcare
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Profile Persona Pill Card (matching the screenshot) */}
                     <div style={{
-                        width: '42px',
-                        height: '42px',
-                        borderRadius: '14px',
-                        background: '#2563eb',
+                        background: 'rgba(237, 242, 254, 0.85)',
+                        backdropFilter: 'blur(8px)',
+                        WebkitBackdropFilter: 'blur(8px)',
+                        border: '1px solid rgba(191, 219, 254, 0.5)',
+                        borderRadius: '18px',
+                        padding: '0.75rem 0.95rem',
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'center',
-                        color: '#ffffff',
-                        boxShadow: '0 4px 12px rgba(37, 99, 235, 0.25)'
+                        justifyContent: 'space-between',
+                        marginBottom: '0.85rem'
                     }}>
-                        <Heart size={22} fill="#ffffff" />
-                    </div>
-                    <div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <span style={{ fontSize: '1.25rem', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.02em' }}>
-                                Veyora
-                            </span>
-                            <span style={{
-                                fontSize: '0.72rem',
-                                background: '#edf2fe',
-                                color: '#2563eb',
-                                padding: '0.15rem 0.55rem',
-                                borderRadius: '8px',
-                                fontWeight: '700'
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                            <div style={{
+                                width: '38px',
+                                height: '38px',
+                                borderRadius: '50%',
+                                background: '#2563eb',
+                                color: '#ffffff',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '0.95rem',
+                                fontWeight: '800',
+                                boxShadow: '0 4px 10px rgba(37, 99, 235, 0.25)'
                             }}>
-                                Doctor Portal
-                            </span>
+                                <User size={18} />
+                            </div>
+                            <div>
+                                <div style={{ fontSize: '0.92rem', fontWeight: '800', color: '#0f172a' }}>
+                                    Doctor
+                                </div>
+                                <div style={{ fontSize: '0.74rem', color: '#2563eb', fontWeight: '600' }}>
+                                    Doctor Portal
+                                </div>
+                            </div>
                         </div>
-                        <div style={{ fontSize: '0.68rem', fontWeight: '700', color: '#94a3b8', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-                            Healthcare
+                        <div style={{
+                            width: '28px',
+                            height: '28px',
+                            borderRadius: '50%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: '#64748b',
+                            cursor: 'pointer'
+                        }}>
+                            <Bell size={16} />
                         </div>
                     </div>
+
+                    {/* Language Selector Pill (matching the screenshot) */}
+                    <div style={{
+                        display: 'inline-flex',
+                        background: 'rgba(241, 245, 249, 0.8)',
+                        borderRadius: '20px',
+                        padding: '0.2rem',
+                        gap: '0.2rem',
+                        marginBottom: '1.25rem',
+                        border: '1px solid rgba(226, 232, 240, 0.5)'
+                    }}>
+                        <span style={{
+                            background: '#2563eb',
+                            color: '#ffffff',
+                            borderRadius: '16px',
+                            padding: '0.2rem 0.75rem',
+                            fontSize: '0.74rem',
+                            fontWeight: '700',
+                            boxShadow: '0 2px 6px rgba(37, 99, 235, 0.25)'
+                        }}>
+                            EN
+                        </span>
+                        <span style={{
+                            color: '#64748b',
+                            padding: '0.2rem 0.65rem',
+                            fontSize: '0.74rem',
+                            fontWeight: '600'
+                        }}>
+                            हि
+                        </span>
+                    </div>
+
+                    {/* Navigation Items */}
+                    <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                        {navItems.map((item) => {
+                            const active = isCurrentPath(item.path);
+                            const IconComponent = item.icon;
+                            return (
+                                <NavLink
+                                    key={item.label}
+                                    to={item.path}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                        padding: '0.7rem 0.95rem',
+                                        borderRadius: '14px',
+                                        textDecoration: 'none',
+                                        fontSize: '0.88rem',
+                                        fontWeight: active ? '700' : '500',
+                                        color: active ? '#2563eb' : '#475569',
+                                        background: active ? 'rgba(237, 242, 254, 0.9)' : 'transparent',
+                                        backdropFilter: active ? 'blur(8px)' : 'none',
+                                        WebkitBackdropFilter: active ? 'blur(8px)' : 'none',
+                                        boxShadow: active ? '0 2px 8px rgba(37, 99, 235, 0.08)' : 'none',
+                                        transition: 'all 0.15s ease'
+                                    }}
+                                >
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                        <IconComponent size={18} color={active ? '#2563eb' : '#64748b'} />
+                                        <span>{item.label}</span>
+                                    </div>
+                                    {active && <ChevronRight size={16} color="#2563eb" />}
+                                </NavLink>
+                            );
+                        })}
+                    </nav>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+                <div>
+                    {/* Current Patient Context Pill */}
+                    <div style={{
+                        marginBottom: '1rem',
+                        padding: '0.75rem 0.95rem',
+                        background: 'rgba(248, 250, 253, 0.85)',
+                        backdropFilter: 'blur(8px)',
+                        WebkitBackdropFilter: 'blur(8px)',
+                        borderRadius: '16px',
+                        border: '1px solid rgba(226, 232, 240, 0.7)'
+                    }}>
+                        <div style={{ fontSize: '0.68rem', fontWeight: '800', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                            Current Patient
+                        </div>
+                        <div style={{ fontSize: '0.88rem', fontWeight: '800', color: '#0f172a', marginTop: '0.2rem' }}>
+                            {activePatient.name}
+                        </div>
+                        <div style={{ fontSize: '0.74rem', color: '#2563eb', fontWeight: '700', marginTop: '0.1rem' }}>
+                            Token: {activePatient.token}
+                        </div>
+                    </div>
+
+                    {/* Bottom Logout */}
+                    <button
+                        onClick={() => navigate('/')}
+                        style={{
+                            width: '100%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.75rem',
+                            padding: '0.65rem 0.95rem',
+                            borderRadius: '12px',
+                            border: 'none',
+                            background: 'transparent',
+                            color: '#ef4444',
+                            fontSize: '0.88rem',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                            transition: 'all 0.15s ease'
+                        }}
+                    >
+                        <LogOut size={18} color="#ef4444" />
+                        <span>Sign Out</span>
+                    </button>
+                </div>
+            </aside>
+
+            {/* Page Content Canvas with Glassy Ambient Header */}
+            <main style={{ flex: 1, padding: '2rem 2.5rem', overflowY: 'auto', minHeight: '100vh' }}>
+                {/* Clean Top Status Strip */}
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: '1.75rem'
+                }}>
+                    <div style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: '600' }}>
+                        Veyora Healthcare · Clinical Portal
+                    </div>
                     <div style={{
                         display: 'flex',
                         alignItems: 'center',
                         gap: '0.5rem',
-                        background: '#f8fafc',
-                        border: '1px solid #e2e8f0',
-                        padding: '0.35rem 0.85rem',
+                        background: 'rgba(255, 255, 255, 0.85)',
+                        backdropFilter: 'blur(10px)',
+                        WebkitBackdropFilter: 'blur(10px)',
+                        border: '1px solid rgba(226, 232, 240, 0.8)',
+                        padding: '0.4rem 0.95rem',
                         borderRadius: '20px',
                         fontSize: '0.82rem',
-                        color: '#475569',
-                        fontWeight: '600'
+                        color: '#334155',
+                        fontWeight: '600',
+                        boxShadow: '0 2px 10px rgba(0, 0, 0, 0.03)'
                     }}>
-                        <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }}></span>
+                        <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px #10b981' }}></span>
                         <span>Clinical Station Active</span>
                     </div>
                 </div>
-            </header>
 
-            {/* Main Layout Container */}
-            <div style={{ display: 'flex', flex: 1 }}>
-                {/* Clean Light Sidebar */}
-                <aside style={{
-                    width: '260px',
-                    background: '#ffffff',
-                    borderRight: '1px solid #f1f5f9',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    padding: '1.5rem 1rem',
-                    boxSizing: 'border-box'
-                }}>
-                    <div>
-                        {/* Profile Persona Pill Card (matching the image) */}
-                        <div style={{
-                            background: '#edf2fe',
-                            borderRadius: '16px',
-                            padding: '0.75rem 0.95rem',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            marginBottom: '0.85rem'
-                        }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                <div style={{
-                                    width: '38px',
-                                    height: '38px',
-                                    borderRadius: '50%',
-                                    background: '#2563eb',
-                                    color: '#ffffff',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    fontSize: '0.95rem',
-                                    fontWeight: '800'
-                                }}>
-                                    <User size={18} />
-                                </div>
-                                <div>
-                                    <div style={{ fontSize: '0.92rem', fontWeight: '800', color: '#0f172a' }}>
-                                        Doctor
-                                    </div>
-                                    <div style={{ fontSize: '0.74rem', color: '#2563eb', fontWeight: '600' }}>
-                                        Doctor Portal
-                                    </div>
-                                </div>
-                            </div>
-                            <div style={{
-                                width: '28px',
-                                height: '28px',
-                                borderRadius: '50%',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                color: '#64748b',
-                                cursor: 'pointer'
-                            }}>
-                                <Bell size={16} />
-                            </div>
-                        </div>
-
-                        {/* Language Selector Pill (matching the image) */}
-                        <div style={{
-                            display: 'inline-flex',
-                            background: '#f1f5f9',
-                            borderRadius: '20px',
-                            padding: '0.2rem',
-                            gap: '0.2rem',
-                            marginBottom: '1.25rem'
-                        }}>
-                            <span style={{
-                                background: '#2563eb',
-                                color: '#ffffff',
-                                borderRadius: '16px',
-                                padding: '0.15rem 0.65rem',
-                                fontSize: '0.74rem',
-                                fontWeight: '700'
-                            }}>
-                                EN
-                            </span>
-                            <span style={{
-                                color: '#64748b',
-                                padding: '0.15rem 0.65rem',
-                                fontSize: '0.74rem',
-                                fontWeight: '600'
-                            }}>
-                                हि
-                            </span>
-                        </div>
-
-                        {/* Navigation Items */}
-                        <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                            {navItems.map((item) => {
-                                const active = isCurrentPath(item.path);
-                                const IconComponent = item.icon;
-                                return (
-                                    <NavLink
-                                        key={item.label}
-                                        to={item.path}
-                                        style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'space-between',
-                                            padding: '0.7rem 0.95rem',
-                                            borderRadius: '14px',
-                                            textDecoration: 'none',
-                                            fontSize: '0.88rem',
-                                            fontWeight: active ? '700' : '500',
-                                            color: active ? '#2563eb' : '#475569',
-                                            background: active ? '#edf2fe' : 'transparent',
-                                            transition: 'all 0.15s ease'
-                                        }}
-                                    >
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                            <IconComponent size={18} color={active ? '#2563eb' : '#64748b'} />
-                                            <span>{item.label}</span>
-                                        </div>
-                                        {active && <ChevronRight size={16} color="#2563eb" />}
-                                    </NavLink>
-                                );
-                            })}
-                        </nav>
-                    </div>
-
-                    <div>
-                        {/* Current Patient Context Pill */}
-                        <div style={{
-                            marginBottom: '1rem',
-                            padding: '0.75rem 0.95rem',
-                            background: '#f8fafd',
-                            borderRadius: '14px',
-                            border: '1px solid #e2e8f0'
-                        }}>
-                            <div style={{ fontSize: '0.68rem', fontWeight: '800', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                                Current Patient
-                            </div>
-                            <div style={{ fontSize: '0.88rem', fontWeight: '800', color: '#0f172a', marginTop: '0.2rem' }}>
-                                {activePatient.name}
-                            </div>
-                            <div style={{ fontSize: '0.74rem', color: '#2563eb', fontWeight: '700', marginTop: '0.1rem' }}>
-                                Token: {activePatient.token}
-                            </div>
-                        </div>
-
-                        {/* Bottom Logout */}
-                        <button
-                            onClick={() => navigate('/')}
-                            style={{
-                                width: '100%',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.75rem',
-                                padding: '0.65rem 0.95rem',
-                                borderRadius: '12px',
-                                border: 'none',
-                                background: 'transparent',
-                                color: '#ef4444',
-                                fontSize: '0.88rem',
-                                fontWeight: '600',
-                                cursor: 'pointer',
-                                transition: 'all 0.15s ease'
-                            }}
-                        >
-                            <LogOut size={18} color="#ef4444" />
-                            <span>Sign Out</span>
-                        </button>
-                    </div>
-                </aside>
-
-                {/* Page Content Canvas */}
-                <main style={{ flex: 1, padding: '2rem', overflowY: 'auto' }}>
-                    {children ? children : <Outlet />}
-                </main>
-            </div>
+                {children ? children : <Outlet />}
+            </main>
         </div>
     );
 }

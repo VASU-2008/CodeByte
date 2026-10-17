@@ -52,10 +52,12 @@ export default function SignOffHandoff() {
     };
 
     const cardStyle = {
-        background: '#ffffff',
-        borderRadius: '22px',
-        border: '1px solid #f1f5f9',
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)',
+        background: 'rgba(255, 255, 255, 0.85)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+        borderRadius: '24px',
+        border: '1px solid rgba(255, 255, 255, 0.9)',
+        boxShadow: '0 10px 30px rgba(37, 99, 235, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02)',
         padding: '1.75rem',
         marginBottom: '1.5rem'
     };
@@ -88,13 +90,15 @@ export default function SignOffHandoff() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.55rem',
-                    background: '#edf2fe',
+                    background: 'rgba(237, 242, 254, 0.9)',
+                    backdropFilter: 'blur(8px)',
+                    WebkitBackdropFilter: 'blur(8px)',
                     padding: '0.4rem 0.95rem',
                     borderRadius: '20px',
                     fontSize: '0.84rem',
                     fontWeight: '700',
                     color: '#0f172a',
-                    border: '1px solid #bfdbfe'
+                    border: '1px solid rgba(191, 219, 254, 0.6)'
                 }}>
                     <User size={15} color="#2563eb" />
                     <span>Patient: <strong>{patient.name}</strong> ({patient.age} / {patient.gender === 'Female' ? 'F' : 'M'}) · Token: <strong style={{ color: '#2563eb' }}>{patient.token}</strong></span>
@@ -128,10 +132,12 @@ export default function SignOffHandoff() {
                         <div style={{
                             maxWidth: '480px',
                             margin: '0 auto 1.75rem auto',
-                            background: '#f8fafc',
-                            borderRadius: '12px',
-                            padding: '1rem',
-                            border: '1px solid #e2e8f0',
+                            background: 'rgba(248, 250, 252, 0.8)',
+                            backdropFilter: 'blur(8px)',
+                            WebkitBackdropFilter: 'blur(8px)',
+                            borderRadius: '16px',
+                            padding: '1.25rem',
+                            border: '1px solid rgba(226, 232, 240, 0.8)',
                             fontSize: '0.84rem',
                             color: '#334155',
                             textAlign: 'left',
@@ -148,17 +154,20 @@ export default function SignOffHandoff() {
                             <button
                                 onClick={() => window.print()}
                                 style={{
-                                    background: '#ffffff',
-                                    border: '1.5px solid #bfdbfe',
-                                    padding: '0.7rem 1.35rem',
-                                    borderRadius: '12px',
+                                    background: 'rgba(255, 255, 255, 0.9)',
+                                    backdropFilter: 'blur(8px)',
+                                    WebkitBackdropFilter: 'blur(8px)',
+                                    border: '1.5px solid rgba(191, 219, 254, 0.8)',
+                                    padding: '0.75rem 1.45rem',
+                                    borderRadius: '14px',
                                     fontWeight: '700',
                                     fontSize: '0.88rem',
                                     color: '#2563eb',
                                     cursor: 'pointer',
                                     display: 'flex',
                                     alignItems: 'center',
-                                    gap: '0.45rem'
+                                    gap: '0.45rem',
+                                    boxShadow: '0 2px 8px rgba(37, 99, 235, 0.04)'
                                 }}
                             >
                                 <Printer size={16} />
@@ -167,15 +176,15 @@ export default function SignOffHandoff() {
                             <button
                                 onClick={() => navigate('/doctor/queue')}
                                 style={{
-                                    background: '#2563eb',
+                                    background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
                                     color: '#ffffff',
                                     border: 'none',
-                                    padding: '0.7rem 1.45rem',
-                                    borderRadius: '14px',
+                                    padding: '0.75rem 1.6rem',
+                                    borderRadius: '16px',
                                     fontWeight: '800',
                                     fontSize: '0.88rem',
                                     cursor: 'pointer',
-                                    boxShadow: '0 4px 14px rgba(37, 99, 235, 0.25)'
+                                    boxShadow: '0 8px 24px rgba(37, 99, 235, 0.35)'
                                 }}
                             >
                                 Return to Patient Queue
@@ -305,19 +314,20 @@ export default function SignOffHandoff() {
                             disabled={signing || !affirmation}
                             style={{
                                 width: '100%',
-                                background: affirmation ? '#2563eb' : '#94a3b8',
+                                background: affirmation ? 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)' : '#94a3b8',
                                 color: '#ffffff',
                                 border: 'none',
-                                padding: '1rem',
-                                borderRadius: '14px',
+                                padding: '1.05rem',
+                                borderRadius: '16px',
                                 fontWeight: '800',
                                 fontSize: '0.96rem',
                                 cursor: affirmation ? 'pointer' : 'not-allowed',
-                                boxShadow: affirmation ? '0 4px 14px rgba(37, 99, 235, 0.25)' : 'none',
+                                boxShadow: affirmation ? '0 8px 24px rgba(37, 99, 235, 0.35)' : 'none',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                gap: '0.5rem'
+                                gap: '0.5rem',
+                                transition: 'all 0.15s ease'
                             }}
                         >
                             <FileCheck size={18} />

@@ -19,5 +19,5 @@ app.use('/api/alerts', require('./routes/alertRoutes'));
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok', service: 'Veyora Backend' }));
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`[Server] Running on port ${PORT}`));

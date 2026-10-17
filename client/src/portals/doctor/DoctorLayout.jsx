@@ -68,21 +68,23 @@ export default function DoctorLayout({ children }) {
         <div style={{
             minHeight: '100vh',
             display: 'flex',
-            background: 'radial-gradient(at 0% 0%, rgba(224, 238, 255, 0.7) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(238, 242, 255, 0.8) 0px, transparent 50%), radial-gradient(at 50% 100%, rgba(240, 249, 255, 0.7) 0px, transparent 50%), #f8faff',
-            fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+            background: '#f1f5f9',
+            fontFamily: "'Outfit', 'DM Sans', system-ui, -apple-system, sans-serif",
             color: '#0f172a'
         }}>
-            {/* Clean Full-Height Light Glassy Sidebar */}
+            {/* Clean Full-Height Light Sidebar (Matching Veyora Design System) */}
             <aside style={{
-                width: '270px',
-                background: 'rgba(255, 255, 255, 0.82)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                borderRight: '1px solid rgba(226, 232, 240, 0.7)',
+                width: '260px',
+                flexShrink: 0,
+                background: 'rgba(255, 255, 255, 0.88)',
+                backdropFilter: 'blur(16px)',
+                WebkitBackdropFilter: 'blur(16px)',
+                borderRight: '1px solid rgba(148, 163, 184, 0.25)',
+                boxShadow: '2px 0 20px rgba(0, 0, 0, 0.04)',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                padding: '1.75rem 1.25rem',
+                padding: '1.25rem 0.875rem',
                 boxSizing: 'border-box',
                 position: 'sticky',
                 top: 0,
@@ -90,65 +92,64 @@ export default function DoctorLayout({ children }) {
                 overflowY: 'auto'
             }}>
                 <div>
-                    {/* Brand / Logo (matching the screenshot) */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginBottom: '1.75rem' }}>
+                    {/* Brand / Logo */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', padding: '0.5rem 0.5rem 1.25rem', borderBottom: '1px solid rgba(148, 163, 184, 0.25)', marginBottom: '1rem' }}>
                         <div style={{
-                            width: '44px',
-                            height: '44px',
-                            borderRadius: '50%',
-                            background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                            width: '40px',
+                            height: '40px',
+                            borderRadius: '14px',
+                            background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             color: '#ffffff',
-                            boxShadow: '0 6px 16px rgba(37, 99, 235, 0.3)'
+                            boxShadow: '0 4px 12px rgba(59, 130, 246, 0.35)',
+                            flexShrink: 0
                         }}>
-                            <Heart size={22} fill="#ffffff" />
+                            <Heart size={20} fill="#ffffff" />
                         </div>
                         <div>
-                            <div style={{ fontSize: '1.3rem', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
+                            <div style={{ fontSize: '1.125rem', fontWeight: '800', color: '#0f172a', lineHeight: 1.1 }}>
                                 Veyora
                             </div>
-                            <div style={{ fontSize: '0.68rem', fontWeight: '800', color: '#94a3b8', letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: '0.15rem' }}>
+                            <div style={{ fontSize: '0.7rem', fontWeight: '500', color: '#94a3b8', letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: '0.1rem' }}>
                                 Healthcare
                             </div>
                         </div>
                     </div>
 
-                    {/* Profile Persona Pill Card (matching the screenshot) */}
+                    {/* Profile Persona Pill Card */}
                     <div style={{
-                        background: 'rgba(237, 242, 254, 0.85)',
-                        backdropFilter: 'blur(8px)',
-                        WebkitBackdropFilter: 'blur(8px)',
-                        border: '1px solid rgba(191, 219, 254, 0.5)',
-                        borderRadius: '18px',
-                        padding: '0.75rem 0.95rem',
+                        background: '#e0e7ff',
+                        borderRadius: '20px',
+                        padding: '0.75rem 0.65rem',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        marginBottom: '0.85rem'
+                        marginBottom: '0.75rem'
                     }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
                             <div style={{
-                                width: '38px',
-                                height: '38px',
+                                width: '36px',
+                                height: '36px',
                                 borderRadius: '50%',
-                                background: '#2563eb',
+                                background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)',
                                 color: '#ffffff',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                fontSize: '0.95rem',
-                                fontWeight: '800',
-                                boxShadow: '0 4px 10px rgba(37, 99, 235, 0.25)'
+                                fontSize: '0.9rem',
+                                fontWeight: '700',
+                                boxShadow: '0 2px 8px rgba(59, 130, 246, 0.3)',
+                                flexShrink: 0
                             }}>
                                 <User size={18} />
                             </div>
                             <div>
-                                <div style={{ fontSize: '0.92rem', fontWeight: '800', color: '#0f172a' }}>
+                                <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#0f172a', lineHeight: 1.2 }}>
                                     Doctor
                                 </div>
-                                <div style={{ fontSize: '0.74rem', color: '#2563eb', fontWeight: '600' }}>
+                                <div style={{ fontSize: '0.7rem', color: '#2563eb', fontWeight: '500' }}>
                                     Doctor Portal
                                 </div>
                             </div>
@@ -167,9 +168,8 @@ export default function DoctorLayout({ children }) {
                         </div>
                     </div>
 
-
                     {/* Navigation Items */}
-                    <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                    <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
                         {navItems.map((item) => {
                             const active = isCurrentPath(item.path);
                             const IconComponent = item.icon;
@@ -181,16 +181,13 @@ export default function DoctorLayout({ children }) {
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'space-between',
-                                        padding: '0.7rem 0.95rem',
-                                        borderRadius: '14px',
+                                        padding: '0.7rem 0.875rem',
+                                        borderRadius: '20px',
                                         textDecoration: 'none',
-                                        fontSize: '0.88rem',
-                                        fontWeight: active ? '700' : '500',
+                                        fontSize: '0.875rem',
+                                        fontWeight: active ? '600' : '500',
                                         color: active ? '#2563eb' : '#475569',
-                                        background: active ? 'rgba(237, 242, 254, 0.9)' : 'transparent',
-                                        backdropFilter: active ? 'blur(8px)' : 'none',
-                                        WebkitBackdropFilter: active ? 'blur(8px)' : 'none',
-                                        boxShadow: active ? '0 2px 8px rgba(37, 99, 235, 0.08)' : 'none',
+                                        background: active ? 'linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%)' : 'transparent',
                                         transition: 'all 0.15s ease'
                                     }}
                                 >
@@ -206,23 +203,22 @@ export default function DoctorLayout({ children }) {
                 </div>
 
                 <div>
-                    {/* Current Patient Context Pill */}
+                    {/* Current Patient Context Card */}
                     <div style={{
-                        marginBottom: '1rem',
-                        padding: '0.75rem 0.95rem',
-                        background: 'rgba(248, 250, 253, 0.85)',
-                        backdropFilter: 'blur(8px)',
-                        WebkitBackdropFilter: 'blur(8px)',
+                        marginBottom: '0.75rem',
+                        padding: '0.75rem 0.875rem',
+                        background: '#ffffff',
                         borderRadius: '16px',
-                        border: '1px solid rgba(226, 232, 240, 0.7)'
+                        border: '1px solid rgba(148, 163, 184, 0.25)',
+                        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)'
                     }}>
-                        <div style={{ fontSize: '0.68rem', fontWeight: '800', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                        <div style={{ fontSize: '0.68rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                             Current Patient
                         </div>
-                        <div style={{ fontSize: '0.88rem', fontWeight: '800', color: '#0f172a', marginTop: '0.2rem' }}>
+                        <div style={{ fontSize: '0.88rem', fontWeight: '700', color: '#0f172a', marginTop: '0.2rem' }}>
                             {activePatient.name}
                         </div>
-                        <div style={{ fontSize: '0.74rem', color: '#2563eb', fontWeight: '700', marginTop: '0.1rem' }}>
+                        <div style={{ fontSize: '0.72rem', color: '#2563eb', fontWeight: '600', marginTop: '0.1rem' }}>
                             Token: {activePatient.token}
                         </div>
                     </div>
@@ -234,13 +230,13 @@ export default function DoctorLayout({ children }) {
                             width: '100%',
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '0.75rem',
-                            padding: '0.65rem 0.95rem',
-                            borderRadius: '12px',
+                            gap: '0.625rem',
+                            padding: '0.625rem 0.875rem',
+                            borderRadius: '20px',
                             border: 'none',
                             background: 'transparent',
                             color: '#ef4444',
-                            fontSize: '0.88rem',
+                            fontSize: '0.875rem',
                             fontWeight: '600',
                             cursor: 'pointer',
                             transition: 'all 0.15s ease'
@@ -252,32 +248,32 @@ export default function DoctorLayout({ children }) {
                 </div>
             </aside>
 
-            {/* Page Content Canvas with Glassy Ambient Header */}
-            <main style={{ flex: 1, padding: '2rem 2.5rem', overflowY: 'auto', minHeight: '100vh' }}>
+            {/* Page Content Canvas */}
+            <main style={{ flex: 1, padding: '2rem 2.5rem', overflowY: 'auto', minHeight: '100vh', width: '100%', boxSizing: 'border-box' }}>
                 {/* Clean Top Status Strip */}
                 <div style={{
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    marginBottom: '1.75rem'
+                    marginBottom: '1.5rem',
+                    maxWidth: '1000px',
+                    margin: '0 auto 1.5rem auto'
                 }}>
-                    <div style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: '600' }}>
+                    <div style={{ fontSize: '0.875rem', color: '#64748b', fontWeight: '500' }}>
                         Veyora Healthcare · Clinical Portal
                     </div>
                     <div style={{
                         display: 'flex',
                         alignItems: 'center',
                         gap: '0.5rem',
-                        background: 'rgba(255, 255, 255, 0.85)',
-                        backdropFilter: 'blur(10px)',
-                        WebkitBackdropFilter: 'blur(10px)',
-                        border: '1px solid rgba(226, 232, 240, 0.8)',
-                        padding: '0.4rem 0.95rem',
+                        background: '#ffffff',
+                        border: '1px solid rgba(148, 163, 184, 0.25)',
+                        padding: '0.35rem 0.85rem',
                         borderRadius: '20px',
-                        fontSize: '0.82rem',
+                        fontSize: '0.8rem',
                         color: '#334155',
                         fontWeight: '600',
-                        boxShadow: '0 2px 10px rgba(0, 0, 0, 0.03)'
+                        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)'
                     }}>
                         <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px #10b981' }}></span>
                         <span>Clinical Station Active</span>

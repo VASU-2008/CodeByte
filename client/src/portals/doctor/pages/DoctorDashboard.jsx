@@ -66,24 +66,24 @@ export default function DoctorDashboard() {
     };
 
     const cardStyle = {
-        background: 'rgba(255, 255, 255, 0.85)',
+        background: 'rgba(255, 255, 255, 0.88)',
         backdropFilter: 'blur(16px)',
         WebkitBackdropFilter: 'blur(16px)',
         borderRadius: '24px',
-        border: '1px solid rgba(255, 255, 255, 0.9)',
-        boxShadow: '0 10px 30px rgba(37, 99, 235, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02)',
+        border: '1px solid rgba(148, 163, 184, 0.25)',
+        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.05)',
         padding: '1.75rem',
         marginBottom: '1.5rem'
     };
 
     return (
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-            {/* Top Clinician Header Card with Glassy Glow */}
+            {/* Top Clinician Header Card */}
             <div style={{
                 ...cardStyle,
-                background: 'radial-gradient(circle at top right, rgba(219, 234, 254, 0.65), transparent 60%), rgba(255, 255, 255, 0.88)',
-                border: '1px solid rgba(255, 255, 255, 0.95)',
-                boxShadow: '0 12px 35px rgba(37, 99, 235, 0.07)'
+                background: '#ffffff',
+                border: '1px solid rgba(148, 163, 184, 0.25)',
+                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.05)'
             }}>
                 <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '1.25rem' }}>
                     {/* Doctor Info & Hospital Affiliation */}
@@ -164,15 +164,13 @@ export default function DoctorDashboard() {
                 </div>
             </div>
 
-            {/* 3 Simple Metric Cards - Dynamic Counts (Glassy Pastel Aesthetic) */}
+            {/* 3 Simple Metric Cards - Dynamic Counts (Matching Veyora Card Aesthetic) */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem', marginBottom: '1.5rem' }}>
                 <div style={{
-                    background: 'rgba(255, 255, 255, 0.82)',
-                    backdropFilter: 'blur(16px)',
-                    WebkitBackdropFilter: 'blur(16px)',
-                    borderRadius: '22px',
-                    border: '1px solid rgba(255, 255, 255, 0.9)',
-                    boxShadow: '0 8px 25px rgba(37, 99, 235, 0.04)',
+                    background: '#ffffff',
+                    borderRadius: '20px',
+                    border: '1px solid rgba(148, 163, 184, 0.25)',
+                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.04)',
                     padding: '1.5rem',
                     display: 'flex',
                     alignItems: 'center',
@@ -180,21 +178,19 @@ export default function DoctorDashboard() {
                 }}>
                     <div>
                         <div style={{ fontSize: '2rem', fontWeight: '800', color: '#0f172a', lineHeight: '1' }}>{totalCount}</div>
-                        <div style={{ fontSize: '0.85rem', fontWeight: '700', color: '#475569', marginTop: '0.4rem' }}>Total Patients Today</div>
+                        <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#475569', marginTop: '0.4rem' }}>Total Patients Today</div>
                         <div style={{ fontSize: '0.72rem', color: '#64748b', marginTop: '0.15rem' }}>Completed: {completedCount} · In Consultation: {inConsultCount}</div>
                     </div>
-                    <div style={{ width: '48px', height: '48px', borderRadius: '16px', background: '#e0f2fe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0284c7' }}>
+                    <div style={{ width: '48px', height: '48px', borderRadius: '16px', background: '#eff6ff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3b82f6' }}>
                         <Users size={22} />
                     </div>
                 </div>
 
                 <div style={{
-                    background: 'rgba(255, 255, 255, 0.82)',
-                    backdropFilter: 'blur(16px)',
-                    WebkitBackdropFilter: 'blur(16px)',
-                    borderRadius: '22px',
-                    border: '1px solid rgba(255, 255, 255, 0.9)',
-                    boxShadow: '0 8px 25px rgba(37, 99, 235, 0.04)',
+                    background: '#ffffff',
+                    borderRadius: '20px',
+                    border: '1px solid rgba(148, 163, 184, 0.25)',
+                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.04)',
                     padding: '1.5rem',
                     display: 'flex',
                     alignItems: 'center',
@@ -202,23 +198,21 @@ export default function DoctorDashboard() {
                 }}>
                     <div>
                         <div style={{ fontSize: '2rem', fontWeight: '800', color: '#2563eb', lineHeight: '1' }}>{inConsultCount}</div>
-                        <div style={{ fontSize: '0.85rem', fontWeight: '700', color: '#2563eb', marginTop: '0.4rem' }}>In Consultation</div>
+                        <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#2563eb', marginTop: '0.4rem' }}>In Consultation</div>
                         <div style={{ fontSize: '0.72rem', color: '#64748b', marginTop: '0.15rem' }}>
                             {inConsultationPatient ? `Active: ${inConsultationPatient.name} (${inConsultationPatient.token})` : 'No Active Session'}
                         </div>
                     </div>
-                    <div style={{ width: '48px', height: '48px', borderRadius: '16px', background: '#edf2fe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2563eb' }}>
+                    <div style={{ width: '48px', height: '48px', borderRadius: '16px', background: '#ede9fe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#8b5cf6' }}>
                         <UserCheck size={22} />
                     </div>
                 </div>
 
                 <div style={{
-                    background: 'rgba(255, 255, 255, 0.82)',
-                    backdropFilter: 'blur(16px)',
-                    WebkitBackdropFilter: 'blur(16px)',
-                    borderRadius: '22px',
-                    border: '1px solid rgba(255, 255, 255, 0.9)',
-                    boxShadow: '0 8px 25px rgba(37, 99, 235, 0.04)',
+                    background: '#ffffff',
+                    borderRadius: '20px',
+                    border: '1px solid rgba(148, 163, 184, 0.25)',
+                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.04)',
                     padding: '1.5rem',
                     display: 'flex',
                     alignItems: 'center',
@@ -226,12 +220,12 @@ export default function DoctorDashboard() {
                 }}>
                     <div>
                         <div style={{ fontSize: '2rem', fontWeight: '800', color: '#d97706', lineHeight: '1' }}>{waitingCount}</div>
-                        <div style={{ fontSize: '0.85rem', fontWeight: '700', color: '#d97706', marginTop: '0.4rem' }}>Waiting in Queue</div>
+                        <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#d97706', marginTop: '0.4rem' }}>Waiting in Queue</div>
                         <div style={{ fontSize: '0.72rem', color: '#64748b', marginTop: '0.15rem' }}>
                             Next: {nextWaitingPatient ? `${nextWaitingPatient.name} (${nextWaitingPatient.token})` : 'Queue Clear'}
                         </div>
                     </div>
-                    <div style={{ width: '48px', height: '48px', borderRadius: '16px', background: '#fef3c7', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d97706' }}>
+                    <div style={{ width: '48px', height: '48px', borderRadius: '16px', background: '#fef3c7', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f59e0b' }}>
                         <Clock size={22} />
                     </div>
                 </div>
@@ -239,12 +233,10 @@ export default function DoctorDashboard() {
 
             {/* Next Up Patient Spotlight Card */}
             <div style={{
-                background: 'rgba(255, 255, 255, 0.85)',
-                backdropFilter: 'blur(16px)',
-                WebkitBackdropFilter: 'blur(16px)',
+                background: '#ffffff',
                 borderRadius: '24px',
-                border: isCurrentlyAttending ? '1.5px solid rgba(37, 99, 235, 0.4)' : '1px solid rgba(255, 255, 255, 0.9)',
-                boxShadow: isCurrentlyAttending ? '0 10px 30px rgba(37, 99, 235, 0.08)' : '0 10px 30px rgba(37, 99, 235, 0.04)',
+                border: isCurrentlyAttending ? '1.5px solid #3b82f6' : '1px solid rgba(148, 163, 184, 0.25)',
+                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.05)',
                 padding: '1.75rem',
                 marginBottom: '1.5rem',
                 display: 'flex',
@@ -298,18 +290,18 @@ export default function DoctorDashboard() {
                             navigate(`/doctor/briefing?encounterId=${activePatient.token}`);
                         }}
                         style={{
-                            background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                            background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
                             color: '#ffffff',
                             border: 'none',
                             padding: '0.85rem 1.6rem',
-                            borderRadius: '16px',
-                            fontWeight: '700',
+                            borderRadius: '20px',
+                            fontWeight: '600',
                             fontSize: '0.9rem',
                             cursor: 'pointer',
                             display: 'flex',
                             alignItems: 'center',
                             gap: '0.5rem',
-                            boxShadow: '0 8px 24px rgba(37, 99, 235, 0.35)',
+                            boxShadow: '0 4px 14px rgba(59, 130, 246, 0.35)',
                             transition: 'all 0.15s ease'
                         }}
                     >
@@ -325,7 +317,7 @@ export default function DoctorDashboard() {
                     onClick={() => navigate('/doctor/queue')}
                     style={{
                         ...cardStyle,
-                        borderRadius: '22px',
+                        borderRadius: '20px',
                         marginBottom: 0,
                         cursor: 'pointer',
                         display: 'flex',
@@ -335,11 +327,11 @@ export default function DoctorDashboard() {
                     }}
                 >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-                        <div style={{ width: '48px', height: '48px', borderRadius: '16px', background: '#edf2fe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2563eb' }}>
+                        <div style={{ width: '48px', height: '48px', borderRadius: '16px', background: '#eff6ff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3b82f6' }}>
                             <Users size={22} />
                         </div>
                         <div>
-                            <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: '800', color: '#0f172a' }}>
+                            <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: '700', color: '#0f172a' }}>
                                 View Full Patient Queue
                             </h4>
                             <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.8rem', color: '#64748b' }}>
@@ -354,7 +346,7 @@ export default function DoctorDashboard() {
                     onClick={() => navigate('/doctor/scan')}
                     style={{
                         ...cardStyle,
-                        borderRadius: '22px',
+                        borderRadius: '20px',
                         marginBottom: 0,
                         cursor: 'pointer',
                         display: 'flex',
@@ -364,11 +356,11 @@ export default function DoctorDashboard() {
                     }}
                 >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-                        <div style={{ width: '48px', height: '48px', borderRadius: '16px', background: '#f3e8ff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9333ea' }}>
+                        <div style={{ width: '48px', height: '48px', borderRadius: '16px', background: '#ede9fe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#8b5cf6' }}>
                             <QrCode size={22} />
                         </div>
                         <div>
-                            <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: '800', color: '#0f172a' }}>
+                            <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: '700', color: '#0f172a' }}>
                                 Token Lookup & QR Scan
                             </h4>
                             <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.8rem', color: '#64748b' }}>
@@ -376,7 +368,7 @@ export default function DoctorDashboard() {
                             </p>
                         </div>
                     </div>
-                    <ArrowRight size={18} color="#9333ea" />
+                    <ArrowRight size={18} color="#8b5cf6" />
                 </div>
             </div>
         </div>

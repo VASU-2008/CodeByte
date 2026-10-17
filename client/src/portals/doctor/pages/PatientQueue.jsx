@@ -64,12 +64,10 @@ export default function PatientQueue() {
     };
 
     const cardStyle = {
-        background: 'rgba(255, 255, 255, 0.85)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
+        background: '#ffffff',
         borderRadius: '24px',
-        border: '1px solid rgba(255, 255, 255, 0.9)',
-        boxShadow: '0 10px 30px rgba(37, 99, 235, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02)',
+        border: '1px solid rgba(148, 163, 184, 0.25)',
+        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.05)',
         padding: '1.75rem',
         marginBottom: '1.5rem'
     };
@@ -84,7 +82,7 @@ export default function PatientQueue() {
                             <h2 style={{ margin: 0, fontSize: '1.35rem', fontWeight: '800', color: '#0f172a' }}>
                                 Today's Patient Queue
                             </h2>
-                            <span style={{ fontSize: '0.72rem', background: 'rgba(237, 242, 254, 0.9)', color: '#2563eb', padding: '0.15rem 0.6rem', borderRadius: '12px', fontWeight: '700', border: '1px solid rgba(191, 219, 254, 0.6)' }}>
+                            <span style={{ fontSize: '0.72rem', background: '#eff6ff', color: '#2563eb', padding: '0.15rem 0.6rem', borderRadius: '12px', fontWeight: '700', border: '1px solid #bfdbfe' }}>
                                 Live Stream
                             </span>
                         </div>
@@ -112,9 +110,9 @@ export default function PatientQueue() {
                             type="button"
                             onClick={() => setActiveTab(tab.key)}
                             style={{
-                                background: activeTab === tab.key ? 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)' : 'rgba(248, 250, 252, 0.8)',
+                                background: activeTab === tab.key ? 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)' : '#f1f5f9',
                                 color: activeTab === tab.key ? '#ffffff' : '#475569',
-                                border: activeTab === tab.key ? 'none' : '1px solid rgba(226, 232, 240, 0.8)',
+                                border: activeTab === tab.key ? 'none' : '1px solid rgba(148, 163, 184, 0.25)',
                                 padding: '0.45rem 0.95rem',
                                 borderRadius: '20px',
                                 fontSize: '0.82rem',
@@ -123,7 +121,7 @@ export default function PatientQueue() {
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: '0.45rem',
-                                boxShadow: activeTab === tab.key ? '0 4px 12px rgba(37, 99, 235, 0.25)' : 'none',
+                                boxShadow: activeTab === tab.key ? '0 4px 12px rgba(59, 130, 246, 0.3)' : 'none',
                                 transition: 'all 0.15s ease'
                             }}
                         >
@@ -146,11 +144,9 @@ export default function PatientQueue() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.65rem',
-                    background: 'rgba(248, 250, 252, 0.8)',
-                    backdropFilter: 'blur(8px)',
-                    WebkitBackdropFilter: 'blur(8px)',
-                    border: '1px solid rgba(226, 232, 240, 0.8)',
-                    borderRadius: '14px',
+                    background: '#f8fafc',
+                    border: '1px solid rgba(148, 163, 184, 0.25)',
+                    borderRadius: '16px',
                     padding: '0.65rem 1rem',
                     marginBottom: '1.5rem'
                 }}>
@@ -236,15 +232,15 @@ export default function PatientQueue() {
                                             <button
                                                 onClick={() => handleAction(patient)}
                                                 style={{
-                                                    background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                                                    background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
                                                     color: '#ffffff',
                                                     border: 'none',
-                                                    padding: '0.55rem 1.35rem',
-                                                    borderRadius: '12px',
-                                                    fontWeight: '700',
+                                                    padding: '0.5rem 1.25rem',
+                                                    borderRadius: '16px',
+                                                    fontWeight: '600',
                                                     fontSize: '0.82rem',
                                                     cursor: 'pointer',
-                                                    boxShadow: '0 4px 12px rgba(37, 99, 235, 0.25)',
+                                                    boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)',
                                                     transition: 'all 0.15s ease'
                                                 }}
                                             >
@@ -254,17 +250,15 @@ export default function PatientQueue() {
                                             <button
                                                 onClick={() => handleAction(patient)}
                                                 style={{
-                                                    background: 'rgba(255, 255, 255, 0.9)',
-                                                    backdropFilter: 'blur(8px)',
-                                                    WebkitBackdropFilter: 'blur(8px)',
+                                                    background: '#ffffff',
                                                     color: '#2563eb',
-                                                    border: '1.5px solid rgba(191, 219, 254, 0.8)',
-                                                    padding: '0.55rem 1.35rem',
-                                                    borderRadius: '12px',
-                                                    fontWeight: '700',
+                                                    border: '1.5px solid #bfdbfe',
+                                                    padding: '0.5rem 1.25rem',
+                                                    borderRadius: '16px',
+                                                    fontWeight: '600',
                                                     fontSize: '0.82rem',
                                                     cursor: 'pointer',
-                                                    boxShadow: '0 2px 8px rgba(37, 99, 235, 0.04)',
+                                                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)',
                                                     transition: 'all 0.15s ease'
                                                 }}
                                             >

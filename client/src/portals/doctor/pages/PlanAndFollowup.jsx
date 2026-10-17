@@ -53,12 +53,10 @@ export default function PlanAndFollowup() {
     };
 
     const cardStyle = {
-        background: 'rgba(255, 255, 255, 0.85)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
+        background: '#ffffff',
         borderRadius: '24px',
-        border: '1px solid rgba(255, 255, 255, 0.9)',
-        boxShadow: '0 10px 30px rgba(37, 99, 235, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02)',
+        border: '1px solid rgba(148, 163, 184, 0.25)',
+        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.05)',
         padding: '1.75rem',
         marginBottom: '1.5rem'
     };
@@ -91,15 +89,13 @@ export default function PlanAndFollowup() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.55rem',
-                    background: 'rgba(237, 242, 254, 0.9)',
-                    backdropFilter: 'blur(8px)',
-                    WebkitBackdropFilter: 'blur(8px)',
+                    background: '#e0e7ff',
                     padding: '0.4rem 0.95rem',
                     borderRadius: '20px',
                     fontSize: '0.84rem',
-                    fontWeight: '700',
+                    fontWeight: '600',
                     color: '#0f172a',
-                    border: '1px solid rgba(191, 219, 254, 0.6)'
+                    border: '1px solid #bfdbfe'
                 }}>
                     <User size={15} color="#2563eb" />
                     <span>Patient: <strong>{patient.name}</strong> ({patient.age} / {patient.gender === 'Female' ? 'F' : 'M'}) · Token: <strong style={{ color: '#2563eb' }}>{patient.token}</strong></span>
@@ -140,15 +136,15 @@ export default function PlanAndFollowup() {
                                 type="button"
                                 onClick={() => handleQuickPreset(p.days)}
                                 style={{
-                                    background: selectedDays === p.days ? 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)' : 'rgba(248, 250, 252, 0.8)',
-                                    border: selectedDays === p.days ? 'none' : '1px solid rgba(226, 232, 240, 0.8)',
+                                    background: selectedDays === p.days ? 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)' : '#f1f5f9',
+                                    border: selectedDays === p.days ? 'none' : '1px solid rgba(148, 163, 184, 0.25)',
                                     color: selectedDays === p.days ? '#ffffff' : '#475569',
                                     padding: '0.45rem 0.95rem',
-                                    borderRadius: '12px',
+                                    borderRadius: '16px',
                                     fontSize: '0.82rem',
                                     fontWeight: '700',
                                     cursor: 'pointer',
-                                    boxShadow: selectedDays === p.days ? '0 4px 10px rgba(37, 99, 235, 0.25)' : 'none',
+                                    boxShadow: selectedDays === p.days ? '0 4px 10px rgba(59, 130, 246, 0.3)' : 'none',
                                     transition: 'all 0.15s ease'
                                 }}
                             >
@@ -251,19 +247,19 @@ export default function PlanAndFollowup() {
                     onClick={handleContinue}
                     style={{
                         width: '100%',
-                        background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                        background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
                         color: '#ffffff',
                         border: 'none',
                         padding: '1rem',
-                        borderRadius: '16px',
-                        fontWeight: '800',
+                        borderRadius: '20px',
+                        fontWeight: '600',
                         fontSize: '0.96rem',
                         cursor: 'pointer',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         gap: '0.5rem',
-                        boxShadow: '0 8px 24px rgba(37, 99, 235, 0.35)',
+                        boxShadow: '0 4px 14px rgba(59, 130, 246, 0.35)',
                         transition: 'all 0.15s ease'
                     }}
                 >

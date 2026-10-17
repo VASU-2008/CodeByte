@@ -82,12 +82,10 @@ export default function PrescriptionBuilder() {
     };
 
     const cardStyle = {
-        background: 'rgba(255, 255, 255, 0.85)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
+        background: '#ffffff',
         borderRadius: '24px',
-        border: '1px solid rgba(255, 255, 255, 0.9)',
-        boxShadow: '0 10px 30px rgba(37, 99, 235, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02)',
+        border: '1px solid rgba(148, 163, 184, 0.25)',
+        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.05)',
         padding: '1.75rem',
         marginBottom: '1.5rem'
     };
@@ -95,11 +93,9 @@ export default function PrescriptionBuilder() {
     const inputStyle = {
         width: '100%',
         padding: '0.65rem 0.85rem',
-        borderRadius: '12px',
-        border: '1px solid rgba(226, 232, 240, 0.8)',
-        background: 'rgba(248, 250, 252, 0.8)',
-        backdropFilter: 'blur(8px)',
-        WebkitBackdropFilter: 'blur(8px)',
+        borderRadius: '14px',
+        border: '1px solid rgba(148, 163, 184, 0.25)',
+        background: '#f8fafc',
         fontSize: '0.86rem',
         color: '#1e293b',
         outline: 'none',
@@ -134,15 +130,13 @@ export default function PrescriptionBuilder() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.55rem',
-                    background: 'rgba(237, 242, 254, 0.9)',
-                    backdropFilter: 'blur(8px)',
-                    WebkitBackdropFilter: 'blur(8px)',
+                    background: '#e0e7ff',
                     padding: '0.4rem 0.95rem',
                     borderRadius: '20px',
                     fontSize: '0.84rem',
-                    fontWeight: '700',
+                    fontWeight: '600',
                     color: '#0f172a',
-                    border: '1px solid rgba(191, 219, 254, 0.6)'
+                    border: '1px solid #bfdbfe'
                 }}>
                     <User size={15} color="#2563eb" />
                     <span>Patient: <strong>{patient.name}</strong> ({patient.age} / {patient.gender === 'Female' ? 'F' : 'M'}) · Token: <strong style={{ color: '#2563eb' }}>{patient.token}</strong></span>
@@ -237,18 +231,18 @@ export default function PrescriptionBuilder() {
                         <button
                             type="submit"
                             style={{
-                                background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                                background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
                                 color: '#ffffff',
                                 border: 'none',
                                 padding: '0.65rem 1.4rem',
-                                borderRadius: '14px',
-                                fontWeight: '700',
+                                borderRadius: '16px',
+                                fontWeight: '600',
                                 fontSize: '0.84rem',
                                 cursor: 'pointer',
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: '0.35rem',
-                                boxShadow: '0 4px 14px rgba(37, 99, 235, 0.25)',
+                                boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)',
                                 transition: 'all 0.15s ease'
                             }}
                         >
@@ -270,9 +264,9 @@ export default function PrescriptionBuilder() {
                         <div
                             key={m.id}
                             style={{
-                                background: 'rgba(248, 250, 252, 0.8)',
-                                border: '1px solid rgba(226, 232, 240, 0.8)',
-                                borderRadius: '14px',
+                                background: '#f8fafc',
+                                border: '1px solid rgba(148, 163, 184, 0.25)',
+                                borderRadius: '16px',
                                 padding: '0.9rem 1.15rem',
                                 display: 'flex',
                                 justifyContent: 'space-between',
@@ -281,8 +275,8 @@ export default function PrescriptionBuilder() {
                         >
                             <div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                    <span style={{ fontWeight: '800', color: '#0f172a', fontSize: '0.95rem' }}>{m.name}</span>
-                                    <span style={{ fontSize: '0.75rem', background: 'rgba(237, 242, 254, 0.9)', color: '#2563eb', padding: '0.15rem 0.5rem', borderRadius: '6px', fontWeight: '700', border: '1px solid rgba(191, 219, 254, 0.5)' }}>
+                                    <span style={{ fontWeight: '700', color: '#0f172a', fontSize: '0.95rem' }}>{m.name}</span>
+                                    <span style={{ fontSize: '0.75rem', background: '#e0e7ff', color: '#2563eb', padding: '0.15rem 0.5rem', borderRadius: '6px', fontWeight: '600', border: '1px solid #bfdbfe' }}>
                                         {m.strength}
                                     </span>
                                 </div>
@@ -310,19 +304,19 @@ export default function PrescriptionBuilder() {
                     onClick={handleContinue}
                     style={{
                         width: '100%',
-                        background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                        background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
                         color: '#ffffff',
                         border: 'none',
                         padding: '1rem',
-                        borderRadius: '16px',
-                        fontWeight: '800',
+                        borderRadius: '20px',
+                        fontWeight: '600',
                         fontSize: '0.96rem',
                         cursor: 'pointer',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         gap: '0.5rem',
-                        boxShadow: '0 8px 24px rgba(37, 99, 235, 0.35)',
+                        boxShadow: '0 4px 14px rgba(59, 130, 246, 0.35)',
                         transition: 'all 0.15s ease'
                     }}
                 >

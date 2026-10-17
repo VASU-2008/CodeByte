@@ -126,12 +126,10 @@ export default function TokenLookupScan() {
     };
 
     const cardStyle = {
-        background: 'rgba(255, 255, 255, 0.85)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
+        background: '#ffffff',
         borderRadius: '24px',
-        border: '1px solid rgba(255, 255, 255, 0.9)',
-        boxShadow: '0 10px 30px rgba(37, 99, 235, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02)',
+        border: '1px solid rgba(148, 163, 184, 0.25)',
+        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.05)',
         padding: '1.75rem',
         marginBottom: '1.5rem'
     };
@@ -155,11 +153,9 @@ export default function TokenLookupScan() {
 
                 {/* Camera / Optical Viewfinder Box */}
                 <div style={{
-                    background: 'rgba(248, 250, 252, 0.8)',
-                    backdropFilter: 'blur(8px)',
-                    WebkitBackdropFilter: 'blur(8px)',
-                    border: '2px dashed rgba(203, 213, 225, 0.8)',
-                    borderRadius: '16px',
+                    background: '#f8fafc',
+                    border: '2px dashed rgba(148, 163, 184, 0.45)',
+                    borderRadius: '20px',
                     padding: isCameraActive ? '1rem' : '2rem',
                     textAlign: 'center',
                     marginBottom: '1.5rem'
@@ -179,7 +175,7 @@ export default function TokenLookupScan() {
 
                     {!isCameraActive && (
                         <div>
-                            <Camera size={42} color="#2563eb" style={{ margin: '0 auto 0.75rem auto' }} />
+                            <Camera size={42} color="#3b82f6" style={{ margin: '0 auto 0.75rem auto' }} />
                             <div style={{ fontSize: '0.95rem', fontWeight: '700', color: '#0f172a' }}>
                                 Optical QR Scanner Ready
                             </div>
@@ -192,18 +188,18 @@ export default function TokenLookupScan() {
                                     type="button"
                                     onClick={startCamera}
                                     style={{
-                                        background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                                        background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
                                         color: '#ffffff',
                                         border: 'none',
                                         padding: '0.7rem 1.4rem',
-                                        borderRadius: '14px',
-                                        fontWeight: '700',
+                                        borderRadius: '16px',
+                                        fontWeight: '600',
                                         fontSize: '0.86rem',
                                         cursor: 'pointer',
                                         display: 'flex',
                                         alignItems: 'center',
                                         gap: '0.45rem',
-                                        boxShadow: '0 6px 18px rgba(37, 99, 235, 0.28)',
+                                        boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)',
                                         transition: 'all 0.15s ease'
                                     }}
                                 >
@@ -212,20 +208,18 @@ export default function TokenLookupScan() {
                                 </button>
 
                                 <label style={{
-                                    background: 'rgba(255, 255, 255, 0.9)',
-                                    backdropFilter: 'blur(8px)',
-                                    WebkitBackdropFilter: 'blur(8px)',
+                                    background: '#ffffff',
                                     color: '#2563eb',
-                                    border: '1.5px solid rgba(191, 219, 254, 0.8)',
+                                    border: '1.5px solid #bfdbfe',
                                     padding: '0.7rem 1.4rem',
-                                    borderRadius: '14px',
-                                    fontWeight: '700',
+                                    borderRadius: '16px',
+                                    fontWeight: '600',
                                     fontSize: '0.86rem',
                                     cursor: 'pointer',
                                     display: 'flex',
                                     alignItems: 'center',
                                     gap: '0.45rem',
-                                    boxShadow: '0 2px 8px rgba(37, 99, 235, 0.04)',
+                                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)',
                                     transition: 'all 0.15s ease'
                                 }}>
                                     <Upload size={16} />
@@ -250,15 +244,13 @@ export default function TokenLookupScan() {
                                         type="button"
                                         onClick={() => { setTokenId(tok); handleLookup(tok); }}
                                         style={{
-                                            background: 'rgba(237, 242, 254, 0.9)',
-                                            backdropFilter: 'blur(8px)',
-                                            WebkitBackdropFilter: 'blur(8px)',
-                                            border: '1px solid rgba(191, 219, 254, 0.6)',
+                                            background: '#eff6ff',
+                                            border: '1px solid #bfdbfe',
                                             color: '#2563eb',
                                             padding: '0.35rem 0.85rem',
-                                            borderRadius: '10px',
+                                            borderRadius: '12px',
                                             fontSize: '0.8rem',
-                                            fontWeight: '700',
+                                            fontWeight: '600',
                                             cursor: 'pointer',
                                             transition: 'all 0.15s ease'
                                         }}
@@ -317,11 +309,9 @@ export default function TokenLookupScan() {
                         style={{
                             flex: 1,
                             padding: '0.75rem 1rem',
-                            borderRadius: '12px',
-                            border: '1px solid rgba(226, 232, 240, 0.8)',
-                            background: 'rgba(248, 250, 252, 0.8)',
-                            backdropFilter: 'blur(8px)',
-                            WebkitBackdropFilter: 'blur(8px)',
+                            borderRadius: '16px',
+                            border: '1px solid rgba(148, 163, 184, 0.25)',
+                            background: '#f8fafc',
                             fontSize: '0.9rem',
                             outline: 'none'
                         }}
@@ -330,15 +320,15 @@ export default function TokenLookupScan() {
                         onClick={() => handleLookup()}
                         disabled={loading}
                         style={{
-                            background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                            background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
                             color: '#ffffff',
                             border: 'none',
                             padding: '0.75rem 1.5rem',
-                            borderRadius: '12px',
-                            fontWeight: '700',
+                            borderRadius: '16px',
+                            fontWeight: '600',
                             fontSize: '0.88rem',
                             cursor: 'pointer',
-                            boxShadow: '0 4px 14px rgba(37, 99, 235, 0.25)',
+                            boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)',
                             transition: 'all 0.15s ease'
                         }}
                     >
@@ -349,11 +339,9 @@ export default function TokenLookupScan() {
                 {/* Verified Patient Result Card */}
                 {patientResult && (
                     <div style={{
-                        background: 'rgba(237, 242, 254, 0.85)',
-                        backdropFilter: 'blur(10px)',
-                        WebkitBackdropFilter: 'blur(10px)',
-                        border: '1px solid rgba(191, 219, 254, 0.6)',
-                        borderRadius: '18px',
+                        background: '#e0e7ff',
+                        border: '1px solid #bfdbfe',
+                        borderRadius: '20px',
                         padding: '1.35rem'
                     }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
@@ -362,10 +350,10 @@ export default function TokenLookupScan() {
                                     <User size={18} />
                                 </div>
                                 <div>
-                                    <div style={{ fontWeight: '800', color: '#0f172a', fontSize: '1.05rem' }}>
+                                    <div style={{ fontWeight: '700', color: '#0f172a', fontSize: '1.05rem' }}>
                                         {patientResult.patient_id?.name || 'Patient 1'}
                                     </div>
-                                    <div style={{ fontSize: '0.78rem', color: '#64748b' }}>
+                                    <div style={{ fontSize: '0.78rem', color: '#475569' }}>
                                         {patientResult.patient_id?.age} Years | {patientResult.patient_id?.gender} | Token: {patientResult.token_id || tokenId}
                                     </div>
                                 </div>
@@ -384,19 +372,19 @@ export default function TokenLookupScan() {
                             onClick={handleProceed}
                             style={{
                                 width: '100%',
-                                background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                                background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
                                 color: '#ffffff',
                                 border: 'none',
                                 padding: '0.95rem',
-                                borderRadius: '16px',
-                                fontWeight: '700',
+                                borderRadius: '20px',
+                                fontWeight: '600',
                                 fontSize: '0.94rem',
                                 cursor: 'pointer',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 gap: '0.5rem',
-                                boxShadow: '0 8px 24px rgba(37, 99, 235, 0.35)',
+                                boxShadow: '0 4px 14px rgba(59, 130, 246, 0.35)',
                                 transition: 'all 0.15s ease'
                             }}
                         >

@@ -5,9 +5,42 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Veyora - Smart Healthcare Platform</title>
-    <script type="module" crossorigin src="/assets/index-CcnZ6JlM.js"></script>
+    <!-- Google Fonts: Inter & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              display: ['Outfit', 'sans-serif'],
+            },
+            colors: {
+              nordic: {
+                royal: '#1e3a8a',
+                royalDark: '#172554',
+                amber: '#d97706',
+                amberDark: '#b45309',
+                amberLight: '#fef3c7',
+                slateBg: '#f8fafc',
+                card: 'rgba(255, 255, 255, 0.75)',
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>body{background:radial-gradient(circle at 0 0,#f1f5f9 0%,#f8fafc 50%,#eff6ff 100%);min-height:100vh;font-family:Inter,sans-serif}</style>
+    <script type="module" crossorigin src="/assets/index-DLfDgsKr.js"></script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"></div>
   </body>
 </html>

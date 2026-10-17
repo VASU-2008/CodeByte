@@ -1,271 +1,314 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { 
-    User, 
-    AlertTriangle, 
-    HeartPulse, 
-    History, 
-    FileText, 
+    ArrowLeft, 
     ArrowRight, 
-    ShieldCheck, 
-    Calendar, 
-    Building2, 
-    Pill, 
-    Edit3,
-    Activity,
-    CheckCircle2
+    User, 
+    Edit, 
+    Calendar,
+    ChevronRight
 } from 'lucide-react';
-import { getClinicalBriefing } from '../../../api/doctorApi';
-import VitalsForm from '../components/VitalsForm';
 
 /**
- * ClinicalBriefing Component (Nordic Wellness Glass Theme)
- * Pre-consultation clinician briefing: Chief complaint, vitals, allergies, and past visits timeline.
+ * ClinicalBriefing Component (Aura HealthTech Theme)
+ * Exact match for Doctor Portal "Clinical Briefing" card in the design mockup.
  */
 export default function ClinicalBriefing() {
     const navigate = useNavigate();
     const location = useLocation();
+    const [activeTab, setActiveTab] = useState('Current Visit');
 
-    // Read encounterId from URL query or fallback
     const params = new URLSearchParams(location.search);
-    const encounterId = params.get('encounterId') || localStorage.getItem('activeDoctorEncounterId') || 'enc-101';
+    const encounterId = params.get('encounterId') || 'P-001';
 
-    const [briefing, setBriefing] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [editVitals, setEditVitals] = useState(false);
+    const tabs = ['Current Visit', 'Past Visits', 'Vitals Trend', 'Medicines', 'Documents'];
 
-    useEffect(() => {
-        const fetchBriefing = async () => {
-            setLoading(true);
-            try {
-                const data = await getClinicalBriefing(encounterId);
-                setBriefing(data);
-            } catch (err) {
-                console.error('Error fetching clinical briefing:', err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchBriefing();
-    }, [encounterId]);
-
-    const handleProceedToConsultation = () => {
+    const handleContinue = () => {
         navigate(`/doctor/consultation?encounterId=${encounterId}`);
     };
 
-    const glassCardStyle = {
-        background: 'rgba(255, 255, 255, 0.85)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
-        border: '1px solid rgba(20, 184, 166, 0.2)',
-        borderRadius: '16px',
-        padding: '1.5rem',
-        boxShadow: '0 10px 30px rgba(15, 118, 110, 0.05)',
-        marginBottom: '1.5rem'
-    };
-
-    if (loading) {
-        return (
-            <div style={{ ...glassCardStyle, textAlign: 'center', padding: '3.5rem', color: '#0f766e' }}>
-                <Activity size={32} style={{ animation: 'spin 1s linear infinite', marginBottom: '0.75rem' }} />
-                <div>Loading patient clinical briefing & records...</div>
-            </div>
-        );
-    }
-
-    const { patient, currentEncounter, vitals, pastVisits } = briefing || {};
-
     return (
-        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-            {/* Page Header */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
-                <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <span style={{ fontSize: '0.75rem', background: '#ccfbf1', color: '#0f766e', padding: '0.15rem 0.5rem', borderRadius: '6px', fontWeight: '700' }}>
-                            ENCOUNTER #{encounterId}
-                        </span>
-                        <span style={{ fontSize: '0.75rem', background: '#dcfce7', color: '#166534', padding: '0.15rem 0.5rem', borderRadius: '6px', fontWeight: '600' }}>
-                            <ShieldCheck size={12} style={{ display: 'inline', marginRight: '3px' }} />
-                            Consent Authorized
-                        </span>
-                    </div>
-                    <h1 style={{ margin: '0.4rem 0 0 0', fontSize: '1.65rem', fontWeight: '800', color: '#0f172a' }}>
-                        Clinical Briefing & Patient Dossier
-                    </h1>
-                </div>
+        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+            {/* Back Button */}
+            <button
+                onClick={() => navigate('/doctor/dashboard')}
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    background: 'none',
+                    border: 'none',
+                    color: '#64748b',
+                    fontSize: '0.88rem',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    marginBottom: '1rem',
+                    padding: 0
+                }}
+            >
+                <ArrowLeft size={16} />
+                <span>Back</span>
+            </button>
 
-                <button
-                    onClick={handleProceedToConsultation}
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem',
-                        background: 'linear-gradient(135deg, #0f766e 0%, #14b8a6 100%)',
-                        color: '#ffffff',
-                        border: 'none',
-                        padding: '0.75rem 1.4rem',
-                        borderRadius: '12px',
-                        fontWeight: '700',
-                        fontSize: '0.9rem',
-                        cursor: 'pointer',
-                        boxShadow: '0 4px 14px rgba(15, 118, 110, 0.25)'
-                    }}
-                >
-                    Start Consultation Notes
-                    <ArrowRight size={17} />
-                </button>
-            </div>
-
-            {/* Patient Identity Banner */}
-            <div style={{ ...glassCardStyle, background: 'linear-gradient(135deg, rgba(240, 253, 250, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%)' }}>
-                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            {/* Main Clinical Briefing Card */}
+            <div style={{
+                background: '#ffffff',
+                borderRadius: '18px',
+                border: '1px solid #eef2f6',
+                boxShadow: '0 2px 12px rgba(0, 0, 0, 0.03)',
+                padding: '1.75rem'
+            }}>
+                {/* Header: Patient Info & View Full History */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem' }}>
                         <div style={{
-                            width: '56px',
-                            height: '56px',
-                            borderRadius: '16px',
-                            background: '#0f766e',
-                            color: '#ffffff',
+                            width: '48px',
+                            height: '48px',
+                            borderRadius: '50%',
+                            background: '#e6f7f2',
+                            color: '#044e42',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            fontSize: '1.3rem',
+                            fontSize: '1.2rem',
                             fontWeight: '700'
                         }}>
-                            {patient?.name?.charAt(0) || 'P'}
+                            <User size={24} />
                         </div>
                         <div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <h2 style={{ margin: 0, fontSize: '1.35rem', fontWeight: '800', color: '#0f172a' }}>
-                                    {patient?.name}
-                                </h2>
-                                <span style={{ fontSize: '0.85rem', color: '#64748b' }}>
-                                    ({patient?.age} y/o, {patient?.gender})
-                                </span>
-                            </div>
-                            <div style={{ fontSize: '0.78rem', color: '#0f766e', marginTop: '0.2rem' }}>
-                                ABHA ID: <strong>{patient?.abhaId}</strong> · Blood Group: <strong>{patient?.bloodGroup}</strong> · Preferred Language: <strong>{patient?.languagePreference}</strong>
-                            </div>
+                            <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '800', color: '#0f172a' }}>
+                                Ravi Kumar
+                            </h2>
+                            <p style={{ margin: 0, fontSize: '0.82rem', color: '#64748b' }}>
+                                42 years | Male | Token: {encounterId}
+                            </p>
                         </div>
                     </div>
 
-                    {/* Allergies & Red Flags */}
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.35rem' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                            <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#b91c1c' }}>Allergies:</span>
-                            {patient?.allergies?.map((allergy, i) => (
-                                <span key={i} style={{ background: '#fee2e2', color: '#b91c1c', padding: '0.2rem 0.5rem', borderRadius: '6px', fontSize: '0.75rem', fontWeight: '700' }}>
-                                    {allergy}
-                                </span>
-                            ))}
-                        </div>
-                        <div style={{ fontSize: '0.75rem', color: '#475569' }}>
-                            Chronic: {patient?.chronicConditions?.join(', ')}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Current Chief Complaint & Voice/Text Intake Summary */}
-            <div style={glassCardStyle}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-                    <FileText size={18} color="#0f766e" />
-                    <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: '700', color: '#0f172a' }}>
-                        Current Visit Intake & Complaint
-                    </h3>
-                </div>
-                <div style={{ background: '#f8fafc', borderRadius: '12px', padding: '1rem', borderLeft: '4px solid #0f766e' }}>
-                    <div style={{ fontSize: '0.92rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.3rem' }}>
-                        "{currentEncounter?.chief_complaint}"
-                    </div>
-                    <p style={{ margin: 0, fontSize: '0.84rem', color: '#475569', lineHeight: '1.45' }}>
-                        <strong>Intake Summary:</strong> {currentEncounter?.intakeSummary}
-                    </p>
-                </div>
-            </div>
-
-            {/* Recorded Vitals Section */}
-            <div style={{ marginBottom: '1.5rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                    <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: '700', color: '#0f172a' }}>
-                        Triage Vitals Check
-                    </h3>
                     <button
-                        onClick={() => setEditVitals(!editVitals)}
+                        onClick={() => setActiveTab('Past Visits')}
                         style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.35rem',
                             background: '#ffffff',
-                            border: '1px solid #ccfbf1',
-                            color: '#0f766e',
-                            padding: '0.35rem 0.75rem',
-                            borderRadius: '8px',
-                            fontSize: '0.78rem',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '10px',
+                            padding: '0.5rem 1rem',
+                            fontSize: '0.82rem',
                             fontWeight: '600',
+                            color: '#044e42',
                             cursor: 'pointer'
                         }}
                     >
-                        <Edit3 size={13} />
-                        {editVitals ? 'Done Editing' : 'Update Vitals'}
+                        View Full History
                     </button>
                 </div>
-                <VitalsForm initialVitals={vitals} isReadOnly={!editVitals} />
-            </div>
 
-            {/* Past Encounters Timeline */}
-            <div style={glassCardStyle}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem' }}>
-                    <History size={18} color="#0f766e" />
-                    <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: '700', color: '#0f172a' }}>
-                        Authorized Past Encounters Timeline
-                    </h3>
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                    {pastVisits?.map((visit, idx) => (
-                        <div
-                            key={visit.encounterId}
+                {/* Sub-Navigation Tabs */}
+                <div style={{
+                    display: 'flex',
+                    gap: '1.75rem',
+                    borderBottom: '1px solid #e2e8f0',
+                    marginBottom: '1.75rem',
+                    fontSize: '0.88rem'
+                }}>
+                    {tabs.map(tab => (
+                        <button
+                            key={tab}
+                            onClick={() => setActiveTab(tab)}
                             style={{
-                                border: '1px solid #e2e8f0',
-                                borderRadius: '12px',
-                                padding: '1rem',
-                                background: 'rgba(248, 250, 252, 0.7)',
-                                display: 'flex',
-                                flexWrap: 'wrap',
-                                justifyContent: 'space-between',
-                                gap: '0.85rem'
+                                background: 'none',
+                                border: 'none',
+                                borderBottom: activeTab === tab ? '2.5px solid #044e42' : '2.5px solid transparent',
+                                color: activeTab === tab ? '#044e42' : '#64748b',
+                                fontWeight: activeTab === tab ? '700' : '500',
+                                paddingBottom: '0.75rem',
+                                cursor: 'pointer',
+                                transition: 'all 0.15s ease'
                             }}
                         >
-                            <div style={{ flex: 1, minWidth: '240px' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.3rem' }}>
-                                    <span style={{ fontSize: '0.72rem', background: '#e2e8f0', color: '#334155', padding: '0.1rem 0.45rem', borderRadius: '6px', fontWeight: '600' }}>
-                                        {visit.encounterId}
-                                    </span>
-                                    <span style={{ fontSize: '0.88rem', fontWeight: '700', color: '#0f172a' }}>
-                                        {visit.diagnosis}
-                                    </span>
-                                </div>
-                                <div style={{ fontSize: '0.76rem', color: '#64748b' }}>
-                                    Facility: <strong>{visit.facility}</strong> · Attending: <strong>{visit.prescribedBy}</strong>
-                                </div>
-                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', marginTop: '0.5rem' }}>
-                                    {visit.medicines?.map((med, mIdx) => (
-                                        <span key={mIdx} style={{ fontSize: '0.72rem', background: '#ccfbf1', color: '#0f766e', padding: '0.15rem 0.5rem', borderRadius: '12px', fontWeight: '600' }}>
-                                            {med}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#64748b', fontSize: '0.78rem' }}>
-                                <Calendar size={14} />
-                                {visit.date}
-                            </div>
-                        </div>
+                            {tab}
+                        </button>
                     ))}
                 </div>
+
+                {/* Two-Column Clinical Content */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '2rem' }}>
+                    {/* Left Column: Chief Complaint & Vitals */}
+                    <div>
+                        {/* Chief Complaint */}
+                        <div style={{ marginBottom: '1.75rem' }}>
+                            <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '0.92rem', fontWeight: '700', color: '#0f172a' }}>
+                                Chief Complaint
+                            </h3>
+                            <p style={{ margin: 0, fontSize: '0.86rem', color: '#475569', lineHeight: '1.5' }}>
+                                Fever and body ache since 2 days. Mild cough.
+                            </p>
+                        </div>
+
+                        {/* Current Vitals with Edit Action */}
+                        <div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                                <h3 style={{ margin: 0, fontSize: '0.92rem', fontWeight: '700', color: '#0f172a' }}>
+                                    Vitals (Current)
+                                </h3>
+                                <button
+                                    onClick={() => navigate(`/doctor/consultation?encounterId=${encounterId}`)}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.25rem',
+                                        background: 'none',
+                                        border: 'none',
+                                        color: '#044e42',
+                                        fontSize: '0.8rem',
+                                        fontWeight: '600',
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    <Edit size={13} />
+                                    <span>Edit</span>
+                                </button>
+                            </div>
+
+                            <div style={{
+                                background: '#f8fafc',
+                                borderRadius: '12px',
+                                padding: '1rem',
+                                border: '1px solid #f1f5f9',
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(3, 1fr)',
+                                gap: '1rem'
+                            }}>
+                                <div>
+                                    <div style={{ fontSize: '0.72rem', color: '#64748b' }}>BP</div>
+                                    <div style={{ fontSize: '0.88rem', fontWeight: '700', color: '#0f172a', marginTop: '0.15rem' }}>120/80 mmHg</div>
+                                </div>
+                                <div>
+                                    <div style={{ fontSize: '0.72rem', color: '#64748b' }}>Temp</div>
+                                    <div style={{ fontSize: '0.88rem', fontWeight: '700', color: '#0f172a', marginTop: '0.15rem' }}>101.2 °F</div>
+                                </div>
+                                <div>
+                                    <div style={{ fontSize: '0.72rem', color: '#64748b' }}>Pulse</div>
+                                    <div style={{ fontSize: '0.88rem', fontWeight: '700', color: '#0f172a', marginTop: '0.15rem' }}>98 bpm</div>
+                                </div>
+                                <div>
+                                    <div style={{ fontSize: '0.72rem', color: '#64748b' }}>SpO2</div>
+                                    <div style={{ fontSize: '0.88rem', fontWeight: '700', color: '#0f172a', marginTop: '0.15rem' }}>97 %</div>
+                                </div>
+                                <div>
+                                    <div style={{ fontSize: '0.72rem', color: '#64748b' }}>Weight</div>
+                                    <div style={{ fontSize: '0.88rem', fontWeight: '700', color: '#0f172a', marginTop: '0.15rem' }}>68 kg</div>
+                                </div>
+                                <div>
+                                    <div style={{ fontSize: '0.72rem', color: '#64748b' }}>Height</div>
+                                    <div style={{ fontSize: '0.88rem', fontWeight: '700', color: '#0f172a', marginTop: '0.15rem' }}>170 cm</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Right Column: Past Visit Summary */}
+                    <div>
+                        <h3 style={{ margin: '0 0 0.85rem 0', fontSize: '0.92rem', fontWeight: '700', color: '#0f172a' }}>
+                            Past Visit Summary
+                        </h3>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                            {/* Visit 1 */}
+                            <div style={{
+                                background: '#f8fafc',
+                                borderRadius: '12px',
+                                padding: '0.9rem 1rem',
+                                border: '1px solid #f1f5f9',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center'
+                            }}>
+                                <div>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                        <span style={{ fontSize: '0.8rem', fontWeight: '700', color: '#0f172a' }}>05 Oct 2024</span>
+                                        <span style={{ fontSize: '0.72rem', color: '#64748b' }}>CHC Visit</span>
+                                    </div>
+                                    <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.78rem', color: '#475569' }}>
+                                        Viral fever, symptomatic treatment
+                                    </p>
+                                </div>
+                                <span style={{ color: '#044e42', fontSize: '0.8rem', fontWeight: '600', cursor: 'pointer' }}>
+                                    View →
+                                </span>
+                            </div>
+
+                            {/* Visit 2 */}
+                            <div style={{
+                                background: '#f8fafc',
+                                borderRadius: '12px',
+                                padding: '0.9rem 1rem',
+                                border: '1px solid #f1f5f9',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center'
+                            }}>
+                                <div>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                        <span style={{ fontSize: '0.8rem', fontWeight: '700', color: '#0f172a' }}>10 Aug 2024</span>
+                                        <span style={{ fontSize: '0.72rem', color: '#64748b' }}>Follow-up</span>
+                                    </div>
+                                    <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.78rem', color: '#475569' }}>
+                                        Recovered, no new complaints
+                                    </p>
+                                </div>
+                                <span style={{ color: '#044e42', fontSize: '0.8rem', fontWeight: '600', cursor: 'pointer' }}>
+                                    View →
+                                </span>
+                            </div>
+
+                            {/* Visit 3 */}
+                            <div style={{
+                                background: '#f8fafc',
+                                borderRadius: '12px',
+                                padding: '0.9rem 1rem',
+                                border: '1px solid #f1f5f9',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center'
+                            }}>
+                                <div>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                        <span style={{ fontSize: '0.8rem', fontWeight: '700', color: '#0f172a' }}>12 Jun 2024</span>
+                                        <span style={{ fontSize: '0.72rem', color: '#64748b' }}>General OPD</span>
+                                    </div>
+                                    <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.78rem', color: '#475569' }}>
+                                        Hypertension follow-up
+                                    </p>
+                                </div>
+                                <span style={{ color: '#044e42', fontSize: '0.8rem', fontWeight: '600', cursor: 'pointer' }}>
+                                    View →
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Bottom CTA Button */}
+                <button
+                    onClick={handleContinue}
+                    style={{
+                        width: '100%',
+                        background: '#044e42',
+                        color: '#ffffff',
+                        border: 'none',
+                        padding: '0.9rem',
+                        borderRadius: '12px',
+                        fontWeight: '700',
+                        fontSize: '0.95rem',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '0.5rem'
+                    }}
+                >
+                    Continue to Consultation Notes →
+                </button>
             </div>
         </div>
     );

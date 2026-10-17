@@ -19,6 +19,7 @@ export default function DoctorPortal() {
             <Routes>
                 <Route path="/" element={<DoctorDashboard />} />
                 <Route path="/dashboard" element={<DoctorDashboard />} />
+                <Route path="/queue" element={<DoctorDashboard />} />
                 <Route path="/scan" element={<TokenLookupScan />} />
                 <Route path="/briefing" element={<ClinicalBriefing />} />
                 <Route path="/consultation" element={<ConsultationNotes />} />

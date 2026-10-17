@@ -1,330 +1,260 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
     Users, 
+    UserCheck, 
     Clock, 
-    AlertTriangle, 
-    CheckCircle, 
     Search, 
-    ArrowRight, 
-    QrCode, 
-    Filter,
-    Stethoscope,
-    RefreshCw
+    Calendar,
+    ChevronDown
 } from 'lucide-react';
-import { getDoctorQueue } from '../../../api/doctorApi';
 
 /**
- * DoctorDashboard Component (Nordic Wellness Glass Theme)
- * Today's patient queue, triage status badges, and rapid consultation handoff.
+ * DoctorDashboard Component (Aura HealthTech Theme)
+ * Exact match for "Today's Patient Queue" with 3 KPI metric cards,
+ * search & filter dropdown, and structured patient queue table.
  */
 export default function DoctorDashboard() {
     const navigate = useNavigate();
-    const [queue, setQueue] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-    const [filterCategory, setFilterCategory] = useState('ALL');
+    const [statusFilter, setStatusFilter] = useState('ALL');
 
-    const fetchQueue = async () => {
-        setLoading(true);
-        try {
-            const data = await getDoctorQueue();
-            setQueue(data || []);
-        } catch (error) {
-            console.error('Failed to fetch patient queue:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    const patientQueue = [
+        { id: 1, name: 'Ravi Kumar', ageGender: '42 / M', token: 'P-001', status: 'Waiting' },
+        { id: 2, name: 'Sunita Devi', ageGender: '36 / F', token: 'P-002', status: 'In Consultation' },
+        { id: 3, name: 'Mohan Singh', ageGender: '28 / M', token: 'P-003', status: 'Waiting' },
+        { id: 4, name: 'Asha Patel', ageGender: '55 / F', token: 'P-004', status: 'Completed' },
+        { id: 5, name: 'Imran Khan', ageGender: '31 / M', token: 'P-005', status: 'Waiting' }
+    ];
 
-    useEffect(() => {
-        fetchQueue();
-    }, []);
-
-    const handleSelectPatient = (encounter) => {
-        // Store selected active encounter in localStorage so subpages pick it up
-        localStorage.setItem('activeDoctorEncounterId', encounter._id);
-        navigate(`/doctor/briefing?encounterId=${encounter._id}`);
-    };
-
-    // Filter queue items
-    const filteredQueue = queue.filter(item => {
-        const matchesSearch = 
-            item.patient_id?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            item.token_id?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            item.chief_complaint?.toLowerCase().includes(searchTerm.toLowerCase());
-
+    const filteredPatients = patientQueue.filter(p => {
+        const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                              p.token.toLowerCase().includes(searchTerm.toLowerCase());
         if (!matchesSearch) return false;
-
-        if (filterCategory === 'URGENT') return item.priority === 'URGENT' || item.triage_result?.includes('PRIORITY');
-        if (filterCategory === 'IN_QUEUE') return item.status === 'IN_QUEUE';
-        if (filterCategory === 'IN_CONSULTATION') return item.status === 'IN_CONSULTATION';
-
+        if (statusFilter === 'WAITING') return p.status === 'Waiting';
+        if (statusFilter === 'IN_CONSULTATION') return p.status === 'In Consultation';
+        if (statusFilter === 'COMPLETED') return p.status === 'Completed';
         return true;
     });
 
-    const waitingCount = queue.filter(q => q.status === 'IN_QUEUE').length;
-    const inConsultCount = queue.filter(q => q.status === 'IN_CONSULTATION').length;
-    const urgentCount = queue.filter(q => q.priority === 'URGENT').length;
-
-    const glassCardStyle = {
-        background: 'rgba(255, 255, 255, 0.82)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
-        border: '1px solid rgba(20, 184, 166, 0.18)',
-        borderRadius: '16px',
-        padding: '1.25rem',
-        boxShadow: '0 8px 24px rgba(15, 118, 110, 0.05)'
+    const handlePatientAction = (patient) => {
+        localStorage.setItem('activeDoctorEncounterId', patient.token);
+        navigate(`/doctor/briefing?encounterId=${patient.token}`);
     };
 
     return (
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-            {/* Page Header */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.75rem' }}>
-                <div>
-                    <h1 style={{ margin: 0, fontSize: '1.65rem', fontWeight: '800', color: '#0f172a' }}>Today's Clinical Queue</h1>
-                    <p style={{ margin: '0.35rem 0 0 0', fontSize: '0.9rem', color: '#0f766e' }}>
-                        Primary Health Centre · Real-time patient triage & consultation stream
-                    </p>
+        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+            {/* Top Queue Header Card */}
+            <div style={{
+                background: '#ffffff',
+                borderRadius: '18px',
+                padding: '1.75rem',
+                border: '1px solid #eef2f6',
+                boxShadow: '0 2px 12px rgba(0, 0, 0, 0.03)',
+                marginBottom: '1.5rem'
+            }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                    <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '800', color: '#0f172a' }}>
+                        Today's Patient Queue
+                    </h2>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: '#64748b' }}>
+                        <Calendar size={15} color="#64748b" />
+                        <span>Mon, 13 Jan 2025</span>
+                    </div>
                 </div>
-                <div style={{ display: 'flex', gap: '0.75rem' }}>
-                    <button
-                        onClick={fetchQueue}
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.45rem',
-                            background: '#ffffff',
-                            border: '1px solid #ccfbf1',
-                            color: '#0f766e',
-                            padding: '0.65rem 1rem',
-                            borderRadius: '10px',
-                            fontWeight: '600',
-                            fontSize: '0.85rem',
-                            cursor: 'pointer'
-                        }}
-                    >
-                        <RefreshCw size={15} />
-                        Refresh
-                    </button>
-                    <button
-                        onClick={() => navigate('/doctor/scan')}
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.5rem',
-                            background: 'linear-gradient(135deg, #0f766e 0%, #14b8a6 100%)',
-                            color: '#ffffff',
-                            border: 'none',
-                            padding: '0.65rem 1.25rem',
-                            borderRadius: '10px',
-                            fontWeight: '600',
-                            fontSize: '0.85rem',
-                            cursor: 'pointer',
-                            boxShadow: '0 4px 12px rgba(15, 118, 110, 0.25)'
-                        }}
-                    >
-                        <QrCode size={16} />
-                        Scan Patient QR
-                    </button>
-                </div>
-            </div>
 
-            {/* Quick Metrics Bar */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem', marginBottom: '1.75rem' }}>
-                <div style={glassCardStyle}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontSize: '0.8rem', fontWeight: '600', color: '#64748b' }}>Waiting in Queue</span>
-                        <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#e0f2fe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0284c7' }}>
-                            <Users size={16} />
+                {/* 3 Metric Summary Cards */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem', marginBottom: '1.75rem' }}>
+                    {/* Total Patients */}
+                    <div style={{
+                        background: '#e8f7f2',
+                        borderRadius: '14px',
+                        padding: '1.25rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between'
+                    }}>
+                        <div>
+                            <div style={{ fontSize: '1.75rem', fontWeight: '800', color: '#044e42', lineHeight: '1' }}>12</div>
+                            <div style={{ fontSize: '0.82rem', fontWeight: '600', color: '#044e42', marginTop: '0.35rem' }}>Total Patients</div>
+                        </div>
+                        <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#cceee5', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#044e42' }}>
+                            <Users size={20} />
                         </div>
                     </div>
-                    <div style={{ fontSize: '1.8rem', fontWeight: '800', color: '#0f172a', marginTop: '0.4rem' }}>{waitingCount}</div>
-                    <span style={{ fontSize: '0.72rem', color: '#0284c7', fontWeight: '500' }}>Ready for consultation</span>
-                </div>
 
-                <div style={glassCardStyle}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontSize: '0.8rem', fontWeight: '600', color: '#64748b' }}>In Consultation</span>
-                        <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#ccfbf1', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0f766e' }}>
-                            <Stethoscope size={16} />
+                    {/* In Consultation */}
+                    <div style={{
+                        background: '#eff6ff',
+                        borderRadius: '14px',
+                        padding: '1.25rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between'
+                    }}>
+                        <div>
+                            <div style={{ fontSize: '1.75rem', fontWeight: '800', color: '#1d4ed8', lineHeight: '1' }}>5</div>
+                            <div style={{ fontSize: '0.82rem', fontWeight: '600', color: '#1d4ed8', marginTop: '0.35rem' }}>In Consultation</div>
+                        </div>
+                        <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#dbeafe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1d4ed8' }}>
+                            <UserCheck size={20} />
                         </div>
                     </div>
-                    <div style={{ fontSize: '1.8rem', fontWeight: '800', color: '#0f766e', marginTop: '0.4rem' }}>{inConsultCount}</div>
-                    <span style={{ fontSize: '0.72rem', color: '#0f766e', fontWeight: '500' }}>Active session</span>
-                </div>
 
-                <div style={glassCardStyle}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontSize: '0.8rem', fontWeight: '600', color: '#64748b' }}>Urgent Triage</span>
-                        <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#dc2626' }}>
-                            <AlertTriangle size={16} />
+                    {/* Waiting */}
+                    <div style={{
+                        background: '#fffbeb',
+                        borderRadius: '14px',
+                        padding: '1.25rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between'
+                    }}>
+                        <div>
+                            <div style={{ fontSize: '1.75rem', fontWeight: '800', color: '#b45309', lineHeight: '1' }}>3</div>
+                            <div style={{ fontSize: '0.82rem', fontWeight: '600', color: '#b45309', marginTop: '0.35rem' }}>Waiting</div>
+                        </div>
+                        <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#fef3c7', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#b45309' }}>
+                            <Clock size={20} />
                         </div>
                     </div>
-                    <div style={{ fontSize: '1.8rem', fontWeight: '800', color: '#dc2626', marginTop: '0.4rem' }}>{urgentCount}</div>
-                    <span style={{ fontSize: '0.72rem', color: '#dc2626', fontWeight: '500' }}>Requires fast-track review</span>
                 </div>
 
-                <div style={glassCardStyle}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontSize: '0.8rem', fontWeight: '600', color: '#64748b' }}>Completed Today</span>
-                        <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#dcfce7', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#16a34a' }}>
-                            <CheckCircle size={16} />
-                        </div>
-                    </div>
-                    <div style={{ fontSize: '1.8rem', fontWeight: '800', color: '#16a34a', marginTop: '0.4rem' }}>8</div>
-                    <span style={{ fontSize: '0.72rem', color: '#16a34a', fontWeight: '500' }}>Signed & locked</span>
-                </div>
-            </div>
-
-            {/* Filter & Search Bar */}
-            <div style={{ ...glassCardStyle, marginBottom: '1.5rem', padding: '0.85rem 1.25rem', display: 'flex', flexWrap: 'wrap', gap: '1rem', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flex: 1, minWidth: '240px' }}>
-                    <Search size={16} color="#0f766e" />
-                    <input
-                        type="text"
-                        placeholder="Search patient by name, token ID, or complaint..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        style={{
-                            border: 'none',
-                            outline: 'none',
-                            background: 'transparent',
-                            width: '100%',
-                            fontSize: '0.9rem',
-                            color: '#0f172a'
-                        }}
-                    />
-                </div>
-
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    {['ALL', 'URGENT', 'IN_QUEUE', 'IN_CONSULTATION'].map(cat => (
-                        <button
-                            key={cat}
-                            onClick={() => setFilterCategory(cat)}
+                {/* Filter and Search Row */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', marginBottom: '1.25rem' }}>
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        background: '#f8fafc',
+                        border: '1px solid #e2e8f0',
+                        borderRadius: '10px',
+                        padding: '0.6rem 0.9rem',
+                        flex: 1
+                    }}>
+                        <Search size={16} color="#94a3b8" />
+                        <input
+                            type="text"
+                            placeholder="Search by patient name or token..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
                             style={{
-                                border: filterCategory === cat ? '1px solid #0f766e' : '1px solid #e2e8f0',
-                                background: filterCategory === cat ? '#ccfbf1' : '#ffffff',
-                                color: filterCategory === cat ? '#0f766e' : '#64748b',
-                                padding: '0.35rem 0.8rem',
-                                borderRadius: '8px',
-                                fontSize: '0.78rem',
-                                fontWeight: '600',
+                                border: 'none',
+                                outline: 'none',
+                                background: 'transparent',
+                                fontSize: '0.88rem',
+                                color: '#1e293b',
+                                width: '100%'
+                            }}
+                        />
+                    </div>
+
+                    <div style={{ position: 'relative' }}>
+                        <select
+                            value={statusFilter}
+                            onChange={(e) => setStatusFilter(e.target.value)}
+                            style={{
+                                appearance: 'none',
+                                background: '#f8fafc',
+                                border: '1px solid #e2e8f0',
+                                borderRadius: '10px',
+                                padding: '0.6rem 2.2rem 0.6rem 1rem',
+                                fontSize: '0.88rem',
+                                color: '#475569',
+                                fontWeight: '500',
+                                outline: 'none',
                                 cursor: 'pointer'
                             }}
                         >
-                            {cat === 'ALL' ? 'All Patients' : cat.replace('_', ' ')}
-                        </button>
-                    ))}
+                            <option value="ALL">All Status</option>
+                            <option value="WAITING">Waiting</option>
+                            <option value="IN_CONSULTATION">In Consultation</option>
+                            <option value="COMPLETED">Completed</option>
+                        </select>
+                        <ChevronDown size={14} color="#94a3b8" style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
+                    </div>
                 </div>
-            </div>
 
-            {/* Patients Queue List */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                {loading ? (
-                    <div style={{ ...glassCardStyle, textAlign: 'center', padding: '3rem', color: '#0f766e' }}>
-                        Loading patient queue...
-                    </div>
-                ) : filteredQueue.length === 0 ? (
-                    <div style={{ ...glassCardStyle, textAlign: 'center', padding: '3rem', color: '#64748b' }}>
-                        No patients found matching the selected filter.
-                    </div>
-                ) : (
-                    filteredQueue.map(item => {
-                        const isUrgent = item.priority === 'URGENT';
-                        return (
-                            <div
-                                key={item._id}
-                                style={{
-                                    ...glassCardStyle,
-                                    borderLeft: isUrgent ? '4px solid #ef4444' : '4px solid #0f766e',
-                                    display: 'flex',
-                                    flexWrap: 'wrap',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                    gap: '1rem',
-                                    transition: 'transform 0.15s ease'
-                                }}
-                            >
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', flex: 1, minWidth: '280px' }}>
-                                    <div style={{
-                                        background: isUrgent ? '#fee2e2' : '#ccfbf1',
-                                        color: isUrgent ? '#b91c1c' : '#0f766e',
-                                        padding: '0.5rem 0.85rem',
-                                        borderRadius: '12px',
-                                        textAlign: 'center'
-                                    }}>
-                                        <div style={{ fontSize: '0.65rem', fontWeight: '700', textTransform: 'uppercase' }}>Token</div>
-                                        <div style={{ fontSize: '0.95rem', fontWeight: '800' }}>{item.token_id}</div>
-                                    </div>
+                {/* Patients Table */}
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.88rem' }}>
+                    <thead>
+                        <tr style={{ borderBottom: '1px solid #e2e8f0', color: '#64748b', fontSize: '0.78rem', textAlign: 'left' }}>
+                            <th style={{ padding: '0.75rem 0.5rem' }}>#</th>
+                            <th style={{ padding: '0.75rem 0.5rem' }}>Patient</th>
+                            <th style={{ padding: '0.75rem 0.5rem' }}>Age/Gender</th>
+                            <th style={{ padding: '0.75rem 0.5rem' }}>Token</th>
+                            <th style={{ padding: '0.75rem 0.5rem' }}>Status</th>
+                            <th style={{ padding: '0.75rem 0.5rem', textAlign: 'right' }}>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredPatients.map((patient) => {
+                            const isWaiting = patient.status === 'Waiting';
+                            const isInConsult = patient.status === 'In Consultation';
+                            const isCompleted = patient.status === 'Completed';
 
-                                    <div>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                                            <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: '700', color: '#0f172a' }}>
-                                                {item.patient_id?.name}
-                                            </h3>
-                                            <span style={{ fontSize: '0.8rem', color: '#64748b' }}>
-                                                ({item.patient_id?.age} y/o, {item.patient_id?.gender})
-                                            </span>
-                                            {isUrgent && (
-                                                <span style={{
-                                                    fontSize: '0.68rem',
-                                                    background: '#fee2e2',
-                                                    color: '#b91c1c',
-                                                    padding: '0.15rem 0.5rem',
-                                                    borderRadius: '6px',
-                                                    fontWeight: '700',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: '0.25rem'
-                                                }}>
-                                                    <AlertTriangle size={12} />
-                                                    URGENT
-                                                </span>
-                                            )}
-                                        </div>
+                            const statusBg = isWaiting ? '#fef3c7' : isInConsult ? '#dbeafe' : '#dcfce7';
+                            const statusColor = isWaiting ? '#b45309' : isInConsult ? '#1d4ed8' : '#15803d';
 
-                                        <p style={{ margin: '0.35rem 0 0 0', fontSize: '0.86rem', color: '#334155' }}>
-                                            <strong>Chief Complaint:</strong> {item.chief_complaint}
-                                        </p>
-
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: '0.4rem', fontSize: '0.74rem', color: '#64748b' }}>
-                                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                                                <Clock size={12} />
-                                                Arrived: {new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                            </span>
-                                            <span>·</span>
-                                            <span>Triage: <strong>{item.triage_result}</strong></span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <button
-                                        onClick={() => handleSelectPatient(item)}
-                                        style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '0.5rem',
-                                            background: 'linear-gradient(135deg, #0f766e 0%, #14b8a6 100%)',
-                                            color: '#ffffff',
-                                            border: 'none',
-                                            padding: '0.7rem 1.35rem',
-                                            borderRadius: '10px',
+                            return (
+                                <tr key={patient.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                                    <td style={{ padding: '1rem 0.5rem', color: '#64748b' }}>{patient.id}</td>
+                                    <td style={{ padding: '1rem 0.5rem', fontWeight: '700', color: '#0f172a' }}>{patient.name}</td>
+                                    <td style={{ padding: '1rem 0.5rem', color: '#64748b' }}>{patient.ageGender}</td>
+                                    <td style={{ padding: '1rem 0.5rem', color: '#475569', fontWeight: '600' }}>{patient.token}</td>
+                                    <td style={{ padding: '1rem 0.5rem' }}>
+                                        <span style={{
+                                            background: statusBg,
+                                            color: statusColor,
+                                            padding: '0.25rem 0.65rem',
+                                            borderRadius: '12px',
+                                            fontSize: '0.75rem',
                                             fontWeight: '600',
-                                            fontSize: '0.88rem',
-                                            cursor: 'pointer',
-                                            boxShadow: '0 4px 12px rgba(15, 118, 110, 0.2)'
-                                        }}
-                                    >
-                                        Attend Patient
-                                        <ArrowRight size={16} />
-                                    </button>
-                                </div>
-                            </div>
-                        );
-                    })
-                )}
+                                            display: 'inline-block'
+                                        }}>
+                                            {patient.status}
+                                        </span>
+                                    </td>
+                                    <td style={{ padding: '1rem 0.5rem', textAlign: 'right' }}>
+                                        {isWaiting ? (
+                                            <button
+                                                onClick={() => handlePatientAction(patient)}
+                                                style={{
+                                                    background: '#044e42',
+                                                    color: '#ffffff',
+                                                    border: 'none',
+                                                    padding: '0.45rem 1.15rem',
+                                                    borderRadius: '8px',
+                                                    fontWeight: '600',
+                                                    fontSize: '0.82rem',
+                                                    cursor: 'pointer'
+                                                }}
+                                            >
+                                                Start
+                                            </button>
+                                        ) : (
+                                            <button
+                                                onClick={() => handlePatientAction(patient)}
+                                                style={{
+                                                    background: '#ffffff',
+                                                    color: '#044e42',
+                                                    border: '1px solid #e2e8f0',
+                                                    padding: '0.45rem 1.15rem',
+                                                    borderRadius: '8px',
+                                                    fontWeight: '600',
+                                                    fontSize: '0.82rem',
+                                                    cursor: 'pointer'
+                                                }}
+                                            >
+                                                View
+                                            </button>
+                                        )}
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
             </div>
         </div>
     );

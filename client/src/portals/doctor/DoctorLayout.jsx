@@ -2,78 +2,47 @@ import React, { useState } from 'react';
 import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { 
     LayoutDashboard, 
+    Users, 
     QrCode, 
     FileText, 
     Stethoscope, 
     Pill, 
     CalendarCheck, 
     Lock, 
-    Bell, 
-    ShieldCheck, 
-    AlertCircle, 
-    User, 
-    Clock, 
-    ChevronRight,
-    Activity
+    LogOut,
+    ChevronDown,
+    Search,
+    Bell
 } from 'lucide-react';
 
 /**
- * DoctorLayout Component (Nordic Wellness Glass Theme)
- * Unified Clinician Layout with Frosted Glass Navigation, Active Patient HUD, and Route Outlet.
+ * DoctorLayout Component (Aura HealthTech Theme)
+ * Clean, structured & clinical focus with bright crisp white cards,
+ * soft mint accents, and deep pine teal buttons.
  */
 export default function DoctorLayout({ children }) {
     const navigate = useNavigate();
     const location = useLocation();
     const [activeEncounterId, setActiveEncounterId] = useState(() => {
-        // Retrieve encounter ID from query params or local storage if active
         const params = new URLSearchParams(window.location.search);
-        return params.get('encounterId') || localStorage.getItem('activeDoctorEncounterId') || 'enc-101';
+        return params.get('encounterId') || localStorage.getItem('activeDoctorEncounterId') || 'P-001';
     });
 
-    // Navigation items for Doctor clinical workflow
     const navItems = [
-        { 
-            path: '/doctor', 
-            label: 'Patient Queue', 
-            icon: LayoutDashboard,
-            badge: 'Live'
-        },
-        { 
-            path: '/doctor/scan', 
-            label: 'Token & QR Scan', 
-            icon: QrCode 
-        },
-        { 
-            path: `/doctor/briefing?encounterId=${activeEncounterId}`, 
-            label: 'Clinical Briefing', 
-            icon: FileText 
-        },
-        { 
-            path: `/doctor/consultation?encounterId=${activeEncounterId}`, 
-            label: 'Consultation Notes', 
-            icon: Stethoscope 
-        },
-        { 
-            path: `/doctor/prescription?encounterId=${activeEncounterId}`, 
-            label: 'Prescription Builder', 
-            icon: Pill 
-        },
-        { 
-            path: `/doctor/plan?encounterId=${activeEncounterId}`, 
-            label: 'Plan & Follow-up', 
-            icon: CalendarCheck 
-        },
-        { 
-            path: `/doctor/sign-off?encounterId=${activeEncounterId}`, 
-            label: 'Sign-Off & Handoff', 
-            icon: Lock 
-        }
+        { path: '/doctor/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+        { path: '/doctor/queue', label: 'Patient Queue', icon: Users },
+        { path: '/doctor/scan', label: 'Token Lookup', icon: QrCode },
+        { path: `/doctor/briefing?encounterId=${activeEncounterId}`, label: 'Clinical Briefing', icon: FileText },
+        { path: `/doctor/consultation?encounterId=${activeEncounterId}`, label: 'Consultation Notes', icon: Stethoscope },
+        { path: `/doctor/prescription?encounterId=${activeEncounterId}`, label: 'Prescription', icon: Pill },
+        { path: `/doctor/plan?encounterId=${activeEncounterId}`, label: 'Plan & Follow-up', icon: CalendarCheck },
+        { path: `/doctor/sign-off?encounterId=${activeEncounterId}`, label: 'Sign Off & Handoff', icon: Lock }
     ];
 
     const isCurrentPath = (path) => {
         const basePath = path.split('?')[0];
-        if (basePath === '/doctor') {
-            return location.pathname === '/doctor' || location.pathname === '/doctor/dashboard';
+        if (basePath === '/doctor/dashboard' || basePath === '/doctor/queue') {
+            return location.pathname === '/doctor' || location.pathname === '/doctor/dashboard' || location.pathname === '/doctor/queue';
         }
         return location.pathname.startsWith(basePath);
     };
@@ -82,126 +51,109 @@ export default function DoctorLayout({ children }) {
         <div style={{
             minHeight: '100vh',
             display: 'flex',
-            background: 'linear-gradient(135deg, #f0fdfa 0%, #f1f5f9 50%, #e6f4f1 100%)',
-            fontFamily: 'system-ui, -apple-system, sans-serif',
-            color: '#0f172a'
+            flexDirection: 'column',
+            background: '#f4f8f6',
+            fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+            color: '#1e293b'
         }}>
-            {/* Sidebar Navigation */}
-            <aside style={{
-                width: '270px',
-                background: 'rgba(255, 255, 255, 0.75)',
-                backdropFilter: 'blur(16px)',
-                WebkitBackdropFilter: 'blur(16px)',
-                borderRight: '1px solid rgba(20, 184, 166, 0.15)',
+            {/* Top Global Bar */}
+            <header style={{
+                height: '70px',
+                background: '#ffffff',
+                borderBottom: '1px solid #eef2f6',
                 display: 'flex',
-                flexDirection: 'column',
+                alignItems: 'center',
                 justifyContent: 'space-between',
-                padding: '1.5rem 1rem',
+                padding: '0 2rem',
                 position: 'sticky',
                 top: 0,
-                height: '100vh',
-                boxSizing: 'border-box',
-                boxShadow: '4px 0 24px rgba(15, 118, 110, 0.04)'
+                zIndex: 40
             }}>
-                <div>
-                    {/* Portal Brand */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0 0.5rem 1.5rem 0.5rem', borderBottom: '1px solid rgba(20, 184, 166, 0.15)' }}>
-                        <div style={{
-                            width: '40px',
-                            height: '40px',
-                            borderRadius: '12px',
-                            background: 'linear-gradient(135deg, #0f766e 0%, #14b8a6 100%)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: '#ffffff',
-                            boxShadow: '0 4px 12px rgba(15, 118, 110, 0.25)'
-                        }}>
-                            <Activity size={22} />
-                        </div>
-                        <div>
-                            <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: '700', color: '#0f766e' }}>Veyora Clinician</h2>
-                            <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: '500' }}>Primary Health Care Portal</span>
-                        </div>
-                    </div>
-
-                    {/* Active Patient Session HUD */}
+                {/* Brand / Portal Title */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
                     <div style={{
-                        marginTop: '1.25rem',
-                        marginBottom: '1.25rem',
-                        background: 'rgba(240, 253, 250, 0.85)',
-                        border: '1px solid #ccfbf1',
+                        width: '42px',
+                        height: '42px',
                         borderRadius: '12px',
-                        padding: '0.75rem 0.9rem'
+                        background: '#044e42',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#ffffff'
                     }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
-                            <span style={{ fontSize: '0.7rem', fontWeight: '700', color: '#0f766e', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Active Session</span>
-                            <span style={{ fontSize: '0.7rem', background: '#99f6e4', color: '#115e59', padding: '0.1rem 0.45rem', borderRadius: '10px', fontWeight: '600' }}>TKN-8821</span>
-                        </div>
-                        <div style={{ fontSize: '0.88rem', fontWeight: '700', color: '#0f172a' }}>Ramesh Kumar (54 M)</div>
-                        <div style={{ fontSize: '0.72rem', color: '#64748b' }}>Encounter: {activeEncounterId}</div>
+                        <Stethoscope size={22} />
                     </div>
-
-                    {/* Nav Links */}
-                    <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                        {navItems.map((item) => {
-                            const active = isCurrentPath(item.path);
-                            const IconComponent = item.icon;
-                            return (
-                                <NavLink
-                                    key={item.label}
-                                    to={item.path}
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between',
-                                        padding: '0.65rem 0.85rem',
-                                        borderRadius: '10px',
-                                        textDecoration: 'none',
-                                        fontSize: '0.85rem',
-                                        fontWeight: active ? '700' : '500',
-                                        color: active ? '#0f766e' : '#475569',
-                                        background: active ? 'rgba(204, 251, 241, 0.65)' : 'transparent',
-                                        border: active ? '1px solid rgba(20, 184, 166, 0.3)' : '1px solid transparent',
-                                        transition: 'all 0.15s ease'
-                                    }}
-                                >
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.7rem' }}>
-                                        <IconComponent size={18} color={active ? '#0f766e' : '#64748b'} />
-                                        <span>{item.label}</span>
-                                    </div>
-                                    {item.badge && (
-                                        <span style={{
-                                            fontSize: '0.65rem',
-                                            background: '#0f766e',
-                                            color: '#ffffff',
-                                            padding: '0.15rem 0.45rem',
-                                            borderRadius: '8px',
-                                            fontWeight: '700'
-                                        }}>
-                                            {item.badge}
-                                        </span>
-                                    )}
-                                </NavLink>
-                            );
-                        })}
-                    </nav>
+                    <div>
+                        <h1 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.02em' }}>
+                            Doctor Portal
+                        </h1>
+                        <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b' }}>
+                            Clinical Insights. Better Care.
+                        </p>
+                    </div>
                 </div>
 
-                {/* Doctor Profile Footer */}
-                <div style={{
-                    borderTop: '1px solid rgba(20, 184, 166, 0.15)',
-                    paddingTop: '1rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
-                }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                {/* Search & Doctor Profile */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+                    {/* Global search */}
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        background: '#f8fafc',
+                        border: '1px solid #e2e8f0',
+                        borderRadius: '24px',
+                        padding: '0.5rem 1rem',
+                        width: '260px'
+                    }}>
+                        <Search size={16} color="#94a3b8" />
+                        <input
+                            type="text"
+                            placeholder="Search patients, tasks, or anything..."
+                            style={{
+                                border: 'none',
+                                outline: 'none',
+                                background: 'transparent',
+                                fontSize: '0.84rem',
+                                color: '#1e293b',
+                                width: '100%'
+                            }}
+                        />
+                    </div>
+
+                    {/* Bell notification */}
+                    <button style={{
+                        width: '38px',
+                        height: '38px',
+                        borderRadius: '50%',
+                        border: '1px solid #e2e8f0',
+                        background: '#ffffff',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        color: '#64748b',
+                        position: 'relative'
+                    }}>
+                        <Bell size={18} />
+                        <span style={{ position: 'absolute', top: '7px', right: '8px', width: '7px', height: '7px', borderRadius: '50%', background: '#ef4444' }}></span>
+                    </button>
+
+                    {/* Doctor Info Card */}
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.65rem',
+                        background: '#ffffff',
+                        padding: '0.35rem 0.65rem',
+                        borderRadius: '12px',
+                        cursor: 'pointer'
+                    }}>
                         <div style={{
-                            width: '36px',
-                            height: '36px',
+                            width: '38px',
+                            height: '38px',
                             borderRadius: '50%',
-                            background: '#0f766e',
+                            background: '#044e42',
                             color: '#ffffff',
                             display: 'flex',
                             alignItems: 'center',
@@ -212,80 +164,83 @@ export default function DoctorLayout({ children }) {
                             DS
                         </div>
                         <div>
-                            <div style={{ fontSize: '0.82rem', fontWeight: '700', color: '#0f172a' }}>Dr. Shreyas</div>
-                            <div style={{ fontSize: '0.7rem', color: '#0f766e', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981' }}></span>
-                                On Duty (PHC Main)
-                            </div>
+                            <div style={{ fontSize: '0.86rem', fontWeight: '700', color: '#0f172a' }}>Dr. Shreyas</div>
+                            <div style={{ fontSize: '0.72rem', color: '#64748b' }}>General Physician</div>
                         </div>
+                        <ChevronDown size={14} color="#94a3b8" style={{ marginLeft: '4px' }} />
                     </div>
                 </div>
-            </aside>
+            </header>
 
-            {/* Main Content Area */}
-            <main style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
-                {/* Top Header Bar */}
-                <header style={{
-                    height: '64px',
-                    background: 'rgba(255, 255, 255, 0.75)',
-                    backdropFilter: 'blur(12px)',
-                    WebkitBackdropFilter: 'blur(12px)',
-                    borderBottom: '1px solid rgba(20, 184, 166, 0.15)',
+            {/* Main Layout Container */}
+            <div style={{ display: 'flex', flex: 1 }}>
+                {/* Clean Light Sidebar */}
+                <aside style={{
+                    width: '240px',
+                    background: '#ffffff',
+                    borderRight: '1px solid #eef2f6',
                     display: 'flex',
-                    alignItems: 'center',
+                    flexDirection: 'column',
                     justifyContent: 'space-between',
-                    padding: '0 2rem',
-                    position: 'sticky',
-                    top: 0,
-                    zIndex: 10
+                    padding: '1.5rem 0.85rem',
+                    boxSizing: 'border-box'
                 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                        <span style={{ fontSize: '0.82rem', color: '#64748b' }}>Clinical Workflow</span>
-                        <ChevronRight size={14} color="#94a3b8" />
-                        <span style={{ fontSize: '0.85rem', fontWeight: '600', color: '#0f766e' }}>
-                            {location.pathname === '/doctor' || location.pathname === '/doctor/dashboard'
-                                ? "Today's Patient Queue"
-                                : location.pathname.includes('/scan')
-                                ? 'Token Verification'
-                                : location.pathname.includes('/briefing')
-                                ? 'Clinical Briefing'
-                                : location.pathname.includes('/consultation')
-                                ? 'Consultation & Notes'
-                                : location.pathname.includes('/prescription')
-                                ? 'e-Rx Prescription'
-                                : location.pathname.includes('/plan')
-                                ? 'Follow-Up Plan'
-                                : 'Sign-Off & Lock'}
-                        </span>
-                    </div>
+                    <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+                        {navItems.map((item) => {
+                            const active = isCurrentPath(item.path);
+                            const IconComponent = item.icon;
+                            return (
+                                <NavLink
+                                    key={item.label}
+                                    to={item.path}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.75rem',
+                                        padding: '0.65rem 0.85rem',
+                                        borderRadius: '10px',
+                                        textDecoration: 'none',
+                                        fontSize: '0.88rem',
+                                        fontWeight: active ? '700' : '500',
+                                        color: active ? '#044e42' : '#475569',
+                                        background: active ? '#e6f7f2' : 'transparent',
+                                        transition: 'all 0.15s ease'
+                                    }}
+                                >
+                                    <IconComponent size={18} color={active ? '#044e42' : '#64748b'} />
+                                    <span>{item.label}</span>
+                                </NavLink>
+                            );
+                        })}
+                    </nav>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.8rem', color: '#475569' }}>
-                            <Clock size={15} color="#0f766e" />
-                            <span>{new Date().toLocaleDateString('en-IN', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
-                        </div>
-                        <div style={{
+                    {/* Bottom Logout */}
+                    <button
+                        onClick={() => navigate('/')}
+                        style={{
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '0.4rem',
-                            background: '#ccfbf1',
-                            color: '#0f766e',
-                            padding: '0.35rem 0.75rem',
-                            borderRadius: '20px',
-                            fontSize: '0.75rem',
-                            fontWeight: '600'
-                        }}>
-                            <ShieldCheck size={14} />
-                            Encounter Security Locked
-                        </div>
-                    </div>
-                </header>
+                            gap: '0.75rem',
+                            padding: '0.65rem 0.85rem',
+                            borderRadius: '10px',
+                            border: 'none',
+                            background: 'transparent',
+                            color: '#64748b',
+                            fontSize: '0.88rem',
+                            fontWeight: '500',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        <LogOut size={18} />
+                        <span>Logout</span>
+                    </button>
+                </aside>
 
-                {/* Page Body */}
-                <div style={{ padding: '2rem', flex: 1, overflowY: 'auto' }}>
+                {/* Page Content Canvas */}
+                <main style={{ flex: 1, padding: '2rem', overflowY: 'auto' }}>
                     {children ? children : <Outlet />}
-                </div>
-            </main>
+                </main>
+            </div>
         </div>
     );
 }

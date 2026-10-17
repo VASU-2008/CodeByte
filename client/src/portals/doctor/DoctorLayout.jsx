@@ -11,7 +11,7 @@ import {
     Lock, 
     LogOut
 } from 'lucide-react';
-import { getPatientByToken } from '../../api/doctorApi';
+import { getPatientByToken, getActiveSessionToken } from '../../api/doctorApi';
 
 /**
  * DoctorLayout Component (Aura HealthTech Theme)
@@ -22,10 +22,10 @@ export default function DoctorLayout({ children }) {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Dynamically resolve active encounter ID from URL query params or localStorage
+    // Dynamically resolve active encounter ID from URL query params or active session token
     const params = new URLSearchParams(location.search);
     const encounterFromUrl = params.get('encounterId');
-    const activeEncounterId = encounterFromUrl || localStorage.getItem('activeDoctorEncounterId') || 'P-001';
+    const activeEncounterId = encounterFromUrl || getActiveSessionToken();
 
     useEffect(() => {
         if (encounterFromUrl) {
@@ -146,6 +146,26 @@ export default function DoctorLayout({ children }) {
                             );
                         })}
                     </nav>
+
+                    {/* Current Patient Context Pill */}
+                    <div style={{
+                        marginTop: 'auto',
+                        marginBottom: '1rem',
+                        padding: '0.75rem 0.85rem',
+                        background: '#f8fafc',
+                        borderRadius: '12px',
+                        border: '1px solid #e2e8f0'
+                    }}>
+                        <div style={{ fontSize: '0.68rem', fontWeight: '800', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                            Current Patient
+                        </div>
+                        <div style={{ fontSize: '0.88rem', fontWeight: '800', color: '#0f172a', marginTop: '0.2rem' }}>
+                            {activePatient.name}
+                        </div>
+                        <div style={{ fontSize: '0.74rem', color: '#044e42', fontWeight: '600', marginTop: '0.1rem' }}>
+                            Token: {activePatient.token}
+                        </div>
+                    </div>
 
                     {/* Bottom Logout */}
                     <button

@@ -10,7 +10,7 @@ import {
     Calendar,
     Clock
 } from 'lucide-react';
-import { createPrescription, getPatientByToken } from '../../../api/doctorApi';
+import { createPrescription, getPatientByToken, getActiveSessionToken } from '../../../api/doctorApi';
 
 /**
  * PrescriptionBuilder Component (Clean, Simple & Dynamic)
@@ -21,7 +21,7 @@ export default function PrescriptionBuilder() {
     const location = useLocation();
 
     const params = new URLSearchParams(location.search);
-    const rawToken = params.get('encounterId') || 'P-001';
+    const rawToken = params.get('encounterId') || getActiveSessionToken();
     const encounterId = rawToken.includes('/') ? rawToken.split('/').pop() : rawToken;
 
     const patient = getPatientByToken(encounterId);

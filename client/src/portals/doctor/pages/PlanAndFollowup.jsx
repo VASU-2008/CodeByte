@@ -10,7 +10,7 @@ import {
     User,
     CheckCircle2
 } from 'lucide-react';
-import { recordFollowupPlan, getPatientByToken } from '../../../api/doctorApi';
+import { recordFollowupPlan, getPatientByToken, getActiveSessionToken } from '../../../api/doctorApi';
 
 /**
  * PlanAndFollowup Component (Clean, Focused & Dynamic Patient Info)
@@ -20,7 +20,7 @@ export default function PlanAndFollowup() {
     const location = useLocation();
 
     const params = new URLSearchParams(location.search);
-    const rawToken = params.get('encounterId') || 'P-001';
+    const rawToken = params.get('encounterId') || getActiveSessionToken();
     const encounterId = rawToken.includes('/') ? rawToken.split('/').pop() : rawToken;
 
     const patient = getPatientByToken(encounterId);

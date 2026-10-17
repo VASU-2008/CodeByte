@@ -161,34 +161,134 @@ export const getPatientByToken = (tokenId) => {
             pastVisits: [
                 { date: '20 Sep 2024', facility: 'CHC Visit', doctor: 'Doctor 2', diagnosis: 'Seasonal pharyngitis', rx: 'Antihistamines' }
             ]
+        },
+        'VY-TOK-DEMO-7G8H9I': {
+            id: 6,
+            name: 'Patient 6',
+            age: 29,
+            gender: 'Female',
+            token: 'VY-TOK-DEMO-7G8H9I',
+            abhaId: 'ABHA-9821-4402-7891',
+            complaint: 'Seasonal allergic rhinitis, persistent sneezing and bilateral nasal congestion.',
+            bp: '118/76',
+            temp: '98.4°F',
+            pulse: '74 bpm',
+            spo2: '99%',
+            weight: '58 kg',
+            bmi: '21.5',
+            allergy: 'Dust & Pollen Allergy',
+            hasAllergy: true,
+            diagnosis: 'Allergic Rhinitis with Mild Sinus Congestion',
+            findings: 'Nasal mucosa pale and boggy. Bilateral turbinate hypertrophy. Chest clear to auscultation.',
+            notes: 'Patient scanned via Veyora mobile QR pass. Symptoms peak during morning hours. Started antihistamine and nasal spray.',
+            advice: 'Avoid dust and environmental allergens. Steam inhalation twice daily.',
+            medications: [
+                { id: 1, name: 'Levocetirizine', strength: '5 mg', form: 'Tablet', frequency: '0-0-1', timing: 'Bedtime', duration: '10 Days', instructions: 'Take 1 tablet at night' },
+                { id: 2, name: 'Fluticasone Propionate Nasal Spray', strength: '50 mcg', form: 'Spray', frequency: '1-0-1', timing: 'Both Nostrils', duration: '15 Days', instructions: '1 spray each nostril twice daily' },
+                { id: 3, name: 'Saline Nasal Drops', strength: '0.9%', form: 'Drops', frequency: '2-2-2', timing: 'As Needed', duration: '7 Days', instructions: 'Instill 2 drops in each nostril for congestion' }
+            ],
+            pastVisits: [
+                { date: '12 Aug 2024', facility: 'Primary Health Centre', doctor: 'Doctor 1', diagnosis: 'Seasonal allergic rhinitis', rx: 'Cetirizine 10mg' }
+            ]
         }
     };
 
-    return patientsMap[cleanToken] || {
-        id: 1,
-        name: cleanToken.startsWith('P-') ? `Patient ${cleanToken.replace('P-00', '').replace('P-0', '')}` : 'Patient 1',
-        age: 42,
-        gender: 'Male',
+    // Direct match
+    if (patientsMap[cleanToken]) {
+        return patientsMap[cleanToken];
+    }
+
+    // Normalized match (e.g., "1" -> "P-001", "P-1" -> "P-001")
+    const numOnly = cleanToken.replace(/\D/g, '');
+    if (numOnly) {
+        const paddedKey = `P-00${parseInt(numOnly, 10)}`;
+        if (patientsMap[paddedKey]) {
+            return patientsMap[paddedKey];
+        }
+    }
+
+    // Dynamic resolution for arbitrary / newly registered tokens
+    let hash = 0;
+    for (let i = 0; i < cleanToken.length; i++) {
+        hash = (hash << 5) - hash + cleanToken.charCodeAt(i);
+        hash |= 0;
+    }
+    const derivedNum = numOnly ? parseInt(numOnly, 10) : (Math.abs(hash) % 15 + 7);
+    const isFemale = derivedNum % 2 === 0;
+
+    const complaintsBank = [
+        'Persistent knee joint stiffness and mild swelling, exacerbated after morning walks.',
+        'Spasmodic dry cough and throat irritation without wheeze for 4 days.',
+        'Postprandial epigastric burning, acid reflux and occasional dyspepsia.',
+        'Intermittent tension headaches, neck muscle tightness and blurred near vision.',
+        'Pruritic erythematous rash across bilateral forearms following outdoor work.'
+    ];
+
+    const diagnosisBank = [
+        'Early Osteoarthritis of Bilateral Knees',
+        'Post-Infectious Dry Bronchitis',
+        'Gastroesophageal Reflux Disease (GERD)',
+        'Cervicogenic Tension Headache',
+        'Contact Dermatitis'
+    ];
+
+    const pickIdx = derivedNum % complaintsBank.length;
+
+    return {
+        id: derivedNum,
+        name: `Patient ${derivedNum}`,
+        age: 24 + ((derivedNum * 5) % 46),
+        gender: isFemale ? 'Female' : 'Male',
         token: cleanToken,
-        abhaId: `ABHA-9821-4402-${cleanToken.replace(/[^0-9]/g, '') || '9912'}`,
-        complaint: 'Routine clinical consultation and check-up.',
-        bp: '120/80',
-        temp: '98.6°F',
-        pulse: '76 bpm',
-        spo2: '98%',
-        weight: '68 kg',
-        bmi: '23.5',
-        allergy: 'No Known Drug Allergies (NKDA)',
-        hasAllergy: false,
-        diagnosis: 'General Health Review',
-        findings: 'All vitals within normal parameters.',
-        notes: 'Routine check-up performed. Patient advised healthy lifestyle.',
-        advice: 'Adequate hydration and balanced diet.',
+        abhaId: `ABHA-9821-${1000 + (derivedNum * 137) % 8999}-${cleanToken.replace(/[^0-9]/g, '').slice(-4) || '5501'}`,
+        complaint: complaintsBank[pickIdx],
+        bp: `${114 + (derivedNum * 3) % 24}/${74 + (derivedNum * 2) % 18}`,
+        temp: `${98.2 + ((derivedNum % 4) * 0.4).toFixed(1)}°F`,
+        pulse: `${72 + (derivedNum * 3) % 20} bpm`,
+        spo2: `${97 + (derivedNum % 3)}%`,
+        weight: `${58 + (derivedNum * 2) % 26} kg`,
+        bmi: `${21.5 + ((derivedNum % 6) * 0.7).toFixed(1)}`,
+        allergy: isFemale ? 'No Known Drug Allergies (NKDA)' : 'Ciprofloxacin Allergy',
+        hasAllergy: !isFemale,
+        diagnosis: diagnosisBank[pickIdx],
+        findings: 'Systemic vitals reviewed. Heart and lung sounds within expected limits. Clinical signs localized to presenting complaint.',
+        notes: `Patient assessed for ${complaintsBank[pickIdx].toLowerCase()} Conservative management initiated.`,
+        advice: 'Maintain balanced hydration, adequate rest, and report if symptoms persist past 5 days.',
         medications: [
-            { id: 1, name: 'Multivitamin', strength: '1 Tablet', form: 'Tablet', frequency: '1-0-0', timing: 'After Food', duration: '15 Days', instructions: 'Daily morning with breakfast' }
+            { id: 1, name: 'Paracetamol', strength: '650 mg', form: 'Tablet', frequency: 'SOS', timing: 'After Food', duration: '3 Days', instructions: 'Take for symptom relief' },
+            { id: 2, name: 'Pantoprazole', strength: '40 mg', form: 'Tablet', frequency: '1-0-0', timing: 'Morning Empty Stomach', duration: '7 Days', instructions: 'Take 30 mins before breakfast' }
         ],
-        pastVisits: []
+        pastVisits: [
+            { date: '10 Jan 2025', facility: 'Primary Health Centre', doctor: 'Doctor 1', diagnosis: 'Initial consultation', rx: 'Symptomatic therapy' }
+        ]
     };
+};
+
+/**
+ * Return all demo patients for quick selection and queue display
+ */
+export const getAllDemoPatients = () => {
+    return [
+        { id: 1, token: 'P-001', name: 'Patient 1', ageGender: '42 / M', status: 'Waiting', priority: 'Moderate', complaint: 'Fever and body ache since 2 days' },
+        { id: 2, token: 'P-002', name: 'Patient 2', ageGender: '36 / F', status: 'In Consultation', priority: 'High', complaint: 'Severe headache and elevated BP' },
+        { id: 3, token: 'P-003', name: 'Patient 3', ageGender: '28 / M', status: 'Waiting', priority: 'Routine', complaint: 'Acute stomach cramps and nausea' },
+        { id: 4, token: 'P-004', name: 'Patient 4', ageGender: '55 / F', status: 'Completed', priority: 'Routine', complaint: 'Diabetes check-up & refill' },
+        { id: 5, token: 'P-005', name: 'Patient 5', ageGender: '31 / M', status: 'Waiting', priority: 'Routine', complaint: 'Sore throat and mild cough' },
+        { id: 6, token: 'VY-TOK-DEMO-7G8H9I', name: 'Patient 6', ageGender: '29 / F', status: 'Waiting', priority: 'Routine', complaint: 'Seasonal allergic rhinitis' }
+    ];
+};
+
+/**
+ * Resolve the active session patient token (prioritizing active consultation or storage)
+ */
+export const getActiveSessionToken = () => {
+    try {
+        const stored = localStorage.getItem('activeDoctorEncounterId');
+        if (stored && stored.trim()) return stored.trim();
+    } catch (e) {
+        // ignore
+    }
+    return 'P-002'; // Patient 2 is actively in consultation in the current session
 };
 
 // 0. Dynamic Doctor Identity Resolver
@@ -300,6 +400,19 @@ export const getDoctorQueue = async (facilityId = 'PHC_MAIN') => {
                 status: 'Waiting',
                 priority: 'Routine',
                 createdAt: new Date(Date.now() - 14400000).toISOString()
+            },
+            {
+                id: 6,
+                _id: 'enc-106',
+                token: 'VY-TOK-DEMO-7G8H9I',
+                token_id: 'VY-TOK-DEMO-7G8H9I',
+                name: 'Patient 6',
+                ageGender: '29 / F',
+                complaint: 'Seasonal allergic rhinitis and nasal congestion.',
+                chief_complaint: 'Seasonal allergic rhinitis and nasal congestion.',
+                status: 'Waiting',
+                priority: 'Routine',
+                createdAt: new Date(Date.now() - 1800000).toISOString()
             }
         ];
     }
@@ -479,6 +592,8 @@ export const signOffEncounter = async (encounterId, signOffData) => {
 
 export default {
     getPatientByToken,
+    getActiveSessionToken,
+    getAllDemoPatients,
     getLoggedInDoctor,
     getDoctorQueue,
     lookupEncounterByToken,

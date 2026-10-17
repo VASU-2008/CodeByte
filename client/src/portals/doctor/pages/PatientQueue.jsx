@@ -29,7 +29,8 @@ export default function PatientQueue() {
         { id: 2, name: 'Patient 2', ageGender: '36 / F', token: 'P-002', status: 'In Consultation', priority: 'High', complaint: 'Severe headache and elevated BP' },
         { id: 3, name: 'Patient 3', ageGender: '28 / M', token: 'P-003', status: 'Waiting', priority: 'Routine', complaint: 'Acute stomach cramps and nausea' },
         { id: 4, name: 'Patient 4', ageGender: '55 / F', token: 'P-004', status: 'Completed', priority: 'Routine', complaint: 'Diabetes routine check-up & refill' },
-        { id: 5, name: 'Patient 5', ageGender: '31 / M', token: 'P-005', status: 'Waiting', priority: 'Routine', complaint: 'Sore throat and mild cough' }
+        { id: 5, name: 'Patient 5', ageGender: '31 / M', token: 'P-005', status: 'Waiting', priority: 'Routine', complaint: 'Sore throat and mild cough' },
+        { id: 6, name: 'Patient 6', ageGender: '29 / F', token: 'VY-TOK-DEMO-7G8H9I', status: 'Waiting', priority: 'Routine', complaint: 'Seasonal allergic rhinitis' }
     ]);
 
     useEffect(() => {

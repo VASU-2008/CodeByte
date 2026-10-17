@@ -19,9 +19,10 @@ import {
     Calendar,
     Clock,
     CheckCircle2,
-    Eye
+    Eye,
+    Users
 } from 'lucide-react';
-import { getPatientByToken } from '../../../api/doctorApi';
+import { getPatientByToken, getAllDemoPatients, getActiveSessionToken } from '../../../api/doctorApi';
 
 /**
  * ClinicalBriefing Component (Smooth Transitions & Demo-Ready)
@@ -33,11 +34,17 @@ export default function ClinicalBriefing() {
     const [activeTab, setActiveTab] = useState('Current Visit');
 
     const params = new URLSearchParams(location.search);
-    const rawToken = params.get('encounterId') || 'P-001';
+    const rawToken = params.get('encounterId') || getActiveSessionToken();
     // Format token cleanly if a full URL was passed
     const displayToken = rawToken.includes('/') ? rawToken.split('/').pop() : rawToken;
 
     const patient = getPatientByToken(displayToken);
+    const demoPatients = getAllDemoPatients();
+
+    const handleSelectPatient = (token) => {
+        localStorage.setItem('activeDoctorEncounterId', token);
+        navigate(`/doctor/briefing?encounterId=${token}`);
+    };
 
     const tabs = ['Current Visit', 'Past Visits', 'Vitals Trend', 'Medicines', 'Documents'];
 
@@ -82,6 +89,72 @@ export default function ClinicalBriefing() {
                 <span>Back to Patient Queue</span>
             </button>
 
+            {/* Quick Patient Switcher Bar */}
+            <div style={{
+                background: '#ffffff',
+                borderRadius: '16px',
+                border: '1px solid #eef2f6',
+                boxShadow: '0 2px 10px rgba(0, 0, 0, 0.02)',
+                padding: '0.85rem 1.25rem',
+                marginBottom: '1.25rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '0.75rem'
+            }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <Users size={16} color="#044e42" />
+                    <span style={{ fontSize: '0.82rem', fontWeight: '700', color: '#475569' }}>
+                        Patient Dossier Switcher:
+                    </span>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                    {demoPatients.map((p) => {
+                        const isSelected = p.token === patient.token;
+                        const isInConsult = p.status === 'In Consultation';
+                        return (
+                            <button
+                                key={p.token}
+                                type="button"
+                                onClick={() => handleSelectPatient(p.token)}
+                                style={{
+                                    background: isSelected ? '#044e42' : '#f8fafc',
+                                    color: isSelected ? '#ffffff' : '#334155',
+                                    border: isSelected ? '1.5px solid #044e42' : '1px solid #e2e8f0',
+                                    padding: '0.35rem 0.75rem',
+                                    borderRadius: '20px',
+                                    fontSize: '0.78rem',
+                                    fontWeight: '700',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.35rem',
+                                    transition: 'all 0.15s ease'
+                                }}
+                            >
+                                {isInConsult && (
+                                    <span style={{
+                                        width: '6px',
+                                        height: '6px',
+                                        borderRadius: '50%',
+                                        background: isSelected ? '#34d399' : '#1d4ed8'
+                                    }}></span>
+                                )}
+                                <span>{p.name}</span>
+                                <span style={{
+                                    fontSize: '0.7rem',
+                                    opacity: isSelected ? 0.85 : 0.65
+                                }}>
+                                    ({p.token.startsWith('P-') ? p.token : 'QR Pass'})
+                                </span>
+                            </button>
+                        );
+                    })}
+                </div>
+            </div>
+
             {/* Main Clinical Dossier Card */}
             <div style={cardStyle}>
                 {/* Header: Patient Info & Badges */}
@@ -102,7 +175,7 @@ export default function ClinicalBriefing() {
                             P{patient.id}
                         </div>
                         <div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
                                 <h2 style={{ margin: 0, fontSize: '1.35rem', fontWeight: '800', color: '#0f172a' }}>
                                     {patient.name}
                                 </h2>
@@ -119,6 +192,16 @@ export default function ClinicalBriefing() {
                                 }}>
                                     <ShieldCheck size={13} />
                                     QR Consent Verified
+                                </span>
+                                <span style={{
+                                    fontSize: '0.74rem',
+                                    background: patient.token === 'P-002' ? '#dbeafe' : patient.token === 'P-004' ? '#dcfce7' : '#fef3c7',
+                                    color: patient.token === 'P-002' ? '#1d4ed8' : patient.token === 'P-004' ? '#15803d' : '#b45309',
+                                    padding: '0.2rem 0.6rem',
+                                    borderRadius: '10px',
+                                    fontWeight: '700'
+                                }}>
+                                    {patient.token === 'P-002' ? 'In Consultation' : patient.token === 'P-004' ? 'Completed' : 'Waiting in Queue'}
                                 </span>
                             </div>
                             <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.84rem', color: '#64748b' }}>

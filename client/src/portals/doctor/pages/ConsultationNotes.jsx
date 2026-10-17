@@ -8,7 +8,7 @@ import {
     Sparkles,
     User
 } from 'lucide-react';
-import { saveConsultationNotes, getPatientByToken } from '../../../api/doctorApi';
+import { saveConsultationNotes, getPatientByToken, getActiveSessionToken } from '../../../api/doctorApi';
 
 /**
  * ConsultationNotes Component (Simple, Clean & Dynamic)
@@ -19,7 +19,7 @@ export default function ConsultationNotes() {
     const location = useLocation();
 
     const params = new URLSearchParams(location.search);
-    const rawToken = params.get('encounterId') || 'P-001';
+    const rawToken = params.get('encounterId') || getActiveSessionToken();
     const encounterId = rawToken.includes('/') ? rawToken.split('/').pop() : rawToken;
 
     const patient = getPatientByToken(encounterId);

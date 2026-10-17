@@ -233,8 +233,8 @@ export default function TokenLookupScan() {
                             <div style={{ fontSize: '0.78rem', color: '#64748b', marginBottom: '0.5rem' }}>
                                 Quick test with demo tokens:
                             </div>
-                            <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem' }}>
-                                {['P-001', 'P-002', 'P-003'].map(tok => (
+                            <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                                {['P-001', 'P-002', 'P-003', 'VY-TOK-DEMO-7G8H9I'].map(tok => (
                                     <button
                                         key={tok}
                                         type="button"

@@ -11,7 +11,7 @@ import {
     Stethoscope, 
     FileCheck 
 } from 'lucide-react';
-import { signOffEncounter, getPatientByToken, getLoggedInDoctor } from '../../../api/doctorApi';
+import { signOffEncounter, getPatientByToken, getLoggedInDoctor, getActiveSessionToken } from '../../../api/doctorApi';
 
 /**
  * SignOffHandoff Component (Clean, Focused & Dynamic Patient Info)
@@ -21,7 +21,7 @@ export default function SignOffHandoff() {
     const location = useLocation();
 
     const params = new URLSearchParams(location.search);
-    const rawToken = params.get('encounterId') || 'P-001';
+    const rawToken = params.get('encounterId') || getActiveSessionToken();
     const encounterId = rawToken.includes('/') ? rawToken.split('/').pop() : rawToken;
 
     const patient = getPatientByToken(encounterId);

@@ -14,14 +14,18 @@ import {
     ShieldCheck,
     CheckCircle2
 } from 'lucide-react';
+import { getPatientByToken } from '../../../api/doctorApi';
 
 /**
  * DoctorDashboard Component (Minimal & Professional Home)
  * Simple and clean: Doctor username, hospital affiliation, quick metrics,
- * next patient spotlight, and logout.
+ * dynamic next patient spotlight, and logout.
  */
 export default function DoctorDashboard() {
     const navigate = useNavigate();
+
+    const activeToken = localStorage.getItem('activeDoctorEncounterId') || 'P-001';
+    const activePatient = getPatientByToken(activeToken);
 
     const handleLogout = () => {
         localStorage.removeItem('token');
@@ -167,7 +171,7 @@ export default function DoctorDashboard() {
                     <div>
                         <div style={{ fontSize: '2rem', fontWeight: '800', color: '#b45309', lineHeight: '1' }}>3</div>
                         <div style={{ fontSize: '0.85rem', fontWeight: '700', color: '#b45309', marginTop: '0.4rem' }}>Waiting in Queue</div>
-                        <div style={{ fontSize: '0.72rem', color: '#92400e', marginTop: '0.15rem' }}>Next: Patient 1 (P-001)</div>
+                        <div style={{ fontSize: '0.72rem', color: '#92400e', marginTop: '0.15rem' }}>Active: {activePatient.name} ({activePatient.token})</div>
                     </div>
                     <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#fef3c7', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#b45309' }}>
                         <Clock size={22} />
@@ -202,27 +206,27 @@ export default function DoctorDashboard() {
                         fontSize: '1.2rem',
                         fontWeight: '800'
                     }}>
-                        P1
+                        P{activePatient.id}
                     </div>
                     <div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                             <span style={{ fontSize: '0.72rem', background: '#fef3c7', color: '#b45309', padding: '0.15rem 0.55rem', borderRadius: '8px', fontWeight: '700' }}>
-                                NEXT IN LINE
+                                ACTIVE SPOTLIGHT
                             </span>
-                            <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Token: <strong>P-001</strong></span>
+                            <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Token: <strong>{activePatient.token}</strong></span>
                         </div>
                         <h3 style={{ margin: '0.25rem 0 0.15rem 0', fontSize: '1.15rem', fontWeight: '800', color: '#0f172a' }}>
-                            Patient 1 (42 / Male)
+                            {activePatient.name} ({activePatient.age} / {activePatient.gender})
                         </h3>
                         <p style={{ margin: 0, fontSize: '0.84rem', color: '#475569' }}>
-                            <strong>Chief Complaint:</strong> Fever and body ache since 2 days. Mild cough.
+                            <strong>Chief Complaint:</strong> {activePatient.complaint}
                         </p>
                     </div>
                 </div>
 
                 <div style={{ display: 'flex', gap: '0.75rem' }}>
                     <button
-                        onClick={() => navigate('/doctor/briefing?encounterId=P-001')}
+                        onClick={() => navigate(`/doctor/briefing?encounterId=${activePatient.token}`)}
                         style={{
                             background: '#044e42',
                             color: '#ffffff',
@@ -238,7 +242,7 @@ export default function DoctorDashboard() {
                             boxShadow: '0 4px 12px rgba(4, 78, 66, 0.25)'
                         }}
                     >
-                        Attend Patient 1
+                        Attend {activePatient.name}
                         <ArrowRight size={16} />
                     </button>
                 </div>

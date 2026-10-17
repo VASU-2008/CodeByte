@@ -5,23 +5,26 @@ import {
     ShieldCheck, 
     ArrowLeft, 
     Printer, 
-    User,
-    CheckCircle2,
-    Calendar,
-    Stethoscope,
-    FileCheck
+    User, 
+    CheckCircle2, 
+    Calendar, 
+    Stethoscope, 
+    FileCheck 
 } from 'lucide-react';
-import { signOffEncounter } from '../../../api/doctorApi';
+import { signOffEncounter, getPatientByToken } from '../../../api/doctorApi';
 
 /**
- * SignOffHandoff Component (Clean, Focused & Patient Info at Top Right)
+ * SignOffHandoff Component (Clean, Focused & Dynamic Patient Info)
  */
 export default function SignOffHandoff() {
     const navigate = useNavigate();
     const location = useLocation();
 
     const params = new URLSearchParams(location.search);
-    const encounterId = params.get('encounterId') || 'P-001';
+    const rawToken = params.get('encounterId') || 'P-001';
+    const encounterId = rawToken.includes('/') ? rawToken.split('/').pop() : rawToken;
+
+    const patient = getPatientByToken(encounterId);
 
     const [doctorName, setDoctorName] = useState('Doctor 1');
     const [regNumber, setRegNumber] = useState('MCI-98442');
@@ -38,7 +41,7 @@ export default function SignOffHandoff() {
 
         setSigning(true);
         try {
-            await signOffEncounter(encounterId, { doctorName, regNumber });
+            await signOffEncounter(patient.token, { doctorName, regNumber });
             setSigned(true);
         } catch (err) {
             console.error(err);
@@ -61,7 +64,7 @@ export default function SignOffHandoff() {
             {/* Top Bar: Back & Patient Badge at Top Right */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                 <button
-                    onClick={() => navigate(`/doctor/plan?encounterId=${encounterId}`)}
+                    onClick={() => navigate(`/doctor/plan?encounterId=${patient.token}`)}
                     style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -93,7 +96,7 @@ export default function SignOffHandoff() {
                     border: '1px solid #e2e8f0'
                 }}>
                     <User size={15} color="#044e42" />
-                    <span>Patient: <strong>Patient 1</strong> (42 / M) · Token: <strong>{encounterId}</strong></span>
+                    <span>Patient: <strong>{patient.name}</strong> ({patient.age} / {patient.gender === 'Female' ? 'F' : 'M'}) · Token: <strong>{patient.token}</strong></span>
                 </div>
             </div>
 
@@ -118,7 +121,7 @@ export default function SignOffHandoff() {
                             Clinical Record Signed & Permanently Locked
                         </h2>
                         <p style={{ margin: '0.4rem 0 1.5rem 0', fontSize: '0.88rem', color: '#64748b' }}>
-                            Encounter #{encounterId} · <strong>Patient 1</strong> has been committed to permanent health record.
+                            Encounter #{patient.token} · <strong>{patient.name}</strong> has been committed to permanent health record.
                         </p>
 
                         <div style={{
@@ -210,19 +213,19 @@ export default function SignOffHandoff() {
                         }}>
                             <div>
                                 <span style={{ color: '#64748b', fontSize: '0.78rem', fontWeight: '700' }}>DIAGNOSIS: </span>
-                                <strong>Acute Viral URTI with Reactive Myalgia</strong>
+                                <strong>{patient.diagnosis}</strong>
                             </div>
                             <div>
                                 <span style={{ color: '#64748b', fontSize: '0.78rem', fontWeight: '700' }}>VITALS: </span>
-                                <span>BP: 120/80 mmHg · Temp: 101.2°F · Pulse: 98 bpm · SpO2: 97%</span>
+                                <span>BP: {patient.bp} mmHg · Temp: {patient.temp} · Pulse: {patient.pulse} · SpO2: {patient.spo2}</span>
                             </div>
                             <div>
                                 <span style={{ color: '#64748b', fontSize: '0.78rem', fontWeight: '700' }}>PRESCRIPTION: </span>
-                                <span>Paracetamol 500mg, Cetirizine 10mg, Oral Rehydration Salts (ORS)</span>
+                                <span>{patient.medications?.map(m => m.name).join(', ') || 'Standard Clinical Formulary'}</span>
                             </div>
                             <div>
                                 <span style={{ color: '#64748b', fontSize: '0.78rem', fontWeight: '700' }}>NEXT FOLLOW-UP: </span>
-                                <span>In 5 Days · Review symptoms and fever resolution</span>
+                                <span>In 5 Days · Review symptoms and clinical recovery</span>
                             </div>
                         </div>
 
@@ -289,7 +292,7 @@ export default function SignOffHandoff() {
                                     style={{ width: '18px', height: '18px', marginTop: '2px', cursor: 'pointer' }}
                                 />
                                 <span style={{ fontSize: '0.85rem', color: '#334155', lineHeight: '1.45' }}>
-                                    I hereby confirm that I have evaluated the clinical findings, provisional diagnosis, e-prescription, and follow-up plan for <strong>Patient 1</strong>. By submitting, I affix my digital signature to permanently seal this encounter.
+                                    I hereby confirm that I have evaluated the clinical findings, provisional diagnosis, e-prescription, and follow-up plan for <strong>{patient.name}</strong>. By submitting, I affix my digital signature to permanently seal this encounter.
                                 </span>
                             </label>
                         </div>

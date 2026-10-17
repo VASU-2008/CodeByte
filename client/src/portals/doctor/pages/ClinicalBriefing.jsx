@@ -21,6 +21,7 @@ import {
     CheckCircle2,
     Eye
 } from 'lucide-react';
+import { getPatientByToken } from '../../../api/doctorApi';
 
 /**
  * ClinicalBriefing Component (Smooth Transitions & Demo-Ready)
@@ -36,10 +37,12 @@ export default function ClinicalBriefing() {
     // Format token cleanly if a full URL was passed
     const displayToken = rawToken.includes('/') ? rawToken.split('/').pop() : rawToken;
 
+    const patient = getPatientByToken(displayToken);
+
     const tabs = ['Current Visit', 'Past Visits', 'Vitals Trend', 'Medicines', 'Documents'];
 
     const handleContinue = () => {
-        navigate(`/doctor/consultation?encounterId=${displayToken}`);
+        navigate(`/doctor/consultation?encounterId=${patient.token}`);
     };
 
     const cardStyle = {
@@ -96,12 +99,12 @@ export default function ClinicalBriefing() {
                             fontSize: '1.3rem',
                             fontWeight: '800'
                         }}>
-                            P1
+                            P{patient.id}
                         </div>
                         <div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
                                 <h2 style={{ margin: 0, fontSize: '1.35rem', fontWeight: '800', color: '#0f172a' }}>
-                                    Patient 1
+                                    {patient.name}
                                 </h2>
                                 <span style={{
                                     fontSize: '0.74rem',
@@ -119,15 +122,15 @@ export default function ClinicalBriefing() {
                                 </span>
                             </div>
                             <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.84rem', color: '#64748b' }}>
-                                42 years | Male | Token: <strong>{displayToken}</strong> | ABHA ID: <strong>ABHA-9821-4402-9912</strong>
+                                {patient.age} years | {patient.gender} | Token: <strong>{patient.token}</strong> | ABHA ID: <strong>{patient.abhaId}</strong>
                             </p>
                         </div>
                     </div>
 
                     <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                         <span style={{
-                            background: '#fee2e2',
-                            color: '#b91c1c',
+                            background: patient.hasAllergy ? '#fee2e2' : '#e6f7f2',
+                            color: patient.hasAllergy ? '#b91c1c' : '#044e42',
                             padding: '0.35rem 0.75rem',
                             borderRadius: '10px',
                             fontSize: '0.78rem',
@@ -136,8 +139,8 @@ export default function ClinicalBriefing() {
                             alignItems: 'center',
                             gap: '0.35rem'
                         }}>
-                            <AlertTriangle size={14} />
-                            Penicillin Allergy
+                            {patient.hasAllergy ? <AlertTriangle size={14} /> : <ShieldCheck size={14} />}
+                            {patient.allergy}
                         </span>
 
                         <button
@@ -220,7 +223,7 @@ export default function ClinicalBriefing() {
                                         </span>
                                     </div>
                                     <p style={{ margin: 0, fontSize: '0.92rem', color: '#334155', lineHeight: '1.5', fontWeight: '500' }}>
-                                        "Fever and body ache since 2 days. Mild dry cough, worse at night."
+                                        "{patient.complaint}"
                                     </p>
                                 </div>
 
@@ -230,7 +233,7 @@ export default function ClinicalBriefing() {
                                             Current Vitals Check
                                         </h3>
                                         <button
-                                            onClick={() => navigate(`/doctor/consultation?encounterId=${displayToken}`)}
+                                            onClick={() => navigate(`/doctor/consultation?encounterId=${patient.token}`)}
                                             style={{
                                                 display: 'flex',
                                                 alignItems: 'center',
@@ -254,7 +257,7 @@ export default function ClinicalBriefing() {
                                                 <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: '600' }}>BP</span>
                                                 <Heart size={14} color="#044e42" />
                                             </div>
-                                            <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#0f172a', marginTop: '0.25rem' }}>120/80</div>
+                                            <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#0f172a', marginTop: '0.25rem' }}>{patient.bp}</div>
                                             <span style={{ fontSize: '0.68rem', background: '#dcfce7', color: '#15803d', padding: '0.1rem 0.4rem', borderRadius: '4px', fontWeight: '700' }}>Normal</span>
                                         </div>
 
@@ -263,8 +266,8 @@ export default function ClinicalBriefing() {
                                                 <span style={{ fontSize: '0.72rem', color: '#92400e', fontWeight: '600' }}>Temp</span>
                                                 <Thermometer size={14} color="#ea580c" />
                                             </div>
-                                            <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#9a3412', marginTop: '0.25rem' }}>101.2°F</div>
-                                            <span style={{ fontSize: '0.68rem', background: '#fee2e2', color: '#dc2626', padding: '0.1rem 0.4rem', borderRadius: '4px', fontWeight: '700' }}>Mild Fever</span>
+                                            <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#9a3412', marginTop: '0.25rem' }}>{patient.temp}</div>
+                                            <span style={{ fontSize: '0.68rem', background: '#fee2e2', color: '#dc2626', padding: '0.1rem 0.4rem', borderRadius: '4px', fontWeight: '700' }}>Recorded</span>
                                         </div>
 
                                         <div style={{ background: '#f8fafc', borderRadius: '12px', padding: '0.85rem', border: '1px solid #f1f5f9' }}>
@@ -272,7 +275,7 @@ export default function ClinicalBriefing() {
                                                 <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: '600' }}>Pulse</span>
                                                 <Activity size={14} color="#044e42" />
                                             </div>
-                                            <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#0f172a', marginTop: '0.25rem' }}>98 bpm</div>
+                                            <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#0f172a', marginTop: '0.25rem' }}>{patient.pulse}</div>
                                             <span style={{ fontSize: '0.68rem', background: '#dcfce7', color: '#15803d', padding: '0.1rem 0.4rem', borderRadius: '4px', fontWeight: '700' }}>Normal</span>
                                         </div>
 
@@ -281,7 +284,7 @@ export default function ClinicalBriefing() {
                                                 <span style={{ fontSize: '0.72rem', color: '#1d4ed8', fontWeight: '600' }}>SpO2</span>
                                                 <Wind size={14} color="#1d4ed8" />
                                             </div>
-                                            <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#1e40af', marginTop: '0.25rem' }}>97%</div>
+                                            <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#1e40af', marginTop: '0.25rem' }}>{patient.spo2}</div>
                                             <span style={{ fontSize: '0.68rem', background: '#dbeafe', color: '#1d4ed8', padding: '0.1rem 0.4rem', borderRadius: '4px', fontWeight: '700' }}>Optimal</span>
                                         </div>
 
@@ -290,7 +293,7 @@ export default function ClinicalBriefing() {
                                                 <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: '600' }}>Weight</span>
                                                 <Scale size={14} color="#64748b" />
                                             </div>
-                                            <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#0f172a', marginTop: '0.25rem' }}>68 kg</div>
+                                            <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#0f172a', marginTop: '0.25rem' }}>{patient.weight}</div>
                                             <span style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: '600' }}>Metric</span>
                                         </div>
 
@@ -299,7 +302,7 @@ export default function ClinicalBriefing() {
                                                 <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: '600' }}>BMI</span>
                                                 <Ruler size={14} color="#64748b" />
                                             </div>
-                                            <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#0f172a', marginTop: '0.25rem' }}>23.5</div>
+                                            <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#0f172a', marginTop: '0.25rem' }}>{patient.bmi}</div>
                                             <span style={{ fontSize: '0.68rem', background: '#dcfce7', color: '#15803d', padding: '0.1rem 0.4rem', borderRadius: '4px', fontWeight: '700' }}>Healthy</span>
                                         </div>
                                     </div>
@@ -312,48 +315,24 @@ export default function ClinicalBriefing() {
                                     <h3 style={{ margin: 0, fontSize: '0.92rem', fontWeight: '800', color: '#0f172a' }}>
                                         Past Visit History
                                     </h3>
-                                    <span style={{ fontSize: '0.75rem', color: '#64748b' }}>3 previous encounters</span>
+                                    <span style={{ fontSize: '0.75rem', color: '#64748b' }}>{patient.pastVisits?.length || 0} previous encounters</span>
                                 </div>
 
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-                                    <div style={{ background: '#f8fafc', borderRadius: '14px', padding: '1rem', border: '1px solid #eef2f6', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <div>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                                <span style={{ fontSize: '0.82rem', fontWeight: '800', color: '#0f172a' }}>05 Oct 2024</span>
-                                                <span style={{ fontSize: '0.72rem', background: '#e2e8f0', color: '#475569', padding: '0.1rem 0.45rem', borderRadius: '6px', fontWeight: '600' }}>CHC Visit</span>
+                                    {patient.pastVisits?.map((visit, idx) => (
+                                        <div key={idx} style={{ background: '#f8fafc', borderRadius: '14px', padding: '1rem', border: '1px solid #eef2f6', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                            <div>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                    <span style={{ fontSize: '0.82rem', fontWeight: '800', color: '#0f172a' }}>{visit.date}</span>
+                                                    <span style={{ fontSize: '0.72rem', background: '#e2e8f0', color: '#475569', padding: '0.1rem 0.45rem', borderRadius: '6px', fontWeight: '600' }}>{visit.facility}</span>
+                                                </div>
+                                                <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.78rem', color: '#475569' }}>
+                                                    {visit.diagnosis} · <strong>{visit.doctor}</strong>
+                                                </p>
                                             </div>
-                                            <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.78rem', color: '#475569' }}>
-                                                Viral fever, symptomatic treatment · <strong>Doctor 2</strong>
-                                            </p>
+                                            <span onClick={() => setActiveTab('Past Visits')} style={{ color: '#044e42', fontSize: '0.82rem', fontWeight: '700', cursor: 'pointer' }}>View →</span>
                                         </div>
-                                        <span onClick={() => setActiveTab('Past Visits')} style={{ color: '#044e42', fontSize: '0.82rem', fontWeight: '700', cursor: 'pointer' }}>View →</span>
-                                    </div>
-
-                                    <div style={{ background: '#f8fafc', borderRadius: '14px', padding: '1rem', border: '1px solid #eef2f6', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <div>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                                <span style={{ fontSize: '0.82rem', fontWeight: '800', color: '#0f172a' }}>10 Aug 2024</span>
-                                                <span style={{ fontSize: '0.72rem', background: '#e2e8f0', color: '#475569', padding: '0.1rem 0.45rem', borderRadius: '6px', fontWeight: '600' }}>Follow-up</span>
-                                            </div>
-                                            <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.78rem', color: '#475569' }}>
-                                                Recovered, no new complaints · <strong>Doctor 3</strong>
-                                            </p>
-                                        </div>
-                                        <span onClick={() => setActiveTab('Past Visits')} style={{ color: '#044e42', fontSize: '0.82rem', fontWeight: '700', cursor: 'pointer' }}>View →</span>
-                                    </div>
-
-                                    <div style={{ background: '#f8fafc', borderRadius: '14px', padding: '1rem', border: '1px solid #eef2f6', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <div>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                                <span style={{ fontSize: '0.82rem', fontWeight: '800', color: '#0f172a' }}>12 Jun 2024</span>
-                                                <span style={{ fontSize: '0.72rem', background: '#e2e8f0', color: '#475569', padding: '0.1rem 0.45rem', borderRadius: '6px', fontWeight: '600' }}>General OPD</span>
-                                            </div>
-                                            <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.78rem', color: '#475569' }}>
-                                                Hypertension follow-up · <strong>Doctor 2</strong>
-                                            </p>
-                                        </div>
-                                        <span onClick={() => setActiveTab('Past Visits')} style={{ color: '#044e42', fontSize: '0.82rem', fontWeight: '700', cursor: 'pointer' }}>View →</span>
-                                    </div>
+                                    ))}
                                 </div>
                             </div>
                         </div>
@@ -367,11 +346,7 @@ export default function ClinicalBriefing() {
                                 <span style={{ fontSize: '0.78rem', color: '#64748b' }}>Authorized by Patient Consent QR</span>
                             </div>
 
-                            {[
-                                { date: '05 Oct 2024', facility: 'CHC North Rural Center', doctor: 'Doctor 2', diagnosis: 'Acute Viral Pyrexia with Cephalea', rx: 'Paracetamol 500mg (1-0-1), Cetirizine 10mg (0-0-1)' },
-                                { date: '10 Aug 2024', facility: 'PHC North Main', doctor: 'Doctor 3', diagnosis: 'Routine Seasonal Review', rx: 'Multivitamin B-Complex (1-0-0)' },
-                                { date: '12 Jun 2024', facility: 'District General Hospital', doctor: 'Doctor 2', diagnosis: 'Essential Hypertension (Stage 1)', rx: 'Amlodipine 5mg (1-0-0), Lifestyle Advice' }
-                            ].map((v, i) => (
+                            {patient.pastVisits?.map((v, i) => (
                                 <div key={i} style={{ background: '#f8fafc', borderRadius: '14px', padding: '1.25rem', border: '1px solid #eef2f6' }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
@@ -394,27 +369,27 @@ export default function ClinicalBriefing() {
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
                                 <TrendingUp size={18} color="#044e42" />
                                 <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: '800', color: '#0f172a' }}>
-                                    Physiological Vitals Trend (Last 3 Visits)
+                                    Physiological Vitals Trend ({patient.name})
                                 </h3>
                             </div>
 
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginBottom: '1.5rem' }}>
                                 <div style={{ background: '#f8fafc', padding: '1.25rem', borderRadius: '14px', border: '1px solid #e2e8f0' }}>
                                     <div style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: '600' }}>Blood Pressure Trend</div>
-                                    <div style={{ fontSize: '1.35rem', fontWeight: '800', color: '#0f172a', margin: '0.35rem 0' }}>120/80 mmHg</div>
-                                    <div style={{ fontSize: '0.75rem', color: '#16a34a', fontWeight: '700' }}>↓ -18 mmHg from baseline</div>
+                                    <div style={{ fontSize: '1.35rem', fontWeight: '800', color: '#0f172a', margin: '0.35rem 0' }}>{patient.bp} mmHg</div>
+                                    <div style={{ fontSize: '0.75rem', color: '#16a34a', fontWeight: '700' }}>Monitored with Digital Sphygmo</div>
                                 </div>
 
                                 <div style={{ background: '#f8fafc', padding: '1.25rem', borderRadius: '14px', border: '1px solid #e2e8f0' }}>
                                     <div style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: '600' }}>Body Temperature</div>
-                                    <div style={{ fontSize: '1.35rem', fontWeight: '800', color: '#ea580c', margin: '0.35rem 0' }}>101.2 °F</div>
-                                    <div style={{ fontSize: '0.75rem', color: '#dc2626', fontWeight: '700' }}>↑ Acute Elevation (+2.6°F)</div>
+                                    <div style={{ fontSize: '1.35rem', fontWeight: '800', color: '#ea580c', margin: '0.35rem 0' }}>{patient.temp}</div>
+                                    <div style={{ fontSize: '0.75rem', color: '#dc2626', fontWeight: '700' }}>Clinical Oral Thermometry</div>
                                 </div>
 
                                 <div style={{ background: '#f8fafc', padding: '1.25rem', borderRadius: '14px', border: '1px solid #e2e8f0' }}>
-                                    <div style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: '600' }}>Pulse Rate</div>
-                                    <div style={{ fontSize: '1.35rem', fontWeight: '800', color: '#0f172a', margin: '0.35rem 0' }}>98 bpm</div>
-                                    <div style={{ fontSize: '0.75rem', color: '#044e42', fontWeight: '700' }}>Slight Tachycardia due to Fever</div>
+                                    <div style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: '600' }}>Pulse Rate & Rhythm</div>
+                                    <div style={{ fontSize: '1.35rem', fontWeight: '800', color: '#0f172a', margin: '0.35rem 0' }}>{patient.pulse}</div>
+                                    <div style={{ fontSize: '0.75rem', color: '#044e42', fontWeight: '700' }}>Regular Sinus Rhythm</div>
                                 </div>
                             </div>
                         </div>
@@ -424,25 +399,21 @@ export default function ClinicalBriefing() {
                     {activeTab === 'Medicines' && (
                         <div style={{ marginBottom: '1.5rem' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                                <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: '800', color: '#0f172a' }}>Active & Past Formularies</h3>
+                                <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: '800', color: '#0f172a' }}>Active & Recommended Formularies</h3>
                                 <span style={{ fontSize: '0.78rem', color: '#15803d', background: '#dcfce7', padding: '0.2rem 0.6rem', borderRadius: '8px', fontWeight: '700' }}>
-                                    Adherence Score: 94%
+                                    Adherence Score: 95%
                                 </span>
                             </div>
 
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                                {[
-                                    { name: 'Amlodipine 5mg', schedule: '1-0-0 (Morning)', purpose: 'Hypertension maintenance', status: 'Active (Ongoing)' },
-                                    { name: 'Paracetamol 500mg', schedule: '1-0-1 (SOS)', purpose: 'Antipyretic for fever', status: 'Active (Current)' },
-                                    { name: 'Metformin 500mg', schedule: '1-0-1 (After Food)', purpose: 'Blood glucose regulation', status: 'Active (Ongoing)' }
-                                ].map((med, idx) => (
+                                {patient.medications?.map((med, idx) => (
                                     <div key={idx} style={{ background: '#f8fafc', borderRadius: '12px', padding: '1rem', border: '1px solid #eef2f6', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <div>
                                             <div style={{ fontWeight: '800', color: '#0f172a', fontSize: '0.92rem' }}>{med.name}</div>
-                                            <div style={{ fontSize: '0.78rem', color: '#64748b', marginTop: '0.2rem' }}>{med.schedule} · {med.purpose}</div>
+                                            <div style={{ fontSize: '0.78rem', color: '#64748b', marginTop: '0.2rem' }}>{med.strength} · {med.frequency} · {med.timing} ({med.duration})</div>
                                         </div>
                                         <span style={{ fontSize: '0.75rem', background: '#e6f7f2', color: '#044e42', padding: '0.2rem 0.55rem', borderRadius: '6px', fontWeight: '700' }}>
-                                            {med.status}
+                                            Active
                                         </span>
                                     </div>
                                 ))}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { 
     Pill, 
@@ -10,20 +10,23 @@ import {
     Calendar,
     Clock
 } from 'lucide-react';
-import { createPrescription } from '../../../api/doctorApi';
+import { createPrescription, getPatientByToken } from '../../../api/doctorApi';
 
 /**
- * PrescriptionBuilder Component (Clean & Simple with Patient Top-Right)
- * Multi-drug e-Rx prescription editor with patient badge and dosage builder.
+ * PrescriptionBuilder Component (Clean, Simple & Dynamic)
+ * Multi-drug e-Rx prescription editor with dynamic patient badge and dosage builder.
  */
 export default function PrescriptionBuilder() {
     const navigate = useNavigate();
     const location = useLocation();
 
     const params = new URLSearchParams(location.search);
-    const encounterId = params.get('encounterId') || 'P-001';
+    const rawToken = params.get('encounterId') || 'P-001';
+    const encounterId = rawToken.includes('/') ? rawToken.split('/').pop() : rawToken;
 
-    const [medications, setMedications] = useState([
+    const patient = getPatientByToken(encounterId);
+
+    const [medications, setMedications] = useState(() => patient.medications || [
         {
             id: 1,
             name: 'Paracetamol',
@@ -33,28 +36,14 @@ export default function PrescriptionBuilder() {
             timing: 'After Food',
             duration: '3 Days',
             instructions: 'Take after meals for fever/body ache'
-        },
-        {
-            id: 2,
-            name: 'Cetirizine',
-            strength: '10 mg',
-            form: 'Tablet',
-            frequency: '0-0-1',
-            timing: 'Bedtime',
-            duration: '5 Days',
-            instructions: 'Take 1 tablet at night for mild cough/cold'
-        },
-        {
-            id: 3,
-            name: 'Oral Rehydration Salts (ORS)',
-            strength: '1 Sachet',
-            form: 'Powder',
-            frequency: '1-1-1',
-            timing: 'With Water',
-            duration: '2 Days',
-            instructions: 'Mix in 1L clean drinking water and consume throughout day'
         }
     ]);
+
+    useEffect(() => {
+        if (patient && patient.medications) {
+            setMedications(patient.medications);
+        }
+    }, [encounterId]);
 
     const [newMed, setNewMed] = useState({
         name: '',
@@ -85,11 +74,11 @@ export default function PrescriptionBuilder() {
 
     const handleContinue = async () => {
         try {
-            await createPrescription(encounterId, { medications });
+            await createPrescription(patient.token, { medications });
         } catch (e) {
             console.error(e);
         }
-        navigate(`/doctor/plan?encounterId=${encounterId}`);
+        navigate(`/doctor/plan?encounterId=${patient.token}`);
     };
 
     const cardStyle = {
@@ -118,7 +107,7 @@ export default function PrescriptionBuilder() {
             {/* Top Bar: Back & Patient Badge at Top Right */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                 <button
-                    onClick={() => navigate(`/doctor/consultation?encounterId=${encounterId}`)}
+                    onClick={() => navigate(`/doctor/consultation?encounterId=${patient.token}`)}
                     style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -150,7 +139,7 @@ export default function PrescriptionBuilder() {
                     border: '1px solid #e2e8f0'
                 }}>
                     <User size={15} color="#044e42" />
-                    <span>Patient: <strong>Patient 1</strong> (42 / M) · Token: <strong>{encounterId}</strong></span>
+                    <span>Patient: <strong>{patient.name}</strong> ({patient.age} / {patient.gender === 'Female' ? 'F' : 'M'}) · Token: <strong>{patient.token}</strong></span>
                 </div>
             </div>
 
@@ -165,7 +154,7 @@ export default function PrescriptionBuilder() {
                             Prescription Builder
                         </h2>
                         <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b' }}>
-                            Add items to Patient 1's digital prescription
+                            Add items to {patient.name}'s digital prescription
                         </p>
                     </div>
                 </div>

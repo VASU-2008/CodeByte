@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { 
     Stethoscope, 
@@ -8,25 +8,37 @@ import {
     Sparkles,
     User
 } from 'lucide-react';
-import { saveConsultationNotes } from '../../../api/doctorApi';
+import { saveConsultationNotes, getPatientByToken } from '../../../api/doctorApi';
 
 /**
- * ConsultationNotes Component (Simple, Clean & Focused)
- * Streamlined clinician notes interface with patient banner and quick diagnostic chips.
+ * ConsultationNotes Component (Simple, Clean & Dynamic)
+ * Streamlined clinician notes interface with dynamic patient banner and quick diagnostic chips.
  */
 export default function ConsultationNotes() {
     const navigate = useNavigate();
     const location = useLocation();
 
     const params = new URLSearchParams(location.search);
-    const encounterId = params.get('encounterId') || 'P-001';
+    const rawToken = params.get('encounterId') || 'P-001';
+    const encounterId = rawToken.includes('/') ? rawToken.split('/').pop() : rawToken;
 
-    const [diagnosis, setDiagnosis] = useState('Acute Viral URTI with Reactive Myalgia');
-    const [clinicalFindings, setClinicalFindings] = useState('Throat congested, tonsils non-enlarged. Clear breath sounds bilaterally. Normal heart sounds. Temperature 101.2°F.');
-    const [clinicalNotes, setClinicalNotes] = useState('Patient presents with moderate fever, headache, and body aches for 2 days. No respiratory distress. Prescribed symptomatic antipyretics and advised oral hydration.');
-    const [lifestyleAdvice, setLifestyleAdvice] = useState('Warm saline gargles twice daily. Increase oral fluids (2.5L/day). Rest for 48 hours.');
+    const patient = getPatientByToken(encounterId);
+
+    const [diagnosis, setDiagnosis] = useState(() => patient.diagnosis || 'Acute Viral URTI with Reactive Myalgia');
+    const [clinicalFindings, setClinicalFindings] = useState(() => patient.findings || 'Throat congested, tonsils non-enlarged. Clear breath sounds bilaterally.');
+    const [clinicalNotes, setClinicalNotes] = useState(() => patient.notes || 'Patient presents with symptoms for 2 days. Prescribed supportive care.');
+    const [lifestyleAdvice, setLifestyleAdvice] = useState(() => patient.advice || 'Adequate hydration and rest.');
     const [saving, setSaving] = useState(false);
     const [saveStatus, setSaveStatus] = useState('');
+
+    useEffect(() => {
+        if (patient) {
+            setDiagnosis(patient.diagnosis || 'Acute Viral URTI');
+            setClinicalFindings(patient.findings || 'Clear breath sounds bilaterally.');
+            setClinicalNotes(patient.notes || 'Consultation notes recorded.');
+            setLifestyleAdvice(patient.advice || 'Adequate hydration and rest.');
+        }
+    }, [encounterId]);
 
     const quickDiagnoses = [
         'Acute Viral URTI',
@@ -39,7 +51,7 @@ export default function ConsultationNotes() {
     const handleContinue = async () => {
         setSaving(true);
         try {
-            await saveConsultationNotes(encounterId, {
+            await saveConsultationNotes(patient.token, {
                 diagnosis,
                 clinicalFindings,
                 clinicalNotes,
@@ -50,7 +62,7 @@ export default function ConsultationNotes() {
         } finally {
             setSaving(false);
         }
-        navigate(`/doctor/prescription?encounterId=${encounterId}`);
+        navigate(`/doctor/prescription?encounterId=${patient.token}`);
     };
 
     const cardStyle = {
@@ -81,7 +93,7 @@ export default function ConsultationNotes() {
             {/* Top Bar: Back & Patient Badge */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                 <button
-                    onClick={() => navigate(`/doctor/briefing?encounterId=${encounterId}`)}
+                    onClick={() => navigate(`/doctor/briefing?encounterId=${patient.token}`)}
                     style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -103,16 +115,17 @@ export default function ConsultationNotes() {
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '0.5rem',
+                    gap: '0.55rem',
                     background: '#f1f5f9',
-                    padding: '0.35rem 0.75rem',
+                    padding: '0.4rem 0.9rem',
                     borderRadius: '20px',
-                    fontSize: '0.82rem',
+                    fontSize: '0.84rem',
                     fontWeight: '700',
-                    color: '#0f172a'
+                    color: '#0f172a',
+                    border: '1px solid #e2e8f0'
                 }}>
-                    <User size={14} color="#044e42" />
-                    <span>Patient 1 (42 / M) · Token: {encounterId}</span>
+                    <User size={15} color="#044e42" />
+                    <span>Patient: <strong>{patient.name}</strong> ({patient.age} / {patient.gender === 'Female' ? 'F' : 'M'}) · Token: <strong>{patient.token}</strong></span>
                 </div>
             </div>
 

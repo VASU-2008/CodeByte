@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { 
     LayoutDashboard, 
@@ -11,6 +11,7 @@ import {
     Lock, 
     LogOut
 } from 'lucide-react';
+import { getPatientByToken } from '../../api/doctorApi';
 
 /**
  * DoctorLayout Component (Aura HealthTech Theme)
@@ -20,10 +21,19 @@ import {
 export default function DoctorLayout({ children }) {
     const navigate = useNavigate();
     const location = useLocation();
-    const [activeEncounterId, setActiveEncounterId] = useState(() => {
-        const params = new URLSearchParams(window.location.search);
-        return params.get('encounterId') || localStorage.getItem('activeDoctorEncounterId') || 'P-001';
-    });
+
+    // Dynamically resolve active encounter ID from URL query params or localStorage
+    const params = new URLSearchParams(location.search);
+    const encounterFromUrl = params.get('encounterId');
+    const activeEncounterId = encounterFromUrl || localStorage.getItem('activeDoctorEncounterId') || 'P-001';
+
+    useEffect(() => {
+        if (encounterFromUrl) {
+            localStorage.setItem('activeDoctorEncounterId', encounterFromUrl);
+        }
+    }, [encounterFromUrl]);
+
+    const activePatient = getPatientByToken(activeEncounterId);
 
     const navItems = [
         { path: '/doctor/dashboard', label: 'Dashboard', icon: LayoutDashboard },

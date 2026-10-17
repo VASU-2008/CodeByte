@@ -10,22 +10,25 @@ import {
     User,
     CheckCircle2
 } from 'lucide-react';
-import { recordFollowupPlan } from '../../../api/doctorApi';
+import { recordFollowupPlan, getPatientByToken } from '../../../api/doctorApi';
 
 /**
- * PlanAndFollowup Component (Clean, Focused & Patient Info at Top Right)
+ * PlanAndFollowup Component (Clean, Focused & Dynamic Patient Info)
  */
 export default function PlanAndFollowup() {
     const navigate = useNavigate();
     const location = useLocation();
 
     const params = new URLSearchParams(location.search);
-    const encounterId = params.get('encounterId') || 'P-001';
+    const rawToken = params.get('encounterId') || 'P-001';
+    const encounterId = rawToken.includes('/') ? rawToken.split('/').pop() : rawToken;
+
+    const patient = getPatientByToken(encounterId);
 
     const defaultDate = new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
     const [followupDate, setFollowupDate] = useState(defaultDate);
     const [selectedDays, setSelectedDays] = useState('5');
-    const [instructions, setInstructions] = useState('Review fever chart. If body aches or cough intensify, report immediately to PHC.');
+    const [instructions, setInstructions] = useState('Review condition progress. If symptoms or discomfort intensify, report immediately to PHC.');
     const [transportAssistance, setTransportAssistance] = useState(false);
     const [adherenceCall, setAdherenceCall] = useState(true);
 
@@ -37,7 +40,7 @@ export default function PlanAndFollowup() {
 
     const handleContinue = async () => {
         try {
-            await recordFollowupPlan(encounterId, {
+            await recordFollowupPlan(patient.token, {
                 followupDate,
                 instructions,
                 transportAssistance,
@@ -46,7 +49,7 @@ export default function PlanAndFollowup() {
         } catch (e) {
             console.error(e);
         }
-        navigate(`/doctor/sign-off?encounterId=${encounterId}`);
+        navigate(`/doctor/sign-off?encounterId=${patient.token}`);
     };
 
     const cardStyle = {
@@ -63,7 +66,7 @@ export default function PlanAndFollowup() {
             {/* Top Bar: Back & Patient Badge at Top Right */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                 <button
-                    onClick={() => navigate(`/doctor/prescription?encounterId=${encounterId}`)}
+                    onClick={() => navigate(`/doctor/prescription?encounterId=${patient.token}`)}
                     style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -95,7 +98,7 @@ export default function PlanAndFollowup() {
                     border: '1px solid #e2e8f0'
                 }}>
                     <User size={15} color="#044e42" />
-                    <span>Patient: <strong>Patient 1</strong> (42 / M) · Token: <strong>{encounterId}</strong></span>
+                    <span>Patient: <strong>{patient.name}</strong> ({patient.age} / {patient.gender === 'Female' ? 'F' : 'M'}) · Token: <strong>{patient.token}</strong></span>
                 </div>
             </div>
 

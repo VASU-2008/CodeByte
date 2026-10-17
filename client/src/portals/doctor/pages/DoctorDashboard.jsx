@@ -50,10 +50,14 @@ export default function DoctorDashboard() {
     const inConsultCount = queue.filter(p => p.status === 'In Consultation').length;
     const waitingCount = queue.filter(p => p.status === 'Waiting').length;
 
-    // Resolve next patient spotlight dynamically
-    const nextWaiting = queue.find(p => p.status === 'In Consultation') || queue.find(p => p.status === 'Waiting') || queue[0];
-    const activeToken = localStorage.getItem('activeDoctorEncounterId') || nextWaiting?.token || 'P-001';
-    const activePatient = getPatientByToken(activeToken);
+    // Distinct patient resolutions for In Consultation vs Next Waiting
+    const inConsultationPatient = queue.find(p => p.status === 'In Consultation');
+    const nextWaitingPatient = queue.find(p => p.status === 'Waiting');
+
+    // Spotlight prioritizes the active in-consultation patient, then the next waiting patient
+    const spotlightData = inConsultationPatient || nextWaitingPatient || queue[0];
+    const activePatient = getPatientByToken(spotlightData ? spotlightData.token : 'P-002');
+    const isCurrentlyAttending = Boolean(inConsultationPatient && spotlightData?.token === inConsultationPatient.token);
 
     const handleLogout = () => {
         localStorage.removeItem('token');
@@ -181,7 +185,9 @@ export default function DoctorDashboard() {
                     <div>
                         <div style={{ fontSize: '2rem', fontWeight: '800', color: '#1d4ed8', lineHeight: '1' }}>{inConsultCount}</div>
                         <div style={{ fontSize: '0.85rem', fontWeight: '700', color: '#1d4ed8', marginTop: '0.4rem' }}>In Consultation</div>
-                        <div style={{ fontSize: '0.72rem', color: '#2563eb', marginTop: '0.15rem' }}>Active Clinical Sessions</div>
+                        <div style={{ fontSize: '0.72rem', color: '#2563eb', marginTop: '0.15rem' }}>
+                            {inConsultationPatient ? `Active: ${inConsultationPatient.name} (${inConsultationPatient.token})` : 'No Active Session'}
+                        </div>
                     </div>
                     <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#dbeafe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1d4ed8' }}>
                         <UserCheck size={22} />
@@ -200,7 +206,7 @@ export default function DoctorDashboard() {
                         <div style={{ fontSize: '2rem', fontWeight: '800', color: '#b45309', lineHeight: '1' }}>{waitingCount}</div>
                         <div style={{ fontSize: '0.85rem', fontWeight: '700', color: '#b45309', marginTop: '0.4rem' }}>Waiting in Queue</div>
                         <div style={{ fontSize: '0.72rem', color: '#92400e', marginTop: '0.15rem' }}>
-                            Next: {nextWaiting?.name || activePatient.name} ({nextWaiting?.token || activePatient.token})
+                            Next: {nextWaitingPatient ? `${nextWaitingPatient.name} (${nextWaitingPatient.token})` : 'Queue Clear'}
                         </div>
                     </div>
                     <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#fef3c7', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#b45309' }}>
@@ -213,7 +219,7 @@ export default function DoctorDashboard() {
             <div style={{
                 background: '#ffffff',
                 borderRadius: '18px',
-                border: '2px solid #e6f7f2',
+                border: isCurrentlyAttending ? '2px solid #bfdbfe' : '2px solid #e6f7f2',
                 boxShadow: '0 4px 20px rgba(4, 78, 66, 0.05)',
                 padding: '1.75rem',
                 marginBottom: '1.5rem',
@@ -228,8 +234,8 @@ export default function DoctorDashboard() {
                         width: '56px',
                         height: '56px',
                         borderRadius: '16px',
-                        background: '#e6f7f2',
-                        color: '#044e42',
+                        background: isCurrentlyAttending ? '#eff6ff' : '#e6f7f2',
+                        color: isCurrentlyAttending ? '#1d4ed8' : '#044e42',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -242,13 +248,13 @@ export default function DoctorDashboard() {
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                             <span style={{
                                 fontSize: '0.72rem',
-                                background: inConsultCount > 0 ? '#dbeafe' : '#fef3c7',
-                                color: inConsultCount > 0 ? '#1d4ed8' : '#b45309',
+                                background: isCurrentlyAttending ? '#dbeafe' : '#fef3c7',
+                                color: isCurrentlyAttending ? '#1d4ed8' : '#b45309',
                                 padding: '0.15rem 0.55rem',
                                 borderRadius: '8px',
                                 fontWeight: '700'
                             }}>
-                                {activePatient.token === nextWaiting?.token && nextWaiting?.status === 'In Consultation' ? 'CURRENTLY ATTENDING' : 'NEXT IN LINE'}
+                                {isCurrentlyAttending ? 'CURRENTLY IN CONSULTATION' : 'NEXT IN LINE'}
                             </span>
                             <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Token: <strong>{activePatient.token}</strong></span>
                         </div>
@@ -282,7 +288,7 @@ export default function DoctorDashboard() {
                             boxShadow: '0 4px 12px rgba(4, 78, 66, 0.25)'
                         }}
                     >
-                        Attend {activePatient.name}
+                        {isCurrentlyAttending ? `Resume Consultation with ${activePatient.name}` : `Attend ${activePatient.name}`}
                         <ArrowRight size={16} />
                     </button>
                 </div>

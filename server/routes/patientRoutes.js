@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const { protect, authorize } = require('../middlewares/authMiddleware');
+const { getVisits, submitIntake } = require('../controllers/patientController');
 
-router.get('/visits', (req, res) => res.json({ message: 'Get patient visits stub' }));
-router.post('/intake', (req, res) => res.json({ message: 'Submit intake & generate token stub' }));
+router.get('/visits', protect, authorize('patient'), getVisits);
+router.post('/intake', protect, authorize('patient'), submitIntake);
 
 module.exports = router;

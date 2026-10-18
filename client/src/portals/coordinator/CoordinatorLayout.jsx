@@ -41,6 +41,8 @@ export default function CoordinatorLayout({ children }) {
       }
     };
 
+
+
     updateCountFromStorage();
     window.addEventListener('storage', updateCountFromStorage);
     window.addEventListener('veyora_tasks_updated', updateCountFromStorage);

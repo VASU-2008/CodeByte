@@ -11,7 +11,7 @@ const registerSchema = z.object({
     email: z.string().email('Invalid email address'),
     password: z.string().min(6, 'Password must be at least 6 characters'),
     phone: z.string().optional(),
-    role: z.enum(['patient', 'doctor', 'coordinator']),
+    role: z.enum(['patient', 'doctor']),
     // Patient-specific (optional)
     age: z.number().positive().optional(),
     gender: z.enum(['Male', 'Female', 'Other']).optional(),

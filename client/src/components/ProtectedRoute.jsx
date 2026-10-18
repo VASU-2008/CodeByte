@@ -81,7 +81,7 @@ export default function ProtectedRoute({ children, allowedRoles = [] }) {
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             <Link
-              to={user.role === 'doctor' ? '/doctor' : user.role === 'coordinator' ? '/coordinator' : '/patient'}
+              to={user.role === 'doctor' ? '/doctor' : '/patient'}
               style={{
                 background: '#044e42',
                 color: '#ffffff',

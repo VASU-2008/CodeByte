@@ -3,18 +3,19 @@ import { NavLink, useNavigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
   Home, Stethoscope, QrCode, Clock, FileText, RefreshCw,
-  Pill, LogOut, Menu, X, ChevronRight, Bell, User, Heart
+  Pill, LogOut, Menu, X, ChevronRight, Bell, User, Heart, Sparkles
 } from 'lucide-react';
 import LanguageSelector from './components/LanguageSelector';
 
 const NAV_ITEMS = [
-  { to: '/patient',           label: 'Home',               labelHi: 'होम',                 icon: Home,        end: true },
-  { to: '/patient/intake',    label: 'Start Consultation', labelHi: 'परामर्श शुरू करें',   icon: Stethoscope        },
-  { to: '/patient/qr-pass',  label: 'My QR Pass',         labelHi: 'मेरा QR पास',          icon: QrCode             },
-  { to: '/patient/history',  label: 'Visit History',      labelHi: 'यात्रा इतिहास',        icon: Clock              },
-  { to: '/patient/results',  label: 'Visit Results',      labelHi: 'यात्रा परिणाम',        icon: FileText           },
-  { to: '/patient/followup', label: 'Follow-up Journey',  labelHi: 'फॉलो-अप यात्रा',      icon: RefreshCw          },
-  { to: '/patient/medicines',label: 'Medicines',          labelHi: 'दवाइयाँ',              icon: Pill               },
+  { to: '/patient',                 label: 'Home',                labelHi: 'होम',                   icon: Home,        end: true },
+  { to: '/patient/ai-coordinator',  label: 'AI Care Coordinator', labelHi: 'एआई केयर समन्वयक',     icon: Sparkles              },
+  { to: '/patient/intake',          label: 'Start Consultation',  labelHi: 'परामर्श शुरू करें',     icon: Stethoscope           },
+  { to: '/patient/qr-pass',        label: 'My QR Pass',          labelHi: 'मेरा QR पास',            icon: QrCode                },
+  { to: '/patient/history',        label: 'Visit History',       labelHi: 'यात्रा इतिहास',          icon: Clock                 },
+  { to: '/patient/results',        label: 'Visit Results',       labelHi: 'यात्रा परिणाम',          icon: FileText              },
+  { to: '/patient/followup',       label: 'Follow-up Journey',   labelHi: 'फॉलो-अप यात्रा',        icon: RefreshCw             },
+  { to: '/patient/medicines',      label: 'Medicines',           labelHi: 'दवाइयाँ',                icon: Pill                  },
 ];
 
 export default function PatientLayout({ lang, onLangChange }) {

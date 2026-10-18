@@ -100,7 +100,7 @@ export default function Navbar() {
             }}
           >
             <User size={14} />
-            Patient
+            Patient Portal (AI Care)
           </Link>
 
           <Link
@@ -118,25 +118,7 @@ export default function Navbar() {
             }}
           >
             <Stethoscope size={14} />
-            Doctor
-          </Link>
-
-          <Link
-            to="/coordinator"
-            style={{
-              padding: '0.35rem 0.65rem',
-              borderRadius: '8px',
-              textDecoration: 'none',
-              color: isActive('/coordinator') ? '#ffffff' : '#99f6e4',
-              background: isActive('/coordinator') ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
-              fontWeight: isActive('/coordinator') ? '700' : '500',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.3rem'
-            }}
-          >
-            <ShieldCheck size={14} />
-            Coordinator
+            Doctor Portal
           </Link>
         </div>
       </div>

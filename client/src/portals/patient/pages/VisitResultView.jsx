@@ -5,7 +5,7 @@ import { format, parseISO } from 'date-fns';
 import {
   FileText, Pill, Stethoscope, Heart, AlertCircle, RefreshCw,
   Loader2, CheckCircle2, Clock, Building2, ArrowLeft, Printer,
-  Info, User, CalendarClock, ChevronDown, ChevronUp
+  Info, User, CalendarClock, ChevronDown, ChevronUp, Sparkles
 } from 'lucide-react';
 
 const t = (lang, en, hi) => lang === 'hi' ? hi : en;
@@ -316,6 +316,49 @@ export default function VisitResultView({ lang = 'en' }) {
           </div>
         </div>
       )}
+
+      {/* AI Care Coordinator Continuity Banner */}
+      <div style={{
+        marginTop: '1.5rem',
+        background: 'linear-gradient(135deg, #044e42 0%, #065f46 100%)',
+        borderRadius: '16px',
+        padding: '1.25rem 1.5rem',
+        color: '#ffffff',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '1rem'
+      }}>
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 800, fontSize: '1rem', color: '#5eead4' }}>
+            <Sparkles size={18} />
+            {t(lang, 'Veyora AI Care Coordinator Activated', 'Veyora AI केयर समन्वयक सक्रिय')}
+          </div>
+          <p style={{ margin: '0.25rem 0 0', fontSize: '0.84rem', color: '#ccfbf1' }}>
+            {t(lang,
+              'Have questions about your prescription, diet, doses, or recovery? Consult your AI Assistant.',
+              'अपनी दवाइयों, आहार, खुराक या रिकवरी के बारे में प्रश्न हैं? अपने एआई सहायक से पूछें।')}
+          </p>
+        </div>
+        <Link
+          to="/patient/ai-coordinator"
+          style={{
+            background: '#ffffff',
+            color: '#044e42',
+            textDecoration: 'none',
+            padding: '0.55rem 1.1rem',
+            borderRadius: '12px',
+            fontSize: '0.85rem',
+            fontWeight: '700',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.35rem'
+          }}
+        >
+          {t(lang, 'Open AI Coordinator', 'AI समन्वयक खोलें')} →
+        </Link>
+      </div>
     </div>
   );
 }

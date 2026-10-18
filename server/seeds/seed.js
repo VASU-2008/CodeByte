@@ -53,7 +53,6 @@ async function seedDatabase() {
         }
 
         const primaryDoctor = userMap['doctor@veyora.com'];
-        const primaryCoordinator = userMap['coordinator@veyora.com'];
 
         // 3. Insert Encounters
         console.log(`[Seed] Seeding ${data.encounters.length} encounters...`);
@@ -134,12 +133,12 @@ async function seedDatabase() {
             });
         }
 
-        // 7. Insert Tasks
-        console.log(`[Seed] Seeding ${data.tasks.length} coordinator tasks...`);
+        // 7. Insert Tasks (Internal Follow-up & Welfare Action Log)
+        console.log(`[Seed] Seeding ${data.tasks.length} care continuity tasks...`);
         for (const t of data.tasks) {
             await Task.create({
                 ...t,
-                assigned_to: primaryCoordinator._id
+                assigned_to: primaryDoctor?._id
             });
         }
 
@@ -148,7 +147,7 @@ async function seedDatabase() {
         for (const a of data.alerts) {
             await Alert.create({
                 ...a,
-                triggeredBy: primaryDoctor._id
+                triggeredBy: primaryDoctor?._id
             });
         }
 
@@ -160,12 +159,11 @@ async function seedDatabase() {
         console.log(`Vitals Created:        ${data.vitals.length}`);
         console.log(`Prescriptions Created: ${data.prescriptions.length}`);
         console.log(`Follow-ups Created:    ${data.followups.length}`);
-        console.log(`Coordinator Tasks:     ${data.tasks.length}`);
+        console.log(`Care Continuity Tasks: ${data.tasks.length}`);
         console.log(`Emergency Alerts:      ${data.alerts.length}`);
         console.log('\nDefault Test Accounts:');
-        console.log('  Doctor:      doctor@veyora.com      / password123');
-        console.log('  Coordinator: coordinator@veyora.com / password123');
-        console.log('  Patient:     patient@veyora.com     / password123');
+        console.log('  👨‍⚕️ Doctor:  doctor@veyora.com  / password123');
+        console.log('  🏥 Patient: patient@veyora.com / password123 (with Veyora AI Care Coordinator)');
         console.log('=========================================\n');
 
         process.exit(0);

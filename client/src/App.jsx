@@ -8,16 +8,6 @@ import AuthPage from './pages/AuthPage';
 import PatientPortal from './portals/patient/PatientPortal';
 import DoctorPortal from './portals/doctor/DoctorPortal';
 
-// Coordinator Portal layout & pages
-import CoordinatorLayout from './portals/coordinator/CoordinatorLayout';
-import OperationsOverview from './portals/coordinator/pages/OperationsOverview';
-import ReminderQueue from './portals/coordinator/pages/ReminderQueue';
-import TransportBarriers from './portals/coordinator/pages/TransportBarriers';
-import MedicationAdherence from './portals/coordinator/pages/MedicationAdherence';
-import FollowupTracking from './portals/coordinator/pages/FollowupTracking';
-import EscalationsTasks from './portals/coordinator/pages/EscalationsTasks';
-import RulesAndAuditLog from './portals/coordinator/pages/RulesAndAuditLog';
-
 export default function App() {
   return (
     <Router>
@@ -28,11 +18,11 @@ export default function App() {
         <Route path="/login" element={<AuthPage />} />
         <Route path="/register" element={<AuthPage />} />
 
-        {/* Patient Portal (Protected: Patient, Doctor, Coordinator) */}
+        {/* Patient Portal (Protected: Patient, Doctor) */}
         <Route
           path="/patient/*"
           element={
-            <ProtectedRoute allowedRoles={['patient', 'doctor', 'coordinator']}>
+            <ProtectedRoute allowedRoles={['patient', 'doctor']}>
               <PatientPortal />
             </ProtectedRoute>
           }
@@ -47,25 +37,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
-        {/* Coordinator Portal (Protected: Coordinator, Doctor) */}
-        <Route
-          path="/coordinator"
-          element={
-            <ProtectedRoute allowedRoles={['coordinator', 'doctor']}>
-              <CoordinatorLayout />
-            </ProtectedRoute>
-          }
-        >
-          <Route index element={<OperationsOverview />} />
-          <Route path="operations" element={<OperationsOverview />} />
-          <Route path="reminders" element={<ReminderQueue />} />
-          <Route path="transport" element={<TransportBarriers />} />
-          <Route path="medication" element={<MedicationAdherence />} />
-          <Route path="followups" element={<FollowupTracking />} />
-          <Route path="escalations" element={<EscalationsTasks />} />
-          <Route path="audit" element={<RulesAndAuditLog />} />
-        </Route>
 
         {/* Catch-all redirect */}
         <Route path="*" element={<Navigate to="/" replace />} />

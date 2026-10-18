@@ -24,7 +24,7 @@ export default function AuthPage() {
 
   // Mode: 'login' | 'register'
   const isRegisterMode = location.pathname.includes('register');
-  const [role, setRole] = useState('patient'); // 'patient' | 'doctor' | 'coordinator'
+  const [role, setRole] = useState('patient'); // 'patient' | 'doctor'
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -60,7 +60,6 @@ export default function AuthPage() {
     setErrorMessage('');
     const demoCredentials = {
       doctor: { email: 'doctor@veyora.com', password: 'password123', target: '/doctor' },
-      coordinator: { email: 'coordinator@veyora.com', password: 'password123', target: '/coordinator' },
       patient: { email: 'patient@veyora.com', password: 'password123', target: '/patient' }
     };
 
@@ -112,7 +111,6 @@ export default function AuthPage() {
         setSuccessMessage('Registration successful! Launching your portal...');
         setTimeout(() => {
           if (role === 'doctor') navigate('/doctor');
-          else if (role === 'coordinator') navigate('/coordinator');
           else navigate('/patient');
         }, 800);
       } else {
@@ -121,7 +119,6 @@ export default function AuthPage() {
         setSuccessMessage('Welcome back! Directing to portal...');
         setTimeout(() => {
           if (u.role === 'doctor') navigate('/doctor');
-          else if (u.role === 'coordinator') navigate('/coordinator');
           else navigate('/patient');
         }, 800);
       }
@@ -214,22 +211,6 @@ export default function AuthPage() {
               }}
             >
               👨‍⚕️ Doctor
-            </button>
-            <button
-              type="button"
-              onClick={() => handleQuickDemo('coordinator')}
-              style={{
-                background: 'rgba(255, 255, 255, 0.2)',
-                color: '#ffffff',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
-                padding: '0.25rem 0.65rem',
-                borderRadius: '14px',
-                fontSize: '0.75rem',
-                fontWeight: '600',
-                cursor: 'pointer'
-              }}
-            >
-              📋 Coordinator
             </button>
             <button
               type="button"
@@ -343,13 +324,12 @@ export default function AuthPage() {
             </label>
             <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: '0.65rem'
+              gridTemplateColumns: 'repeat(2, 1fr)',
+              gap: '0.75rem'
             }}>
               {[
-                { id: 'patient', label: 'Patient', icon: User, color: '#0284c7', bg: '#f0f9ff' },
-                { id: 'doctor', label: 'Doctor', icon: Stethoscope, color: '#059669', bg: '#f0fdf4' },
-                { id: 'coordinator', label: 'Coordinator', icon: ShieldCheck, color: '#d97706', bg: '#fffbeb' }
+                { id: 'patient', label: 'Patient (with AI Care)', icon: User, color: '#0284c7', bg: '#f0f9ff' },
+                { id: 'doctor', label: 'Doctor', icon: Stethoscope, color: '#059669', bg: '#f0fdf4' }
               ].map(r => {
                 const Icon = r.icon;
                 const isSelected = role === r.id;

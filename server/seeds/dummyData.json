@@ -21,14 +21,7 @@
       "specialization": "Cardiology & Emergency Triage",
       "facility_id": "PHC_MAIN"
     },
-    {
-      "name": "Kavita Ben",
-      "email": "coordinator@veyora.com",
-      "password": "password123",
-      "phone": "+91 98231 44521",
-      "role": "coordinator",
-      "facility_id": "PHC_MAIN"
-    },
+
     {
       "name": "Pranjal Sharma",
       "email": "patient@veyora.com",

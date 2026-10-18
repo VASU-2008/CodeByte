@@ -50,7 +50,7 @@ app.use((req, res, next) => {
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/patient', require('./routes/patientRoutes'));
 app.use('/api/doctor', require('./routes/doctorRoutes'));
-app.use('/api/coordinator', require('./routes/coordinatorRoutes'));
+app.use('/api/ai-coordinator', require('./routes/aiCoordinatorRoutes'));
 app.use('/api/alerts', require('./routes/alertRoutes'));
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok', service: 'Veyora Healthcare Backend', timestamp: new Date() }));

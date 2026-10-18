@@ -10,16 +10,13 @@ import MyVisitsHistory  from './pages/MyVisitsHistory';
 import VisitResultView  from './pages/VisitResultView';
 import FollowupJourney  from './pages/FollowupJourney';
 import MedicinesReminders from './pages/MedicinesReminders';
+import AICareCoordinator from './pages/AICareCoordinator';
 
 /**
  * PatientPortal — root component for /patient/* routes.
  *
  * Maintains global language state (en | hi) and passes it down to
  * both the layout (sidebar language selector) and all page components.
- *
- * No authentication gate is imposed here — the parent App.jsx handles
- * route protection. If an auth gate is required later, wrap with a
- * ProtectedRoute component using the existing AuthContext.
  */
 export default function PatientPortal() {
   const [lang, setLang] = useState('en');
@@ -40,6 +37,7 @@ export default function PatientPortal() {
       <Routes>
         <Route element={<PatientLayout lang={lang} onLangChange={setLang} />}>
           <Route index              element={<HomeTab          lang={lang} />} />
+          <Route path="ai-coordinator" element={<AICareCoordinator lang={lang} />} />
           <Route path="intake"      element={<IntakeFlow        lang={lang} />} />
           <Route path="qr-pass"     element={<ConsentQRPass     lang={lang} />} />
           <Route path="history"     element={<MyVisitsHistory   lang={lang} />} />

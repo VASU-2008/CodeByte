@@ -5,27 +5,26 @@ import {
   Sparkles,
   User,
   Stethoscope,
-  ShieldCheck,
+  Bot,
   ArrowRight,
   QrCode,
   Activity,
   CheckCircle2,
   Clock,
-  Car,
   Pill,
-  FileCheck,
   Lock,
-  ChevronRight
+  HeartPulse,
+  BrainCircuit,
+  CalendarCheck
 } from 'lucide-react';
 
 export default function LandingPage() {
   const navigate = useNavigate();
-  const { user, isAuthenticated, login } = useAuth();
+  const { login } = useAuth();
 
   const handleQuickDemo = async (role) => {
     const creds = {
       doctor: { email: 'doctor@veyora.com', password: 'password123', path: '/doctor' },
-      coordinator: { email: 'coordinator@veyora.com', password: 'password123', path: '/coordinator' },
       patient: { email: 'patient@veyora.com', password: 'password123', path: '/patient' }
     };
     const c = creds[role];
@@ -65,7 +64,7 @@ export default function LandingPage() {
           border: '1px solid #bbf7d0'
         }}>
           <Sparkles size={14} />
-          Connected Care Continuity Engine
+          Post-Consultation AI Continuity Engine
         </div>
 
         <h1 style={{
@@ -74,20 +73,21 @@ export default function LandingPage() {
           color: '#0f172a',
           lineHeight: '1.15',
           margin: '0 auto 1rem',
-          maxWidth: '850px',
+          maxWidth: '900px',
           letterSpacing: '-0.03em'
         }}>
-          Transforming Primary Healthcare with Unified Continuity of Care
+          Closing the Healthcare Continuity Gap with Intelligent AI Care
         </h1>
 
         <p style={{
           fontSize: 'clamp(1rem, 2vw, 1.15rem)',
           color: '#475569',
-          maxWidth: '680px',
+          maxWidth: '750px',
           margin: '0 auto 2rem',
           lineHeight: '1.6'
         }}>
-          Veyora unifies <strong>Patients</strong>, <strong>Clinicians</strong>, and <strong>Community Coordinators</strong> into a single synchronized system with AI-assisted triage, rural transport logistics, and adherence tracking.
+          Pre-existing solutions like <strong>ABHA</strong> store static medical records, but abandon patients after consultation. 
+          Veyora pairs a streamlined <strong>Doctor Portal</strong> and <strong>Patient Portal</strong> with an autonomous <strong>AI Care Coordinator</strong> that guides daily doses, precautions, dietary needs, and checkup reminders.
         </p>
 
         {/* Demo Fast-Track Bar */}
@@ -113,124 +113,52 @@ export default function LandingPage() {
               background: '#044e42',
               color: '#ffffff',
               border: 'none',
-              padding: '0.4rem 0.85rem',
+              padding: '0.45rem 1rem',
               borderRadius: '12px',
               fontSize: '0.82rem',
               fontWeight: '600',
-              cursor: 'pointer'
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.35rem'
             }}
           >
-            👨‍⚕️ Doctor Portal
-          </button>
-          <button
-            onClick={() => handleQuickDemo('coordinator')}
-            style={{
-              background: '#0284c7',
-              color: '#ffffff',
-              border: 'none',
-              padding: '0.4rem 0.85rem',
-              borderRadius: '12px',
-              fontSize: '0.82rem',
-              fontWeight: '600',
-              cursor: 'pointer'
-            }}
-          >
-            📋 Coordinator Portal
+            <Stethoscope size={14} />
+            Doctor Portal
           </button>
           <button
             onClick={() => handleQuickDemo('patient')}
             style={{
-              background: '#059669',
+              background: '#0284c7',
               color: '#ffffff',
               border: 'none',
-              padding: '0.4rem 0.85rem',
+              padding: '0.45rem 1rem',
               borderRadius: '12px',
               fontSize: '0.82rem',
               fontWeight: '600',
-              cursor: 'pointer'
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.35rem'
             }}
           >
-            🏥 Patient Portal
+            <User size={14} />
+            Patient Portal (with AI Care)
           </button>
         </div>
 
-        {/* 3 Portal Selection Cards */}
+        {/* 2 Core Portals + Embedded AI Care Banner */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-          gap: '1.75rem',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
+          gap: '2rem',
           textAlign: 'left'
         }}>
           {/* Patient Card */}
           <div style={{
             background: '#ffffff',
             borderRadius: '24px',
-            padding: '2rem',
-            border: '1px solid #e2e8f0',
-            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.04)',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            transition: 'transform 0.2s ease, box-shadow 0.2s ease'
-          }}>
-            <div>
-              <div style={{
-                width: '52px',
-                height: '52px',
-                borderRadius: '16px',
-                background: '#eff6ff',
-                color: '#2563eb',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '1.25rem'
-              }}>
-                <User size={26} />
-              </div>
-              <h3 style={{ fontSize: '1.35rem', fontWeight: '800', margin: '0 0 0.5rem', color: '#0f172a' }}>
-                Patient Portal
-              </h3>
-              <p style={{ fontSize: '0.88rem', color: '#64748b', margin: '0 0 1.25rem', lineHeight: '1.5' }}>
-                Multilingual intake with Web Speech voice recognition, intelligent triage routing, digital QR check-in passes, and prescription history.
-              </p>
-              <ul style={{ margin: '0 0 1.5rem', padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.65rem', fontSize: '0.84rem', color: '#334155' }}>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-                  <CheckCircle2 size={16} color="#16a34a" /> Voice-enabled multilingual symptom intake
-                </li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-                  <CheckCircle2 size={16} color="#16a34a" /> Instant Consent QR Pass token generation
-                </li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-                  <CheckCircle2 size={16} color="#16a34a" /> Active prescription & medication reminders
-                </li>
-              </ul>
-            </div>
-            <Link
-              to="/patient"
-              style={{
-                background: '#2563eb',
-                color: '#ffffff',
-                textDecoration: 'none',
-                padding: '0.8rem 1.25rem',
-                borderRadius: '14px',
-                fontWeight: '700',
-                fontSize: '0.9rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                boxShadow: '0 4px 12px rgba(37, 99, 235, 0.25)'
-              }}
-            >
-              <span>Launch Patient Portal</span>
-              <ArrowRight size={16} />
-            </Link>
-          </div>
-
-          {/* Doctor Card */}
-          <div style={{
-            background: '#ffffff',
-            borderRadius: '24px',
-            padding: '2rem',
+            padding: '2.25rem',
             border: '1px solid #e2e8f0',
             boxShadow: '0 10px 30px rgba(0, 0, 0, 0.04)',
             display: 'flex',
@@ -239,8 +167,84 @@ export default function LandingPage() {
           }}>
             <div>
               <div style={{
-                width: '52px',
-                height: '52px',
+                width: '54px',
+                height: '54px',
+                borderRadius: '16px',
+                background: '#eff6ff',
+                color: '#2563eb',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: '1.25rem'
+              }}>
+                <User size={28} />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                <h3 style={{ fontSize: '1.4rem', fontWeight: '800', margin: 0, color: '#0f172a' }}>
+                  Patient Portal
+                </h3>
+                <span style={{
+                  background: '#dbeafe',
+                  color: '#1e40af',
+                  fontSize: '0.72rem',
+                  fontWeight: '700',
+                  padding: '0.15rem 0.5rem',
+                  borderRadius: '10px'
+                }}>
+                  AI Powered
+                </span>
+              </div>
+              <p style={{ fontSize: '0.9rem', color: '#64748b', margin: '0 0 1.25rem', lineHeight: '1.5' }}>
+                Frictionless experience for patients: voice-enabled multilingual intake, privacy-first QR check-in passes, and visit history.
+              </p>
+              <ul style={{ margin: '0 0 1.5rem', padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.7rem', fontSize: '0.86rem', color: '#334155' }}>
+                <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <CheckCircle2 size={16} color="#16a34a" /> Web Speech voice-enabled symptom intake in Hindi & English
+                </li>
+                <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <CheckCircle2 size={16} color="#16a34a" /> Instant Consent QR Pass token for touchless clinician lookup
+                </li>
+                <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <CheckCircle2 size={16} color="#16a34a" /> Complete digital prescription and diagnosis records
+                </li>
+              </ul>
+            </div>
+            <Link
+              to="/patient"
+              style={{
+                background: '#0284c7',
+                color: '#ffffff',
+                textDecoration: 'none',
+                padding: '0.85rem 1.25rem',
+                borderRadius: '14px',
+                fontWeight: '700',
+                fontSize: '0.92rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                boxShadow: '0 4px 12px rgba(2, 132, 199, 0.25)'
+              }}
+            >
+              <span>Launch Patient Portal</span>
+              <ArrowRight size={17} />
+            </Link>
+          </div>
+
+          {/* Doctor Card */}
+          <div style={{
+            background: '#ffffff',
+            borderRadius: '24px',
+            padding: '2.25rem',
+            border: '1px solid #e2e8f0',
+            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.04)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between'
+          }}>
+            <div>
+              <div style={{
+                width: '54px',
+                height: '54px',
                 borderRadius: '16px',
                 background: '#ecfdf5',
                 color: '#059669',
@@ -249,23 +253,35 @@ export default function LandingPage() {
                 justifyContent: 'center',
                 marginBottom: '1.25rem'
               }}>
-                <Stethoscope size={26} />
+                <Stethoscope size={28} />
               </div>
-              <h3 style={{ fontSize: '1.35rem', fontWeight: '800', margin: '0 0 0.5rem', color: '#0f172a' }}>
-                Doctor Portal
-              </h3>
-              <p style={{ fontSize: '0.88rem', color: '#64748b', margin: '0 0 1.25rem', lineHeight: '1.5' }}>
-                High-efficiency clinician workstation with QR scanner lookup, clinical briefing, formulary builder with drug allergy conflict warning, and digital lock.
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                <h3 style={{ fontSize: '1.4rem', fontWeight: '800', margin: 0, color: '#0f172a' }}>
+                  Doctor Portal
+                </h3>
+                <span style={{
+                  background: '#d1fae5',
+                  color: '#065f46',
+                  fontSize: '0.72rem',
+                  fontWeight: '700',
+                  padding: '0.15rem 0.5rem',
+                  borderRadius: '10px'
+                }}>
+                  Clinician
+                </span>
+              </div>
+              <p style={{ fontSize: '0.9rem', color: '#64748b', margin: '0 0 1.25rem', lineHeight: '1.5' }}>
+                High-efficiency clinician workstation with rapid QR scanner token lookup, clinical briefing, formulary builder, and cryptographic sign-off.
               </p>
-              <ul style={{ margin: '0 0 1.5rem', padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.65rem', fontSize: '0.84rem', color: '#334155' }}>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-                  <CheckCircle2 size={16} color="#16a34a" /> Live facility patient queue & status tracking
+              <ul style={{ margin: '0 0 1.5rem', padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.7rem', fontSize: '0.86rem', color: '#334155' }}>
+                <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <CheckCircle2 size={16} color="#16a34a" /> Live facility patient queue with triage urgency badges
                 </li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-                  <CheckCircle2 size={16} color="#16a34a" /> Camera and image file QR token scan lookup
+                <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <CheckCircle2 size={16} color="#16a34a" /> Fast camera & image QR token scan lookup
                 </li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-                  <CheckCircle2 size={16} color="#16a34a" /> Multi-drug builder with allergy cross-checking
+                <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <CheckCircle2 size={16} color="#16a34a" /> Multi-drug prescription builder with allergy cross-checking
                 </li>
               </ul>
             </div>
@@ -275,10 +291,10 @@ export default function LandingPage() {
                 background: '#044e42',
                 color: '#ffffff',
                 textDecoration: 'none',
-                padding: '0.8rem 1.25rem',
+                padding: '0.85rem 1.25rem',
                 borderRadius: '14px',
                 fontWeight: '700',
-                fontSize: '0.9rem',
+                fontSize: '0.92rem',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
@@ -286,70 +302,114 @@ export default function LandingPage() {
               }}
             >
               <span>Launch Doctor Portal</span>
-              <ArrowRight size={16} />
+              <ArrowRight size={17} />
             </Link>
           </div>
+        </div>
 
-          {/* Coordinator Card */}
-          <div style={{
-            background: '#ffffff',
-            borderRadius: '24px',
-            padding: '2rem',
-            border: '1px solid #e2e8f0',
-            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.04)',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between'
-          }}>
-            <div>
-              <div style={{
-                width: '52px',
-                height: '52px',
-                borderRadius: '16px',
-                background: '#fffbeb',
-                color: '#d97706',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '1.25rem'
-              }}>
-                <ShieldCheck size={26} />
-              </div>
-              <h3 style={{ fontSize: '1.35rem', fontWeight: '800', margin: '0 0 0.5rem', color: '#0f172a' }}>
-                Coordinator Portal
-              </h3>
-              <p style={{ fontSize: '0.88rem', color: '#64748b', margin: '0 0 1.25rem', lineHeight: '1.5' }}>
-                Central command for community health workers (ASHA), rural transit vouchers for physical barriers, missed dosage adherence, and IVR reminder tracking.
-              </p>
-              <ul style={{ margin: '0 0 1.5rem', padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.65rem', fontSize: '0.84rem', color: '#334155' }}>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-                  <CheckCircle2 size={16} color="#16a34a" /> Rural transit voucher dispatch & driver tracking
-                </li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-                  <CheckCircle2 size={16} color="#16a34a" /> Smart-blister 2-missed-dose adherence alerts
-                </li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-                  <CheckCircle2 size={16} color="#16a34a" /> Telemetry vitals anomalies & emergency escalation
-                </li>
-              </ul>
+        {/* AI Care Coordinator Spotlight Feature (The ABHA Gap Solution) */}
+        <div style={{
+          marginTop: '2.5rem',
+          background: 'linear-gradient(135deg, #044e42 0%, #065f46 50%, #0f766e 100%)',
+          borderRadius: '28px',
+          padding: '2.5rem',
+          color: '#ffffff',
+          textAlign: 'left',
+          boxShadow: '0 15px 35px rgba(4, 78, 66, 0.25)'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '1rem' }}>
+            <div style={{
+              width: '42px',
+              height: '42px',
+              borderRadius: '12px',
+              background: 'rgba(255, 255, 255, 0.2)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <BrainCircuit size={24} color="#5eead4" />
             </div>
+            <div>
+              <span style={{
+                background: 'rgba(94, 234, 212, 0.2)',
+                color: '#5eead4',
+                fontSize: '0.72rem',
+                fontWeight: '800',
+                padding: '0.2rem 0.6rem',
+                borderRadius: '10px',
+                textTransform: 'uppercase',
+                letterSpacing: '0.06em'
+              }}>
+                The Missing ABHA Link
+              </span>
+              <h3 style={{ fontSize: '1.5rem', fontWeight: '800', margin: '0.25rem 0 0', color: '#ffffff' }}>
+                Veyora AI Care Coordinator: 24/7 Post-Consultation Companion
+              </h3>
+            </div>
+          </div>
+
+          <p style={{ fontSize: '0.95rem', color: '#ccfbf1', maxWidth: '850px', lineHeight: '1.6', margin: '0 0 1.75rem' }}>
+            Pre-existing digital health systems (like ABHA / ABDM) only store static records. Patients leave the clinic and forget dose timings, ignore dietary restrictions, or miss follow-ups. 
+            The <strong>Veyora AI Coordinator</strong> activates the moment the doctor signs off:
+          </p>
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gap: '1.25rem',
+            marginBottom: '2rem'
+          }}>
+            <div style={{ background: 'rgba(255, 255, 255, 0.1)', padding: '1.1rem', borderRadius: '16px' }}>
+              <div style={{ color: '#5eead4', marginBottom: '0.4rem' }}><Pill size={20} /></div>
+              <h4 style={{ margin: '0 0 0.3rem', fontSize: '0.95rem', fontWeight: '700' }}>Smart Dose Schedule</h4>
+              <p style={{ margin: 0, fontSize: '0.8rem', color: '#ccfbf1', lineHeight: '1.4' }}>
+                Daily morning, afternoon & night adherence tracking with water/food timing guidance.
+              </p>
+            </div>
+
+            <div style={{ background: 'rgba(255, 255, 255, 0.1)', padding: '1.1rem', borderRadius: '16px' }}>
+              <div style={{ color: '#5eead4', marginBottom: '0.4rem' }}><HeartPulse size={20} /></div>
+              <h4 style={{ margin: '0 0 0.3rem', fontSize: '0.95rem', fontWeight: '700' }}>Diagnosis Precautions</h4>
+              <p style={{ margin: 0, fontSize: '0.8rem', color: '#ccfbf1', lineHeight: '1.4' }}>
+                Personalized dietary restrictions, lifestyle habits, and red-flag symptom warnings.
+              </p>
+            </div>
+
+            <div style={{ background: 'rgba(255, 255, 255, 0.1)', padding: '1.1rem', borderRadius: '16px' }}>
+              <div style={{ color: '#5eead4', marginBottom: '0.4rem' }}><CalendarCheck size={20} /></div>
+              <h4 style={{ margin: '0 0 0.3rem', fontSize: '0.95rem', fontWeight: '700' }}>Check-up Reminders</h4>
+              <p style={{ margin: 0, fontSize: '0.8rem', color: '#ccfbf1', lineHeight: '1.4' }}>
+                Automatic countdowns, preparation checklists (fasting tests), and appointment alerts.
+              </p>
+            </div>
+
+            <div style={{ background: 'rgba(255, 255, 255, 0.1)', padding: '1.1rem', borderRadius: '16px' }}>
+              <div style={{ color: '#5eead4', marginBottom: '0.4rem' }}><Bot size={20} /></div>
+              <h4 style={{ margin: '0 0 0.3rem', fontSize: '0.95rem', fontWeight: '700' }}>Bilingual AI Chat</h4>
+              <p style={{ margin: 0, fontSize: '0.8rem', color: '#ccfbf1', lineHeight: '1.4' }}>
+                Patients ask any health or medicine question in English or Hindi with instant clinical safety.
+              </p>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
             <Link
-              to="/coordinator"
+              to="/patient/ai-coordinator"
               style={{
-                background: '#0284c7',
-                color: '#ffffff',
+                background: '#ffffff',
+                color: '#044e42',
                 textDecoration: 'none',
-                padding: '0.8rem 1.25rem',
+                padding: '0.8rem 1.4rem',
                 borderRadius: '14px',
-                fontWeight: '700',
+                fontWeight: '800',
                 fontSize: '0.9rem',
-                display: 'flex',
+                display: 'inline-flex',
                 alignItems: 'center',
-                justifyContent: 'space-between',
-                boxShadow: '0 4px 12px rgba(2, 132, 199, 0.25)'
+                gap: '0.45rem',
+                boxShadow: '0 4px 15px rgba(0,0,0,0.15)'
               }}
             >
-              <span>Launch Coordinator Portal</span>
+              <span>Explore AI Care Coordinator</span>
               <ArrowRight size={16} />
             </Link>
           </div>
@@ -375,10 +435,10 @@ export default function LandingPage() {
               <Activity size={24} />
             </div>
             <h4 style={{ fontSize: '1.05rem', fontWeight: '800', margin: '0 0 0.35rem' }}>
-              Zero-Friction Care Journey
+              End-to-End Continuity
             </h4>
             <p style={{ fontSize: '0.85rem', color: '#64748b', margin: 0, lineHeight: 1.5 }}>
-              From rural home symptom intake to OPD cabin consultation, every encounter is linked to a permanent clinical record.
+              From initial rural symptom intake to doctor consultation and 24/7 AI-guided recovery at home.
             </p>
           </div>
 
@@ -399,10 +459,10 @@ export default function LandingPage() {
               <Pill size={24} />
             </div>
             <h4 style={{ fontSize: '1.05rem', fontWeight: '800', margin: '0 0 0.35rem' }}>
-              Adherence & Logistics
+              Daily Adherence Tracking
             </h4>
             <p style={{ fontSize: '0.85rem', color: '#64748b', margin: 0, lineHeight: 1.5 }}>
-              Proactively solves rural non-attendance: impassable terrain triggers transit vouchers, missed pills trigger ASHA home visits.
+              Helps patients stick to antibiotic courses and chronic disease regimens with interactive checklists.
             </p>
           </div>
 

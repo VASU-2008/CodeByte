@@ -1,7 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const { protect, authorize } = require('../middlewares/authMiddleware');
+const { getTasks, resolveTask, createTask } = require('../controllers/coordinatorController');
 
-router.get('/tasks', (req, res) => res.json({ message: 'Get coordinator task queue stub' }));
-router.post('/tasks/:id/resolve', (req, res) => res.json({ message: 'Resolve task stub' }));
+router.get('/tasks', protect, authorize('coordinator'), getTasks);
+router.post('/tasks', protect, authorize('coordinator', 'doctor'), createTask);
+router.post('/tasks/:id/resolve', protect, authorize('coordinator'), resolveTask);
 
 module.exports = router;

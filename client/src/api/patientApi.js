@@ -13,8 +13,8 @@ const DEMO_MODE = false;
 // ─── DEMO DATA (Fallback only when backend is unreachable) ──────────────────────
 const DEMO_PROFILE = {
   _id: 'demo_patient_001',
-  name: 'Pranjal Sharma',
-  email: 'patient@veyora.com',
+  name: 'Patient 1',
+  email: 'patient1@veyora.com',
   role: 'patient',
   phone: '+91-98765-43210',
   dob: '1990-06-15',

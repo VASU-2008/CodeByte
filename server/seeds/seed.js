@@ -52,7 +52,7 @@ async function seedDatabase() {
             userMap[u.email] = userDoc;
         }
 
-        const primaryDoctor = userMap['doctor@veyora.com'];
+        const primaryDoctor = userMap['doctor1@veyora.com'];
 
         // 3. Insert Encounters
         console.log(`[Seed] Seeding ${data.encounters.length} encounters...`);
@@ -162,8 +162,8 @@ async function seedDatabase() {
         console.log(`Care Continuity Tasks: ${data.tasks.length}`);
         console.log(`Emergency Alerts:      ${data.alerts.length}`);
         console.log('\nDefault Test Accounts:');
-        console.log('  👨‍⚕️ Doctor:  doctor@veyora.com  / password123');
-        console.log('  🏥 Patient: patient@veyora.com / password123 (with Veyora AI Care Coordinator)');
+        console.log('  👨‍⚕️ Doctor:  doctor1@veyora.com  / password123');
+        console.log('  🏥 Patient: patient1@veyora.com / password123 (with Veyora AI Care Coordinator)');
         console.log('=========================================\n');
 
         process.exit(0);

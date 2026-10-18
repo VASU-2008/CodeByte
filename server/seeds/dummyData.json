@@ -5,7 +5,7 @@
   "users": [
     {
       "name": "Dr. Anil Mehta",
-      "email": "doctor@veyora.com",
+      "email": "doctor1@veyora.com",
       "password": "password123",
       "phone": "+91 98765 11001",
       "role": "doctor",
@@ -14,7 +14,7 @@
     },
     {
       "name": "Dr. Priya Sharma",
-      "email": "dr.priya@veyora.com",
+      "email": "doctor2@veyora.com",
       "password": "password123",
       "phone": "+91 98765 11002",
       "role": "doctor",
@@ -24,7 +24,7 @@
 
     {
       "name": "Patient 1",
-      "email": "patient@veyora.com",
+      "email": "patient1@veyora.com",
       "password": "password123",
       "phone": "+91 98765 43210",
       "role": "patient",
@@ -38,7 +38,7 @@
     },
     {
       "name": "Patient 2",
-      "email": "meena@veyora.com",
+      "email": "patient2@veyora.com",
       "password": "password123",
       "phone": "+91 98231 44521",
       "role": "patient",
@@ -52,7 +52,7 @@
     },
     {
       "name": "Patient 3",
-      "email": "ramesh@veyora.com",
+      "email": "patient3@veyora.com",
       "password": "password123",
       "phone": "+91 98234 56789",
       "role": "patient",
@@ -66,7 +66,7 @@
     },
     {
       "name": "Patient 4",
-      "email": "sunita@veyora.com",
+      "email": "patient4@veyora.com",
       "password": "password123",
       "phone": "+91 97721 55642",
       "role": "patient",
@@ -80,7 +80,7 @@
     },
     {
       "name": "Patient 5",
-      "email": "mohan@veyora.com",
+      "email": "patient5@veyora.com",
       "password": "password123",
       "phone": "+91 98210 11234",
       "role": "patient",
@@ -94,7 +94,7 @@
     },
     {
       "name": "Patient 6",
-      "email": "anita@veyora.com",
+      "email": "patient6@veyora.com",
       "password": "password123",
       "phone": "+91 98231 44521",
       "role": "patient",
@@ -110,7 +110,7 @@
   "encounters": [
     {
       "token_id": "P-001",
-      "patientEmail": "patient@veyora.com",
+      "patientEmail": "patient1@veyora.com",
       "chief_complaint": "High fever, chills and dry cough since 2 days. Generalized body weakness.",
       "diagnosis": "Acute Viral Upper Respiratory Tract Infection (URTI) with Reactive Myalgia",
       "clinical_findings": "Pharynx erythematous, tonsils non-enlarged. Clear bilateral vesicular breath sounds. S1/S2 heard normal.",
@@ -125,7 +125,7 @@
     },
     {
       "token_id": "P-002",
-      "patientEmail": "meena@veyora.com",
+      "patientEmail": "patient2@veyora.com",
       "chief_complaint": "Severe throbbing occipital headache, blurred near vision, dizziness and palpitations.",
       "diagnosis": "Essential Hypertension (Stage 2) with Hypertensive Cephalea",
       "clinical_findings": "Elevated blood pressure 162/98 mmHg. Bilateral temporal pulse bounding. Neurological cranial screen intact.",
@@ -140,7 +140,7 @@
     },
     {
       "token_id": "P-003",
-      "patientEmail": "ramesh@veyora.com",
+      "patientEmail": "patient3@veyora.com",
       "chief_complaint": "Acute periumbilical abdominal cramps, 4 episodes of watery diarrhea and nausea.",
       "diagnosis": "Acute Infectious Gastroenteritis with Mild Dehydration",
       "clinical_findings": "Abdomen soft with diffuse mild umbilical tenderness, hyperactive borborygmi, oral mucosa dry.",
@@ -155,7 +155,7 @@
     },
     {
       "token_id": "P-004",
-      "patientEmail": "sunita@veyora.com",
+      "patientEmail": "patient4@veyora.com",
       "chief_complaint": "Routine 3-month Type 2 Diabetes follow-up and prescription refill.",
       "diagnosis": "Type 2 Diabetes Mellitus - Stable Glycemic Control",
       "clinical_findings": "Fasting blood glucose 118 mg/dL, HbA1c 6.8%. Peripheral pedal pulses palpable, no diabetic foot sores.",
@@ -170,7 +170,7 @@
     },
     {
       "token_id": "P-005",
-      "patientEmail": "mohan@veyora.com",
+      "patientEmail": "patient5@veyora.com",
       "chief_complaint": "Persistent sore throat, painful swallowing (odynophagia) and mild ear pain for 3 days.",
       "diagnosis": "Acute Streptococcal Pharyngotonsillitis",
       "clinical_findings": "Marked pharyngeal erythema with tonsillar exudate. Tender anterior cervical lymphadenopathy bilaterally.",
@@ -185,7 +185,7 @@
     },
     {
       "token_id": "VY-TOK-DEMO-7G8H9I",
-      "patientEmail": "anita@veyora.com",
+      "patientEmail": "patient6@veyora.com",
       "chief_complaint": "Seasonal allergic rhinitis, morning sneezing fits and bilateral watery nasal discharge.",
       "diagnosis": "Allergic Rhinitis with Mild Sinus Congestion",
       "clinical_findings": "Nasal turbinates pale and edematous. Oropharynx clear. Chest bilateral air entry equal.",

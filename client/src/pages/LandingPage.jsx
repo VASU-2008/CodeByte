@@ -24,8 +24,8 @@ export default function LandingPage() {
 
   const handleQuickDemo = async (role) => {
     const creds = {
-      doctor: { email: 'doctor@veyora.com', password: 'password123', path: '/doctor' },
-      patient: { email: 'patient@veyora.com', password: 'password123', path: '/patient' }
+      doctor: { email: 'doctor1@veyora.com', password: 'password123', path: '/doctor' },
+      patient: { email: 'patient1@veyora.com', password: 'password123', path: '/patient' }
     };
     const c = creds[role];
     try {

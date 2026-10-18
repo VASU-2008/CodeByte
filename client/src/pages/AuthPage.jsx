@@ -59,8 +59,8 @@ export default function AuthPage() {
     setLoading(true);
     setErrorMessage('');
     const demoCredentials = {
-      doctor: { email: 'doctor@veyora.com', password: 'password123', target: '/doctor' },
-      patient: { email: 'patient@veyora.com', password: 'password123', target: '/patient' }
+      doctor: { email: 'doctor1@veyora.com', password: 'password123', target: '/doctor' },
+      patient: { email: 'patient1@veyora.com', password: 'password123', target: '/patient' }
     };
 
     const target = demoCredentials[demoRole];

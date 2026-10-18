@@ -11,7 +11,13 @@ const EncounterSchema = new mongoose.Schema({
         default: 'IN_QUEUE'
     },
     chief_complaint: { type: String, required: true },
-    triage_result: { type: String }, // PHC, CHC, OPD, teleconsult
+    diagnosis: { type: String },
+    clinical_findings: { type: String },
+    doctor_notes: { type: String },
+    lifestyle_advice: { type: String },
+    severity: { type: Number, default: 3 },
+    priority: { type: String, enum: ['Routine', 'Moderate', 'High', 'Critical'], default: 'Routine' },
+    triage_result: { type: String }, // PHC, CHC, OPD, EMERGENCY, teleconsult
     token_id: { type: String, unique: true, sparse: true },
     is_signed_off: { type: Boolean, default: false },
     signed_at: { type: Date }

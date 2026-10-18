@@ -1,0 +1,509 @@
+{
+  "description": "Veyora Healthcare Platform - Comprehensive Master Dummy Data",
+  "version": "1.0.0",
+  "generatedAt": "2026-10-18T07:25:00.000Z",
+  "users": [
+    {
+      "name": "Dr. Anil Mehta",
+      "email": "doctor@veyora.com",
+      "password": "password123",
+      "phone": "+91 98765 11001",
+      "role": "doctor",
+      "specialization": "General Medicine & Chronic Care",
+      "facility_id": "PHC_MAIN"
+    },
+    {
+      "name": "Dr. Priya Sharma",
+      "email": "dr.priya@veyora.com",
+      "password": "password123",
+      "phone": "+91 98765 11002",
+      "role": "doctor",
+      "specialization": "Cardiology & Emergency Triage",
+      "facility_id": "PHC_MAIN"
+    },
+    {
+      "name": "Kavita Ben",
+      "email": "coordinator@veyora.com",
+      "password": "password123",
+      "phone": "+91 98231 44521",
+      "role": "coordinator",
+      "facility_id": "PHC_MAIN"
+    },
+    {
+      "name": "Pranjal Sharma",
+      "email": "patient@veyora.com",
+      "password": "password123",
+      "phone": "+91 98765 43210",
+      "role": "patient",
+      "age": 34,
+      "gender": "Male",
+      "bloodGroup": "O+",
+      "allergies": ["Penicillin Allergy"],
+      "chronicConditions": ["Mild Asthma"],
+      "abhaId": "ABHA-9821-4402-9912",
+      "languagePreference": "Hindi / English"
+    },
+    {
+      "name": "Meena Sharma",
+      "email": "meena@veyora.com",
+      "password": "password123",
+      "phone": "+91 98231 44521",
+      "role": "patient",
+      "age": 52,
+      "gender": "Female",
+      "bloodGroup": "B+",
+      "allergies": ["Sulfa Drugs Allergy"],
+      "chronicConditions": ["Type 2 Diabetes", "Hypertension"],
+      "abhaId": "ABHA-9102-4431-89",
+      "languagePreference": "Hindi"
+    },
+    {
+      "name": "Ramesh Kumar",
+      "email": "ramesh@veyora.com",
+      "password": "password123",
+      "phone": "+91 98234 56789",
+      "role": "patient",
+      "age": 61,
+      "gender": "Male",
+      "bloodGroup": "A+",
+      "allergies": ["No Known Drug Allergies (NKDA)"],
+      "chronicConditions": ["Hypertension"],
+      "abhaId": "ABHA-3312-7809-12",
+      "languagePreference": "Hindi"
+    },
+    {
+      "name": "Sunita Devi",
+      "email": "sunita@veyora.com",
+      "password": "password123",
+      "phone": "+91 97721 55642",
+      "role": "patient",
+      "age": 44,
+      "gender": "Female",
+      "bloodGroup": "B+",
+      "allergies": ["NSAIDs Allergy"],
+      "chronicConditions": ["Post-Operative Wound"],
+      "abhaId": "ABHA-6651-9920-33",
+      "languagePreference": "Hindi"
+    },
+    {
+      "name": "Mohan Lal Verma",
+      "email": "mohan@veyora.com",
+      "password": "password123",
+      "phone": "+91 98210 11234",
+      "role": "patient",
+      "age": 68,
+      "gender": "Male",
+      "bloodGroup": "O+",
+      "allergies": ["Ciprofloxacin Allergy"],
+      "chronicConditions": ["Stage 2 Hypertension", "CAD"],
+      "abhaId": "ABHA-4481-2290-77",
+      "languagePreference": "Hindi"
+    },
+    {
+      "name": "Anita Roy",
+      "email": "anita@veyora.com",
+      "password": "password123",
+      "phone": "+91 98231 44521",
+      "role": "patient",
+      "age": 38,
+      "gender": "Female",
+      "bloodGroup": "AB+",
+      "allergies": ["Dust & Pollen Allergy"],
+      "chronicConditions": ["Third Trimester Gestational Anemia"],
+      "abhaId": "ABHA-1190-8841-55",
+      "languagePreference": "Bengali / Hindi"
+    }
+  ],
+  "encounters": [
+    {
+      "token_id": "P-001",
+      "patientEmail": "patient@veyora.com",
+      "chief_complaint": "High fever, chills and dry cough since 2 days. Generalized body weakness.",
+      "diagnosis": "Acute Viral Upper Respiratory Tract Infection (URTI) with Reactive Myalgia",
+      "clinical_findings": "Pharynx erythematous, tonsils non-enlarged. Clear bilateral vesicular breath sounds. S1/S2 heard normal.",
+      "doctor_notes": "Patient presents with acute low-grade fever and myalgia. Conservative antipyretic therapy advised.",
+      "lifestyle_advice": "Steam inhalation twice daily, drink at least 2.5L clean water, avoid cold exposure.",
+      "status": "IN_QUEUE",
+      "priority": "Moderate",
+      "severity": 5,
+      "facility_id": "PHC_MAIN",
+      "triage_result": "PHC",
+      "is_signed_off": false
+    },
+    {
+      "token_id": "P-002",
+      "patientEmail": "meena@veyora.com",
+      "chief_complaint": "Severe throbbing occipital headache, blurred near vision, dizziness and palpitations.",
+      "diagnosis": "Essential Hypertension (Stage 2) with Hypertensive Cephalea",
+      "clinical_findings": "Elevated blood pressure 162/98 mmHg. Bilateral temporal pulse bounding. Neurological cranial screen intact.",
+      "doctor_notes": "Elevated baseline BP. Initiated Telmisartan 40mg + Amlodipine 5mg. Scheduled 14-day retinopathy review.",
+      "lifestyle_advice": "Low sodium DASH diet (<2g salt/day), daily blood pressure charting morning and evening.",
+      "status": "IN_CONSULTATION",
+      "priority": "High",
+      "severity": 8,
+      "facility_id": "PHC_MAIN",
+      "triage_result": "CHC",
+      "is_signed_off": false
+    },
+    {
+      "token_id": "P-003",
+      "patientEmail": "ramesh@veyora.com",
+      "chief_complaint": "Acute periumbilical abdominal cramps, 4 episodes of watery diarrhea and nausea.",
+      "diagnosis": "Acute Infectious Gastroenteritis with Mild Dehydration",
+      "clinical_findings": "Abdomen soft with diffuse mild umbilical tenderness, hyperactive borborygmi, oral mucosa dry.",
+      "doctor_notes": "History of outside meal 24h ago. Started oral rehydration salts and empiric gut antibiotic.",
+      "lifestyle_advice": "Strict BRAT diet (Banana, Rice, Applesauce, Toast). Consume 1 liter ORS every 4-6 hours.",
+      "status": "IN_QUEUE",
+      "priority": "Routine",
+      "severity": 4,
+      "facility_id": "PHC_MAIN",
+      "triage_result": "PHC",
+      "is_signed_off": false
+    },
+    {
+      "token_id": "P-004",
+      "patientEmail": "sunita@veyora.com",
+      "chief_complaint": "Routine 3-month Type 2 Diabetes follow-up and prescription refill.",
+      "diagnosis": "Type 2 Diabetes Mellitus - Stable Glycemic Control",
+      "clinical_findings": "Fasting blood glucose 118 mg/dL, HbA1c 6.8%. Peripheral pedal pulses palpable, no diabetic foot sores.",
+      "doctor_notes": "Optimal medication adherence. Refilled Metformin 500mg and Glimepiride 1mg for 30 days.",
+      "lifestyle_advice": "Continue 30 minutes brisk morning walk. Avoid refined carbohydrate snacks.",
+      "status": "COMPLETED",
+      "priority": "Routine",
+      "severity": 3,
+      "facility_id": "PHC_MAIN",
+      "triage_result": "OPD",
+      "is_signed_off": true
+    },
+    {
+      "token_id": "P-005",
+      "patientEmail": "mohan@veyora.com",
+      "chief_complaint": "Persistent sore throat, painful swallowing (odynophagia) and mild ear pain for 3 days.",
+      "diagnosis": "Acute Streptococcal Pharyngotonsillitis",
+      "clinical_findings": "Marked pharyngeal erythema with tonsillar exudate. Tender anterior cervical lymphadenopathy bilaterally.",
+      "doctor_notes": "Commenced oral Amoxicillin/Clavulanate 625mg for 5 days. Emphasized completing full antibiotic course.",
+      "lifestyle_advice": "Warm saline gargles 3-4 times daily. Soft semi-solid diet.",
+      "status": "FOLLOW_UP_DUE",
+      "priority": "Routine",
+      "severity": 4,
+      "facility_id": "PHC_MAIN",
+      "triage_result": "PHC",
+      "is_signed_off": true
+    },
+    {
+      "token_id": "VY-TOK-DEMO-7G8H9I",
+      "patientEmail": "anita@veyora.com",
+      "chief_complaint": "Seasonal allergic rhinitis, morning sneezing fits and bilateral watery nasal discharge.",
+      "diagnosis": "Allergic Rhinitis with Mild Sinus Congestion",
+      "clinical_findings": "Nasal turbinates pale and edematous. Oropharynx clear. Chest bilateral air entry equal.",
+      "doctor_notes": "Prescribed non-sedating H1 antihistamine and steroid nasal spray. Advised allergen avoidance.",
+      "lifestyle_advice": "Wear mask during outdoor farm chores. Avoid dust exposure.",
+      "status": "IN_QUEUE",
+      "priority": "Routine",
+      "severity": 3,
+      "facility_id": "PHC_MAIN",
+      "triage_result": "PHC",
+      "is_signed_off": false
+    }
+  ],
+  "vitals": [
+    {
+      "token_id": "P-001",
+      "bloodPressureSys": 120,
+      "bloodPressureDia": 80,
+      "heartRate": 98,
+      "temperature": 101.2,
+      "spo2": 97,
+      "respiratoryRate": 18,
+      "weightKg": 68
+    },
+    {
+      "token_id": "P-002",
+      "bloodPressureSys": 145,
+      "bloodPressureDia": 95,
+      "heartRate": 84,
+      "temperature": 98.6,
+      "spo2": 98,
+      "respiratoryRate": 16,
+      "weightKg": 62
+    },
+    {
+      "token_id": "P-003",
+      "bloodPressureSys": 118,
+      "bloodPressureDia": 76,
+      "heartRate": 76,
+      "temperature": 99.1,
+      "spo2": 99,
+      "respiratoryRate": 16,
+      "weightKg": 71
+    },
+    {
+      "token_id": "P-004",
+      "bloodPressureSys": 130,
+      "bloodPressureDia": 82,
+      "heartRate": 72,
+      "temperature": 98.4,
+      "spo2": 98,
+      "respiratoryRate": 15,
+      "weightKg": 70
+    },
+    {
+      "token_id": "P-005",
+      "bloodPressureSys": 115,
+      "bloodPressureDia": 75,
+      "heartRate": 88,
+      "temperature": 100.4,
+      "spo2": 98,
+      "respiratoryRate": 17,
+      "weightKg": 65
+    },
+    {
+      "token_id": "VY-TOK-DEMO-7G8H9I",
+      "bloodPressureSys": 118,
+      "bloodPressureDia": 76,
+      "heartRate": 74,
+      "temperature": 98.4,
+      "spo2": 99,
+      "respiratoryRate": 16,
+      "weightKg": 58
+    }
+  ],
+  "prescriptions": [
+    {
+      "token_id": "P-001",
+      "medications": [
+        {
+          "name": "Paracetamol",
+          "dosage": "500 mg",
+          "frequency": "1-0-1",
+          "duration": "3 Days",
+          "instructions": "Take after meals for fever and body ache"
+        },
+        {
+          "name": "Cetirizine",
+          "dosage": "10 mg",
+          "frequency": "0-0-1",
+          "duration": "5 Days",
+          "instructions": "Take 1 tablet at night for mild cough"
+        },
+        {
+          "name": "Oral Rehydration Salts (ORS)",
+          "dosage": "1 Sachet",
+          "frequency": "1-1-1",
+          "duration": "2 Days",
+          "instructions": "Mix in 1L clean drinking water and sip throughout day"
+        }
+      ],
+      "notes": "Review if fever persists past 72 hours."
+    },
+    {
+      "token_id": "P-002",
+      "medications": [
+        {
+          "name": "Telmisartan",
+          "dosage": "40 mg",
+          "frequency": "1-0-0",
+          "duration": "30 Days",
+          "instructions": "Take regularly at 8 AM every morning"
+        },
+        {
+          "name": "Amlodipine",
+          "dosage": "5 mg",
+          "frequency": "0-0-1",
+          "duration": "30 Days",
+          "instructions": "Take at bedtime"
+        },
+        {
+          "name": "Paracetamol",
+          "dosage": "650 mg",
+          "frequency": "SOS",
+          "duration": "3 Days",
+          "instructions": "Take only if severe headache recurs"
+        }
+      ],
+      "notes": "Check serum electrolytes and creatinine at 14 days."
+    },
+    {
+      "token_id": "P-004",
+      "medications": [
+        {
+          "name": "Metformin",
+          "dosage": "500 mg",
+          "frequency": "1-0-1",
+          "duration": "30 Days",
+          "instructions": "Take immediately after breakfast and dinner"
+        },
+        {
+          "name": "Glimepiride",
+          "dosage": "1 mg",
+          "frequency": "1-0-0",
+          "duration": "30 Days",
+          "instructions": "Take 15 minutes before breakfast"
+        },
+        {
+          "name": "Atorvastatin",
+          "dosage": "10 mg",
+          "frequency": "0-0-1",
+          "duration": "30 Days",
+          "instructions": "Take at night before bed"
+        }
+      ],
+      "notes": "Routine diabetic maintenance refill."
+    }
+  ],
+  "followups": [
+    {
+      "token_id": "P-001",
+      "followupDate": "2026-10-25T10:00:00.000Z",
+      "reason": "Post-viral recovery check and symptom resolution",
+      "instructions": "Return if fever persists beyond 3 days or shortness of breath develops.",
+      "status": "SCHEDULED"
+    },
+    {
+      "token_id": "P-002",
+      "followupDate": "2026-10-28T09:30:00.000Z",
+      "reason": "14-Day Diabetic Retinopathy review & renal panel titration",
+      "instructions": "Bring daily BP chart logs and fasting blood samples.",
+      "status": "SCHEDULED"
+    },
+    {
+      "token_id": "P-005",
+      "followupDate": "2026-10-21T11:00:00.000Z",
+      "reason": "Tonsillitis clinical resolution & antibiotic course review",
+      "instructions": "Check for complete throat symptom resolution.",
+      "status": "SCHEDULED"
+    }
+  ],
+  "tasks": [
+    {
+      "type": "TRANSPORT",
+      "category": "transport",
+      "priority": "High",
+      "status": "Active",
+      "title": "Rural River Crossing Impassable · Critical Follow-up Transport Needed",
+      "description": "Gram Panchayat culvert flooded near Narmada tributary. Patient unable to walk 6km to Primary Health Centre for mandatory 14-day Diabetic Retinopathy review & renal panel.",
+      "actionRequired": "Dispatch Gram Panchayat EV-Auto voucher #AP-44 or coordinate with local ASHA for subsidized shared rural transit.",
+      "patientName": "Meena Sharma",
+      "patientAge": 52,
+      "patientGender": "Female",
+      "patientPhone": "+91 98231 44521",
+      "abhaId": "ABHA-9102-4431-89",
+      "tokenNumber": "TK-842",
+      "village": "Rampur Kalan (Ward 3)",
+      "assignedAsha": "ASHA Kavita Ben",
+      "ashaPhone": "+91 98231 44521",
+      "ashaSector": "Sub-Centre Rampur",
+      "voucherNumber": "GP-VOUCH-882"
+    },
+    {
+      "type": "MEDICATION",
+      "category": "medication",
+      "priority": "High",
+      "status": "Active",
+      "title": "2-Missed-Dose Alert: Telmisartan 40mg + Metformin 500mg",
+      "description": "Veyora smart blister dispenser detected zero activity for 48 consecutive hours. Patient flagged high baseline BP (162/98 mmHg) during prior kiosk triage.",
+      "actionRequired": "Immediate in-person ASHA verification call to confirm pill intake, evaluate gastrointestinal tolerance, and replenish dosage strip.",
+      "patientName": "Ramesh Kumar",
+      "patientAge": 61,
+      "patientGender": "Male",
+      "patientPhone": "+91 98234 56789",
+      "abhaId": "ABHA-3312-7809-12",
+      "tokenNumber": "TK-819",
+      "village": "Shivgarh Sub-division",
+      "assignedAsha": "ASHA Suman Lata",
+      "ashaPhone": "+91 94112 09873",
+      "ashaSector": "Ward 8 Shivgarh",
+      "drug": "Telmisartan 40mg + Metformin 500mg",
+      "missedCount": 2,
+      "lastTaken": "2 days ago (Evening)"
+    },
+    {
+      "type": "REMINDER",
+      "category": "reminder",
+      "priority": "High",
+      "status": "Active",
+      "title": "3 Unanswered Automated Call Reminders for Post-Op Wound Inspection",
+      "description": "Autonomous IVR voice reminders at T-48h, T-24h, and T-6h failed to connect (call dropped after 2 rings / network congestion). Surgical dressing change is overdue by 36 hours.",
+      "actionRequired": "Switch communication protocol to secondary contact (daughter: Priya Devi) or trigger emergency SMS flash alert with direct coordinator callback link.",
+      "patientName": "Sunita Devi",
+      "patientAge": 44,
+      "patientGender": "Female",
+      "patientPhone": "+91 97721 55642",
+      "abhaId": "ABHA-6651-9920-33",
+      "tokenNumber": "TK-855",
+      "village": "Belgharia Village",
+      "assignedAsha": "ASHA Pooja Verma",
+      "ashaPhone": "+91 97721 55642",
+      "ashaSector": "Sector 2 Belgharia"
+    },
+    {
+      "type": "VITALS",
+      "category": "vitals",
+      "priority": "CRITICAL",
+      "status": "Active",
+      "title": "Post-Discharge Blood Pressure Surge (174/104 mmHg)",
+      "description": "MediKiosk remote telemetry captured Stage 2 hypertensive urgency during routine kiosk check-in. Teleconsultation recommended within 2 hours.",
+      "actionRequired": "Escalate encounter to On-Duty Teleconsult Physician Dr. Anil Mehta and alert ASHA worker with portable digital sphygmomanometer.",
+      "patientName": "Mohan Lal Verma",
+      "patientAge": 68,
+      "patientGender": "Male",
+      "patientPhone": "+91 98210 11234",
+      "abhaId": "ABHA-4481-2290-77",
+      "tokenNumber": "TK-790",
+      "village": "Kalyanpur GP",
+      "assignedAsha": "ASHA Rajeshwari Patel",
+      "ashaPhone": "+91 98210 11234",
+      "ashaSector": "Kalyanpur Health Post"
+    },
+    {
+      "type": "TRANSPORT",
+      "category": "transport",
+      "priority": "Medium",
+      "status": "Vehicle Dispatched",
+      "title": "Maternal Iron Infusion Transport Coordination",
+      "description": "Third trimester high-risk anemia patient requires safe transit to CHC for scheduled ferric carboxymaltose injection. Bus service suspended due to road repaving.",
+      "actionRequired": "Validate local subsidized transport partner and link patient family with transit pass.",
+      "patientName": "Anita Roy",
+      "patientAge": 38,
+      "patientGender": "Female",
+      "patientPhone": "+91 98231 44521",
+      "abhaId": "ABHA-1190-8841-55",
+      "tokenNumber": "TK-774",
+      "village": "Durgapur East",
+      "assignedAsha": "ASHA Kavita Ben",
+      "ashaPhone": "+91 98231 44521",
+      "ashaSector": "Sub-Centre Rampur",
+      "voucherNumber": "GP-VOUCH-810",
+      "driverAssigned": "Mohan Singh",
+      "vehicleNumber": "MP-04-TA-4491 (EV Auto)",
+      "driverPhone": "+91 98221 44510",
+      "dispatchedAt": "15 mins ago (ETA: 10 mins)"
+    },
+    {
+      "type": "GENERAL",
+      "category": "general",
+      "priority": "Low",
+      "status": "Resolved",
+      "title": "Follow-up SMS Dispatch & Appointment Confirmation",
+      "description": "WhatsApp and SMS reminder sent in Hindi to Pranjal Sharma for Primary Health Centre follow-up.",
+      "actionRequired": "Logged and verified by automated notification service.",
+      "patientName": "Pranjal Sharma",
+      "patientPhone": "+91 98765 43210",
+      "resolution_notes": "Delivered successfully with delivery receipt ACK-9921."
+    }
+  ],
+  "alerts": [
+    {
+      "type": "EMERGENCY",
+      "message": "Hypertensive Crisis (174/104 mmHg) detected at MediKiosk #02 for Mohan Lal Verma",
+      "severity": "CRITICAL",
+      "status": "ACTIVE"
+    },
+    {
+      "type": "WARNING",
+      "message": "3 Consecutive IVR Reminder Drops for Post-Op Patient Sunita Devi",
+      "severity": "HIGH",
+      "status": "ACTIVE"
+    }
+  ]
+}

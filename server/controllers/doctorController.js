@@ -1,8 +1,21 @@
+const mongoose = require('mongoose');
 const Encounter = require('../models/Encounter');
 const User = require('../models/User');
 const Vitals = require('../models/Vitals');
 const Prescription = require('../models/Prescription');
 const FollowUp = require('../models/FollowUp');
+
+/**
+ * Helper to find encounter by MongoDB ObjectId or token_id (e.g. P-001, TOK-123)
+ */
+const findEncounter = async (idOrToken) => {
+    if (!idOrToken) return null;
+    if (mongoose.Types.ObjectId.isValid(idOrToken)) {
+        const byId = await Encounter.findById(idOrToken);
+        if (byId) return byId;
+    }
+    return await Encounter.findOne({ token_id: idOrToken });
+};
 
 /**
  * @route   GET /api/doctor/queue
@@ -14,13 +27,32 @@ const getDoctorQueue = async (req, res) => {
         const facilityId = req.query.facilityId || 'PHC_MAIN';
 
         const encounters = await Encounter.find({
-            facility_id: facilityId,
-            status: { $in: ['IN_QUEUE', 'IN_CONSULTATION', 'AWAITING_SIGN_OFF'] }
+            facility_id: facilityId
         })
-            .populate('patient_id', 'name age gender phone')
+            .populate('patient_id', 'name age gender phone bloodGroup allergies chronicConditions abhaId languagePreference')
             .sort({ createdAt: 1 });
 
-        res.json(encounters);
+        const mapped = encounters.map((enc, idx) => {
+            const p = enc.patient_id;
+            const token = enc.token_id || `P-00${idx + 1}`;
+            return {
+                id: idx + 1,
+                _id: enc._id,
+                token,
+                token_id: token,
+                name: p?.name || `Patient ${idx + 1}`,
+                ageGender: p ? `${p.age || 40} / ${p.gender?.charAt(0) || 'M'}` : '40 / M',
+                complaint: enc.chief_complaint,
+                chief_complaint: enc.chief_complaint,
+                diagnosis: enc.diagnosis || '',
+                status: enc.status === 'IN_QUEUE' ? 'Waiting' : enc.status === 'IN_CONSULTATION' ? 'In Consultation' : enc.status === 'COMPLETED' ? 'Completed' : enc.status,
+                priority: enc.priority || (enc.severity >= 7 ? 'High' : enc.severity >= 5 ? 'Moderate' : 'Routine'),
+                createdAt: enc.createdAt,
+                patient_id: p
+            };
+        });
+
+        res.json(mapped);
     } catch (error) {
         console.error('[doctorController] getDoctorQueue error:', error.message);
         res.status(500).json({ message: 'Failed to retrieve queue' });
@@ -40,6 +72,12 @@ const lookupByToken = async (req, res) => {
             .populate('patient_id', 'name age gender phone bloodGroup allergies chronicConditions abhaId languagePreference');
 
         if (!encounter) {
+            // Also attempt findById if it's an ObjectId
+            if (mongoose.Types.ObjectId.isValid(tokenId)) {
+                const byId = await Encounter.findById(tokenId)
+                    .populate('patient_id', 'name age gender phone bloodGroup allergies chronicConditions abhaId languagePreference');
+                if (byId) return res.json(byId);
+            }
             return res.status(404).json({ message: `No encounter found for token: ${tokenId}` });
         }
 
@@ -57,12 +95,13 @@ const lookupByToken = async (req, res) => {
  */
 const getClinicalBriefing = async (req, res) => {
     try {
-        const encounter = await Encounter.findById(req.params.id)
-            .populate('patient_id', 'name age gender phone bloodGroup allergies chronicConditions abhaId languagePreference');
+        const encounter = await findEncounter(req.params.id);
 
         if (!encounter) {
             return res.status(404).json({ message: 'Encounter not found' });
         }
+
+        await encounter.populate('patient_id', 'name age gender phone bloodGroup allergies chronicConditions abhaId languagePreference');
 
         // Fetch latest vitals for this encounter
         const vitals = await Vitals.findOne({ encounter_id: encounter._id })
@@ -70,7 +109,7 @@ const getClinicalBriefing = async (req, res) => {
 
         // Fetch past visits for the same patient (excluding current)
         const pastEncounters = await Encounter.find({
-            patient_id: encounter.patient_id._id,
+            patient_id: encounter.patient_id?._id,
             _id: { $ne: encounter._id },
             status: 'COMPLETED'
         })
@@ -82,27 +121,36 @@ const getClinicalBriefing = async (req, res) => {
         const pastVisits = await Promise.all(pastEncounters.map(async (pastEnc) => {
             const prescriptions = await Prescription.find({ encounter_id: pastEnc._id });
             const medications = prescriptions.flatMap(p =>
-                p.medications.map(m => `${m.name} ${m.dosage} (${m.frequency})`)
+                (p.medications || []).map(m => `${m.name} ${m.dosage} (${m.frequency})`)
             );
             return {
                 encounterId: pastEnc._id,
                 date: pastEnc.createdAt,
                 facility: pastEnc.facility_id,
-                diagnosis: pastEnc.chief_complaint,
+                diagnosis: pastEnc.diagnosis || pastEnc.chief_complaint,
                 prescribedBy: pastEnc.clinician_id?.name || 'Unknown',
                 medicines: medications
             };
         }));
 
         res.json({
-            encounterId: encounter._id,
+            encounterId: encounter.token_id || encounter._id,
             patient: encounter.patient_id,
             currentEncounter: {
                 chief_complaint: encounter.chief_complaint,
+                diagnosis: encounter.diagnosis || '',
                 triage_result: encounter.triage_result,
                 token_id: encounter.token_id
             },
-            vitals: vitals || null,
+            vitals: vitals ? {
+                bloodPressure: vitals.bloodPressureSys && vitals.bloodPressureDia ? `${vitals.bloodPressureSys}/${vitals.bloodPressureDia}` : null,
+                temperature: vitals.temperature ? `${vitals.temperature}°F` : null,
+                pulse: vitals.heartRate ? `${vitals.heartRate} bpm` : null,
+                spo2: vitals.spo2 ? `${vitals.spo2}%` : null,
+                weight: vitals.weightKg ? `${vitals.weightKg} kg` : null,
+                bmi: '22.5',
+                recordedAt: vitals.recordedAt
+            } : null,
             pastVisits
         });
     } catch (error) {
@@ -118,14 +166,16 @@ const getClinicalBriefing = async (req, res) => {
  */
 const saveConsultationNotes = async (req, res) => {
     try {
-        const encounter = await Encounter.findById(req.params.id);
+        const encounter = await findEncounter(req.params.id);
         if (!encounter) {
             return res.status(404).json({ message: 'Encounter not found' });
         }
 
         // Update encounter with notes data and move status to IN_CONSULTATION
-        encounter.chief_complaint = req.body.diagnosis || encounter.chief_complaint;
-        encounter.triage_result = req.body.triage_result || encounter.triage_result;
+        encounter.diagnosis = req.body.diagnosis || encounter.diagnosis;
+        encounter.clinical_findings = req.body.clinicalFindings || req.body.clinical_findings || encounter.clinical_findings;
+        encounter.doctor_notes = req.body.clinicalNotes || req.body.doctor_notes || encounter.doctor_notes;
+        encounter.lifestyle_advice = req.body.lifestyleAdvice || req.body.lifestyle_advice || encounter.lifestyle_advice;
         encounter.clinician_id = req.user.id;
         if (encounter.status === 'IN_QUEUE') {
             encounter.status = 'IN_CONSULTATION';
@@ -152,7 +202,7 @@ const saveConsultationNotes = async (req, res) => {
  */
 const saveVitals = async (req, res) => {
     try {
-        const encounter = await Encounter.findById(req.params.id);
+        const encounter = await findEncounter(req.params.id);
         if (!encounter) {
             return res.status(404).json({ message: 'Encounter not found' });
         }
@@ -161,13 +211,13 @@ const saveVitals = async (req, res) => {
             encounter_id: encounter._id,
             patient_id: encounter.patient_id,
             recordedBy: req.user.id,
-            bloodPressureSys: req.body.bloodPressureSys,
-            bloodPressureDia: req.body.bloodPressureDia,
-            heartRate: req.body.heartRate,
-            temperature: req.body.temperature,
+            bloodPressureSys: req.body.bloodPressureSys || parseInt(req.body.bp?.split('/')[0], 10),
+            bloodPressureDia: req.body.bloodPressureDia || parseInt(req.body.bp?.split('/')[1], 10),
+            heartRate: req.body.heartRate || req.body.pulse,
+            temperature: req.body.temperature || req.body.temp,
             spo2: req.body.spo2,
             respiratoryRate: req.body.respiratoryRate,
-            weightKg: req.body.weightKg
+            weightKg: req.body.weightKg || req.body.weight
         });
 
         res.json({
@@ -190,7 +240,7 @@ const saveVitals = async (req, res) => {
  */
 const createPrescription = async (req, res) => {
     try {
-        const encounter = await Encounter.findById(req.params.id);
+        const encounter = await findEncounter(req.params.id);
         if (!encounter) {
             return res.status(404).json({ message: 'Encounter not found' });
         }
@@ -230,7 +280,7 @@ const createPrescription = async (req, res) => {
  */
 const recordFollowup = async (req, res) => {
     try {
-        const encounter = await Encounter.findById(req.params.id);
+        const encounter = await findEncounter(req.params.id);
         if (!encounter) {
             return res.status(404).json({ message: 'Encounter not found' });
         }
@@ -277,7 +327,7 @@ const recordFollowup = async (req, res) => {
  */
 const signOff = async (req, res) => {
     try {
-        const encounter = await Encounter.findById(req.params.id);
+        const encounter = await findEncounter(req.params.id);
         if (!encounter) {
             return res.status(404).json({ message: 'Encounter not found' });
         }

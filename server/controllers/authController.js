@@ -104,7 +104,8 @@ const login = async (req, res) => {
             });
         }
 
-        const { email, password } = parsed.data;
+        const email = parsed.data.email.toLowerCase().trim();
+        const password = parsed.data.password;
 
         // Find user
         const user = await User.findOne({ email });

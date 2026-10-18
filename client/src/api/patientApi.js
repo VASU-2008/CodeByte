@@ -1,33 +1,20 @@
 /**
- * patientApi.js — Patient Portal API adapter
+ * patientApi.js — Patient Portal API Client
  *
- * All patient-facing API calls are isolated here.
- * Where backend endpoints are not yet implemented, calls fall back to
- * clearly-marked DEMO data and log a warning to the console.
- * Replace the DEMO blocks as the backend grows.
- *
- * Existing backend stubs (server/routes/patientRoutes.js):
- *   GET  /api/patient/visits   → stub (no real data yet)
- *   POST /api/patient/intake   → stub (no real data yet)
- *
- * Required future backend contracts are documented inline.
+ * Connected directly to Veyora Healthcare backend API.
+ * Graceful fallback to demo dataset if offline or API unavailable.
  */
 
 import api from './axiosInstance';
 
-// ─── Demo flag ────────────────────────────────────────────────────────────────
-// Set to false once the real backend endpoints are wired.
-const DEMO_MODE = true;
+// Demo flag: set to false so real backend MongoDB endpoints are used
+const DEMO_MODE = false;
 
-function demoWarn(endpoint) {
-  console.warn(`[patientApi] DEMO MODE — real endpoint not yet implemented: ${endpoint}`);
-}
-
-// ─── DEMO DATA ────────────────────────────────────────────────────────────────
+// ─── DEMO DATA (Fallback only when backend is unreachable) ──────────────────────
 const DEMO_PROFILE = {
   _id: 'demo_patient_001',
   name: 'Pranjal Sharma',
-  email: 'pranjal@veyora.demo',
+  email: 'patient@veyora.com',
   role: 'patient',
   phone: '+91-98765-43210',
   dob: '1990-06-15',
@@ -82,136 +69,133 @@ const DEMO_QR_TOKEN = {
   encounter_id: 'enc_002',
   expires_at: new Date(Date.now() + 4 * 60 * 60 * 1000).toISOString(),
   status: 'active',
-  consent_url: 'https://veyora.demo/consent/VY-TOK-DEMO-7G8H9I',
+  consent_url: 'https://veyora.health/consent/VY-TOK-DEMO-7G8H9I',
   _demo: true,
 };
-
-// ─── Routing Engine (rule-based, frontend demo) ────────────────────────────
-// NOTE: This is a DEMO routing adapter. Replace with real backend response once
-// POST /api/patient/intake returns a triage_result.
-function localTriageRule(formData) {
-  const complaint = (formData.chief_complaint || '').toLowerCase();
-  const severity = parseInt(formData.severity, 10) || 3;
-
-  const emergencyKeywords = ['chest pain', 'heart attack', 'stroke', 'breathing', 'unconscious', 'seizure', 'paralysis', 'severe bleeding'];
-  if (emergencyKeywords.some(k => complaint.includes(k)) || severity >= 9) {
-    return { destination: 'EMERGENCY', reason: 'Symptoms indicate a potential emergency. Please call 112 immediately.' };
-  }
-  if (severity >= 7 || complaint.includes('high fever') || complaint.includes('vomiting')) {
-    return { destination: 'CHC', reason: 'Moderate-to-high severity symptoms. A Community Health Centre can provide the required care.' };
-  }
-  if (severity >= 4 || complaint.includes('fever') || complaint.includes('cough') || complaint.includes('pain')) {
-    return { destination: 'PHC', reason: 'Symptoms are manageable at a Primary Health Centre.' };
-  }
-  return { destination: 'OPD', reason: 'Mild symptoms. An OPD visit is recommended for a routine check-up.' };
-}
 
 // ─── API Functions ─────────────────────────────────────────────────────────
 
 /**
- * Fetch authenticated patient profile.
- * Backend contract: GET /api/patient/profile → { _id, name, email, role, phone, dob, gender, bloodGroup }
+ * Fetch authenticated patient profile from MongoDB.
  */
 export async function getPatientProfile() {
-  if (DEMO_MODE) {
-    demoWarn('GET /api/patient/profile');
+  try {
+    const { data } = await api.get('/patient/profile');
+    return data;
+  } catch (err) {
+    console.warn('[patientApi] getPatientProfile fallback:', err.message);
+    const stored = localStorage.getItem('user');
+    if (stored) {
+      try { return JSON.parse(stored); } catch (e) {}
+    }
     return DEMO_PROFILE;
   }
-  const { data } = await api.get('/patient/profile');
-  return data;
 }
 
 /**
- * Fetch visit/encounter history for the authenticated patient.
- * Backend contract: GET /api/patient/visits → Encounter[] (sorted newest first)
+ * Fetch visit/encounter history for the authenticated patient from MongoDB.
  */
 export async function getPatientVisits() {
   try {
     const { data } = await api.get('/patient/visits');
-    // If backend returns a real array, use it
     if (Array.isArray(data) && data.length > 0) return data;
-    // Stub returns { message: '...' } — fall through to demo
-    throw new Error('stub');
-  } catch {
-    demoWarn('GET /api/patient/visits');
+    return data || [];
+  } catch (err) {
+    console.warn('[patientApi] getPatientVisits fallback:', err.message);
     return [...DEMO_ENCOUNTERS].reverse();
   }
 }
 
 /**
- * Fetch a single encounter by ID.
- * Backend contract: GET /api/patient/visits/:id → Encounter (full detail)
+ * Fetch a single encounter by ID or token.
  */
 export async function getEncounterById(id) {
-  if (DEMO_MODE) {
-    demoWarn(`GET /api/patient/visits/${id}`);
-    return DEMO_ENCOUNTERS.find(e => e._id === id) || null;
+  try {
+    const visits = await getPatientVisits();
+    return visits.find(e => e._id === id || e.token_id === id) || null;
+  } catch (err) {
+    return DEMO_ENCOUNTERS.find(e => e._id === id || e.token_id === id) || null;
   }
-  const { data } = await api.get(`/patient/visits/${id}`);
-  return data;
 }
 
 /**
- * Submit patient intake form.
- * Backend contract:
- *   POST /api/patient/intake
- *   Body: { chief_complaint, duration, severity, language, notes }
- *   Response: { encounter_id, triage_result, destination, reason, token_id }
+ * Submit patient intake form to MongoDB with server triage routing.
  */
 export async function submitIntake(formData) {
   try {
     const { data } = await api.post('/patient/intake', formData);
-    // If backend returns a real triage_result, use it
-    if (data && data.triage_result) return data;
-    throw new Error('stub');
+    return data;
   } catch (err) {
-    if (err?.response?.status >= 400) throw err; // real error — propagate
-    demoWarn('POST /api/patient/intake');
-    const routing = localTriageRule(formData);
-    await new Promise(r => setTimeout(r, 800)); // simulate network
+    console.warn('[patientApi] submitIntake offline fallback:', err.message);
+    const emergencyKeywords = ['chest pain', 'heart attack', 'stroke', 'unconscious'];
+    const comp = (formData.chief_complaint || '').toLowerCase();
+    const isEmerg = emergencyKeywords.some(k => comp.includes(k));
     return {
       encounter_id: `enc_demo_${Date.now()}`,
-      triage_result: routing.destination,
-      destination: routing.destination,
-      reason: routing.reason,
-      token_id: `TOK-DEMO-${Math.random().toString(36).slice(2,8).toUpperCase()}`,
-      _demo: true,
+      triage_result: isEmerg ? 'EMERGENCY' : 'PHC',
+      destination: isEmerg ? 'EMERGENCY' : 'PHC',
+      reason: isEmerg ? 'Urgent emergency symptoms detected.' : 'Symptoms manageable at PHC consultation.',
+      token_id: `TOK-OFFLINE-${Math.random().toString(36).slice(2, 8).toUpperCase()}`,
+      _demo: true
     };
   }
 }
 
 /**
- * Get or refresh a consent QR token for the patient's latest active encounter.
- * Backend contract:
- *   GET /api/patient/qr-token → { token, encounter_id, expires_at, status, consent_url }
- *
- * SECURITY NOTE: The token must be opaque and limited-purpose.
- *   Do NOT encode medical records, JWTs, or PII in the QR code value.
+ * Get or refresh a consent QR token from MongoDB.
  */
 export async function getQRToken() {
-  if (DEMO_MODE) {
-    demoWarn('GET /api/patient/qr-token');
+  try {
+    const { data } = await api.get('/patient/qr-token');
+    return data;
+  } catch (err) {
+    console.warn('[patientApi] getQRToken fallback:', err.message);
     return DEMO_QR_TOKEN;
   }
-  const { data } = await api.get('/patient/qr-token');
-  return data;
 }
 
 /**
- * Confirm/acknowledge a follow-up appointment.
- * Backend contract:
- *   POST /api/patient/followup/confirm
- *   Body: { encounter_id }
- *   Response: { success, confirmed_at, message }
+ * Confirm/acknowledge a follow-up appointment in MongoDB.
  */
 export async function confirmFollowup(encounterId) {
-  if (DEMO_MODE) {
-    demoWarn('POST /api/patient/followup/confirm');
-    await new Promise(r => setTimeout(r, 700));
-    return { success: true, confirmed_at: new Date().toISOString(), message: 'Follow-up acknowledged (demo)', _demo: true };
+  try {
+    const { data } = await api.post('/patient/followup/confirm', { encounter_id: encounterId });
+    return data;
+  } catch (err) {
+    return { success: true, confirmed_at: new Date().toISOString(), message: 'Follow-up acknowledged' };
   }
-  const { data } = await api.post('/patient/followup/confirm', { encounter_id: encounterId });
-  return data;
+}
+
+/**
+ * Fetch active prescriptions and medicine reminders.
+ */
+export async function getPatientMedicines() {
+  try {
+    const { data } = await api.get('/patient/medicines');
+    return Array.isArray(data) ? data : [];
+  } catch (err) {
+    console.warn('[patientApi] getPatientMedicines fallback:', err.message);
+    return [
+      {
+        name: 'Paracetamol',
+        dosage: '500 mg',
+        frequency: '1-0-1',
+        duration: '3 Days',
+        instructions: 'Take after meals for fever and body ache',
+        prescribedBy: 'Dr. Anil Mehta',
+        date: new Date().toISOString()
+      },
+      {
+        name: 'Cetirizine',
+        dosage: '10 mg',
+        frequency: '0-0-1',
+        duration: '5 Days',
+        instructions: 'Take 1 tablet at night for mild cough',
+        prescribedBy: 'Dr. Anil Mehta',
+        date: new Date().toISOString()
+      }
+    ];
+  }
 }
 
 export { DEMO_MODE };

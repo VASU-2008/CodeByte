@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import TaskCard from '../components/TaskCard';
+import api from '../../../api/axiosInstance';
 import {
   AlertTriangle,
   Car,
@@ -185,6 +186,40 @@ export default function OperationsOverview() {
   const [searchQuery, setSearchQuery] = useState('');
   const [toastMessage, setToastMessage] = useState(null);
 
+  // Fetch real coordinator tasks from backend MongoDB
+  useEffect(() => {
+    let isMounted = true;
+    api.get('/coordinator/tasks')
+      .then(res => {
+        if (isMounted && Array.isArray(res.data) && res.data.length > 0) {
+          const formatted = res.data.map(item => ({
+            id: item._id,
+            patientName: item.patientName || item.patient_id?.name || 'Patient',
+            patientAge: item.patientAge || item.patient_id?.age || 48,
+            patientGender: item.patientGender || item.patient_id?.gender || 'Female',
+            abhaId: item.abhaId || item.patient_id?.abhaId || 'ABHA-XXXX-YYYY-ZZ',
+            tokenNumber: item.tokenNumber || item.encounter_id?.token_id || 'TK-100',
+            village: item.village || 'Primary Health Centre Ward',
+            category: item.category || 'general',
+            priority: item.priority || 'Medium',
+            title: item.title || item.description,
+            description: item.description,
+            actionRequired: item.actionRequired || 'Review patient care plan and coordinate field support.',
+            assignedAsha: item.assignedAsha || 'ASHA Kavita Ben',
+            ashaPhone: item.ashaPhone || '+91 98231 44521',
+            status: item.status || 'Active',
+            timestamp: new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            encounterId: item.encounter_id?._id || item.encounter_id
+          }));
+          setTasks(formatted);
+        }
+      })
+      .catch(err => {
+        console.warn('[OperationsOverview] Live API fallback to cached/demo:', err.message);
+      });
+    return () => { isMounted = false; };
+  }, []);
+
   // Sync tasks to localStorage
   useEffect(() => {
     try {
@@ -231,7 +266,12 @@ export default function OperationsOverview() {
     });
   }, [tasks, statusFilter, categoryFilter, searchQuery]);
 
-  const handleResolveTask = (taskId) => {
+  const handleResolveTask = async (taskId) => {
+    try {
+      await api.post(`/coordinator/tasks/${taskId}/resolve`);
+    } catch (err) {
+      console.warn('Backend resolve fallback:', err.message);
+    }
     setTasks((prev) =>
       prev.map((t) => {
         if (t.id === taskId) {
@@ -249,7 +289,12 @@ export default function OperationsOverview() {
     triggerToast(`Task for ${item?.patientName || 'Patient'} marked as Resolved`);
   };
 
-  const handleReopenTask = (taskId) => {
+  const handleReopenTask = async (taskId) => {
+    try {
+      await api.post(`/coordinator/tasks/${taskId}/reopen`);
+    } catch (err) {
+      console.warn('Backend reopen fallback:', err.message);
+    }
     setTasks((prev) =>
       prev.map((t) => {
         if (t.id === taskId) {

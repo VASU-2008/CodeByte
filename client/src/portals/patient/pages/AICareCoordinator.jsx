@@ -31,6 +31,16 @@ export default function AICareCoordinator({ lang = 'en' }) {
   // Adherence tracking state (today's taken doses)
   const [adherenceMap, setAdherenceMap] = useState({});
 
+  // Day-Before Consultation Checklist State
+  const [checklistDone, setChecklistDone] = useState({});
+  const toggleChecklist = (id) => {
+    setChecklistDone(prev => {
+      const next = { ...prev, [id]: !prev[id] };
+      toast.success(next[id] ? 'Checklist item marked ready!' : 'Item uncheck');
+      return next;
+    });
+  };
+
   // AI Chat state
   const [chatMessages, setChatMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
@@ -51,8 +61,8 @@ export default function AICareCoordinator({ lang = 'en' }) {
         if (chatMessages.length === 0) {
           const diag = res.data.encounter?.diagnosis || 'your recent consultation';
           const welcomeMsg = isHindi
-            ? `नमस्ते ${user?.name || ''}! मैं आपका Veyora AI केयर समन्वयक हूँ। मुझे आपकी हालिया जांच (${diag}) की पूरी जानकारी है। आप मुझसे दवाइयों के समय, परहेज़ या अपनी सेहत के बारे में कोई भी प्रश्न पूछ सकते हैं!`
-            : `Hello ${user?.name || ''}! I am your Veyora AI Care Coordinator. I have loaded your recent doctor consultation for "${diag}". Feel free to ask me anything about your medication timings, food precautions, or upcoming appointments!`;
+            ? `नमस्ते ${user?.name || ''}! मैं आपका Veyora AI केयर समन्वयक हूँ। मुझे आपकी हालिया जांच (${diag}) की पूरी जानकारी है। आप मुझसे दवाइयों के समय, परहेज़ या कल की आगामी जांच के बारे में कोई भी प्रश्न पूछ सकते हैं!`
+            : `Hello ${user?.name || ''}! I am your Veyora AI Care Coordinator. I have loaded your recent doctor consultation for "${diag}". Feel free to ask me anything about your medication timings, food precautions, or preparation for tomorrow's follow-up consultation!`;
 
           setChatMessages([
             {
@@ -60,6 +70,7 @@ export default function AICareCoordinator({ lang = 'en' }) {
               text: welcomeMsg,
               time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
               suggestedActions: [
+                isHindi ? 'कल की जांच की तैयारी कैसे करें?' : 'How should I prepare for tomorrow\'s visit?',
                 isHindi ? 'मेरी आज की दवाइयां बताएं' : 'What are my medicines today?',
                 isHindi ? 'मुझे क्या परहेज़ रखना चाहिए?' : 'What precautions should I take?',
                 isHindi ? 'अगली जांच की तारीख कब है?' : 'When is my next check-up?'
@@ -73,7 +84,7 @@ export default function AICareCoordinator({ lang = 'en' }) {
       // Fallback demo data so user is NEVER blocked
       const fallback = {
         patient: {
-          name: user?.name || 'Pranjal Sharma',
+          name: user?.name || 'Patient 1',
           age: 34,
           gender: 'Male',
           abhaId: 'ABHA-9821-4402-9912'
@@ -121,10 +132,52 @@ export default function AICareCoordinator({ lang = 'en' }) {
           }
         ],
         followUp: {
-          date: '1 Nov 2026',
-          daysRemaining: 14,
+          date: 'Tomorrow, 9:30 AM',
+          daysRemaining: 1,
           reason: 'Fasting blood glucose re-check and BP titration',
           instructions: 'Bring fasting blood sugar report and previous prescription slip.'
+        },
+        dayBeforeConsultation: {
+          isDueTomorrow: true,
+          daysRemaining: 1,
+          appointmentDate: 'Tomorrow, 9:30 AM',
+          doctorName: 'Dr. Anil Mehta',
+          facility: 'PHC Main Health Center',
+          urgency: 'TOMORROW_FOLLOWUP',
+          headline: 'Consultation Alert: Your Follow-Up Appointment is Tomorrow!',
+          headlineHi: 'महत्वपूर्ण सूचना: कल आपकी फॉलो-अप जांच निर्धारित है!',
+          subheadline: 'Complete this 24-hour pre-consultation checklist before visiting the clinic:',
+          subheadlineHi: 'अस्पताल जाने से पूर्व कृपया यह 24 घंटे की तैयारी चेकलिस्ट पूरी करें:',
+          checklist: [
+            {
+              id: 'fasting',
+              title: '10-12 Hours Overnight Fasting',
+              titleHi: '10-12 घंटे का उपवास (Fasting)',
+              desc: 'Do not eat food or drink milk/tea after 9 PM tonight if fasting blood glucose or lipid profile is scheduled. Sip plain water only.',
+              descHi: 'यदि खाली पेट ब्लड शुगर टेस्ट होना है, तो रात 9 बजे के बाद केवल सादा पानी पिएं। चाय, दूध या नाश्ता न करें।'
+            },
+            {
+              id: 'documents',
+              title: 'Carry Physical Prescription & Medicine Strips',
+              titleHi: 'दस्तावेज़ एवं दवाइयां साथ रखें',
+              desc: 'Bring your previous consultation slip, lab reports, and current medication packaging so the clinician can review adherence.',
+              descHi: 'पिछला पर्चा, पुरानी जांच रिपोर्ट और वर्तमान दवाइयों के खाली रैपर साथ लाएं ताकि डॉक्टर खुराक का मिलान कर सकें।'
+            },
+            {
+              id: 'morning_dose',
+              title: 'Morning Medication Timing Rule',
+              titleHi: 'सुबह की दवा का नियम',
+              desc: 'Do NOT take morning diabetes/insulin medication before your fasting blood sample is drawn. Take it immediately after your post-sample breakfast.',
+              descHi: 'सुबह की शुगर की दवा खून का सैंपल देने और नाश्ता करने के बाद ही लें।'
+            },
+            {
+              id: 'arrival',
+              title: 'Arrive 15 Minutes Early at PHC',
+              titleHi: '15 मिनट पूर्व स्वास्थ्य केंद्र पहुंचें',
+              desc: 'Reach the Primary Health Centre early to record baseline vitals (BP, pulse, SpO₂) prior to entering the doctor cabin.',
+              descHi: 'डॉक्टर से मिलने से पहले अपने वाइटल्स (बीपी, पल्स) दर्ज कराने के लिए 15 मिनट पहले पहुंचें।'
+            }
+          ]
         },
         precautions: {
           category: 'Metabolic & Cardiovascular Care',
@@ -248,6 +301,7 @@ export default function AICareCoordinator({ lang = 'en' }) {
   const followUp = context?.followUp;
   const precautions = context?.precautions;
   const encounter = context?.encounter;
+  const dayBefore = context?.dayBeforeConsultation;
 
   // Calculate compliance percentage
   const totalDoseSlots = meds.reduce((acc, m) => {
@@ -364,6 +418,142 @@ export default function AICareCoordinator({ lang = 'en' }) {
           </div>
         </div>
       </div>
+
+      {/* 1-Day-Before Consultation Follow-Up Alert & Checklist Banner */}
+      {dayBefore && (
+        <div style={{
+          background: 'linear-gradient(135deg, #fffbeb 0%, #fef3c7 40%, #fef9c3 100%)',
+          border: '2px solid #f59e0b',
+          borderRadius: '24px',
+          padding: '1.5rem 1.75rem',
+          marginBottom: '1.75rem',
+          boxShadow: '0 8px 24px rgba(245, 158, 11, 0.15)',
+          position: 'relative',
+          overflow: 'hidden'
+        }}>
+          {/* Header pill & Action */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+              <span style={{
+                background: '#b45309',
+                color: '#ffffff',
+                fontSize: '0.72rem',
+                fontWeight: '900',
+                padding: '0.25rem 0.65rem',
+                borderRadius: '8px',
+                letterSpacing: '0.05em',
+                textTransform: 'uppercase',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem'
+              }}>
+                <Clock size={13} /> {isHindi ? 'कल की परामर्श सूचना (T-1)' : 'T-1 Day-Before Consultation Alert'}
+              </span>
+              <span style={{
+                background: 'rgba(180, 83, 9, 0.12)',
+                color: '#92400e',
+                fontSize: '0.78rem',
+                fontWeight: '700',
+                padding: '0.25rem 0.6rem',
+                borderRadius: '8px'
+              }}>
+                {dayBefore.appointmentDate || 'Tomorrow Morning'}
+              </span>
+            </div>
+
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <button
+                onClick={() => {
+                  setActiveTab('chat');
+                  handleSendMessage(isHindi ? 'कल की डॉक्टर जांच के लिए मुझे क्या तैयारी करनी चाहिए?' : 'How should I prepare for tomorrow\'s consultation?');
+                }}
+                style={{
+                  background: '#044e42',
+                  color: '#ffffff',
+                  border: 'none',
+                  padding: '0.45rem 0.95rem',
+                  borderRadius: '10px',
+                  fontSize: '0.78rem',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  boxShadow: '0 2px 8px rgba(4, 78, 66, 0.2)'
+                }}
+              >
+                <Bot size={14} color="#5eead4" />
+                {isHindi ? 'एआई से तैयारी पूछें' : 'Ask AI Prep Guidance'}
+              </button>
+            </div>
+          </div>
+
+          <h3 style={{ fontSize: '1.25rem', fontWeight: '900', color: '#78350f', margin: '0 0 0.4rem' }}>
+            {isHindi ? (dayBefore.headlineHi || dayBefore.headline) : dayBefore.headline}
+          </h3>
+          <p style={{ fontSize: '0.86rem', color: '#92400e', margin: '0 0 1.25rem', lineHeight: 1.5 }}>
+            {isHindi ? (dayBefore.subheadlineHi || dayBefore.subheadline) : dayBefore.subheadline}
+          </p>
+
+          {/* Interactive Checklist Cards */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gap: '0.85rem',
+            marginBottom: '1rem'
+          }}>
+            {dayBefore.checklist?.map((item) => {
+              const isDone = !!checklistDone[item.id];
+              return (
+                <div
+                  key={item.id}
+                  onClick={() => toggleChecklist(item.id)}
+                  style={{
+                    background: isDone ? '#f0fdf4' : '#ffffff',
+                    border: isDone ? '1.5px solid #22c55e' : '1px solid #fde68a',
+                    borderRadius: '14px',
+                    padding: '0.9rem 1rem',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease',
+                    boxShadow: '0 2px 6px rgba(0,0,0,0.03)'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '0.5rem', marginBottom: '0.4rem' }}>
+                    <div style={{ fontSize: '0.85rem', fontWeight: '800', color: isDone ? '#166534' : '#0f172a' }}>
+                      {isHindi ? (item.titleHi || item.title) : item.title}
+                    </div>
+                    <div style={{
+                      width: '20px',
+                      height: '20px',
+                      borderRadius: '6px',
+                      border: isDone ? 'none' : '1.5px solid #d97706',
+                      background: isDone ? '#22c55e' : 'transparent',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0
+                    }}>
+                      {isDone && <CheckCircle2 size={16} color="#ffffff" />}
+                    </div>
+                  </div>
+                  <p style={{ fontSize: '0.76rem', color: isDone ? '#15803d' : '#64748b', margin: 0, lineHeight: 1.45 }}>
+                    {isHindi ? (item.descHi || item.desc) : item.desc}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem', fontSize: '0.78rem', color: '#92400e' }}>
+            <span>
+              💡 <strong>Clinician:</strong> {dayBefore.doctorName || 'Dr. Anil Mehta'} • <strong>Facility:</strong> {dayBefore.facility || 'PHC Main Health Center'}
+            </span>
+            <span>
+              {Object.values(checklistDone).filter(Boolean).length} of {dayBefore.checklist?.length || 4} preparation steps verified ready
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Navigation Tabs */}
       <div style={{

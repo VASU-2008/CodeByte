@@ -23,7 +23,7 @@
     },
 
     {
-      "name": "Pranjal Sharma",
+      "name": "Patient 1",
       "email": "patient@veyora.com",
       "password": "password123",
       "phone": "+91 98765 43210",
@@ -37,7 +37,7 @@
       "languagePreference": "Hindi / English"
     },
     {
-      "name": "Meena Sharma",
+      "name": "Patient 2",
       "email": "meena@veyora.com",
       "password": "password123",
       "phone": "+91 98231 44521",
@@ -51,7 +51,7 @@
       "languagePreference": "Hindi"
     },
     {
-      "name": "Ramesh Kumar",
+      "name": "Patient 3",
       "email": "ramesh@veyora.com",
       "password": "password123",
       "phone": "+91 98234 56789",
@@ -65,7 +65,7 @@
       "languagePreference": "Hindi"
     },
     {
-      "name": "Sunita Devi",
+      "name": "Patient 4",
       "email": "sunita@veyora.com",
       "password": "password123",
       "phone": "+91 97721 55642",
@@ -79,7 +79,7 @@
       "languagePreference": "Hindi"
     },
     {
-      "name": "Mohan Lal Verma",
+      "name": "Patient 5",
       "email": "mohan@veyora.com",
       "password": "password123",
       "phone": "+91 98210 11234",
@@ -93,7 +93,7 @@
       "languagePreference": "Hindi"
     },
     {
-      "name": "Anita Roy",
+      "name": "Patient 6",
       "email": "anita@veyora.com",
       "password": "password123",
       "phone": "+91 98231 44521",

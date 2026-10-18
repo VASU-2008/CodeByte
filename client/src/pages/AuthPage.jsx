@@ -91,19 +91,19 @@ export default function AuthPage() {
       if (isRegisterMode) {
         // Register payload
         const payload = {
-          name: formData.name,
-          email: formData.email,
+          name: formData.name.trim(),
+          email: formData.email.trim().toLowerCase(),
           password: formData.password,
-          phone: formData.phone || undefined,
+          phone: formData.phone?.trim() || undefined,
           role,
           ...(role === 'patient' && {
-            age: formData.age ? parseInt(formData.age, 10) : undefined,
-            gender: formData.gender,
-            bloodGroup: formData.bloodGroup
+            age: formData.age && !isNaN(Number(formData.age)) ? Number(formData.age) : undefined,
+            gender: formData.gender || 'Male',
+            bloodGroup: formData.bloodGroup || 'O+'
           }),
           ...(role === 'doctor' && {
-            specialization: formData.specialization,
-            facility_id: formData.facility_id
+            specialization: formData.specialization || 'General Medicine',
+            facility_id: formData.facility_id || 'PHC_MAIN'
           })
         };
 
@@ -115,7 +115,7 @@ export default function AuthPage() {
         }, 800);
       } else {
         // Login payload
-        const u = await login(formData.email, formData.password);
+        const u = await login(formData.email.trim().toLowerCase(), formData.password);
         setSuccessMessage('Welcome back! Directing to portal...');
         setTimeout(() => {
           if (u.role === 'doctor') navigate('/doctor');
@@ -126,10 +126,15 @@ export default function AuthPage() {
       if (!err?.response) {
         setErrorMessage('Cannot connect to backend server (http://localhost:5001). Please make sure `npm run dev` is running in PowerShell.');
       } else {
-        setErrorMessage(
-          err?.response?.data?.message ||
-          (err?.response?.data?.errors ? Object.values(err.response.data.errors).flat().join(', ') : 'Authentication failed. Please check credentials.')
-        );
+        const errData = err?.response?.data;
+        if (errData?.errors) {
+          const detail = Object.entries(errData.errors)
+            .map(([field, msgs]) => `${field}: ${Array.isArray(msgs) ? msgs.join(', ') : msgs}`)
+            .join('; ');
+          setErrorMessage(`Validation error (${detail})`);
+        } else {
+          setErrorMessage(errData?.message || 'Authentication failed. Please check credentials.');
+        }
       }
     } finally {
       setLoading(false);

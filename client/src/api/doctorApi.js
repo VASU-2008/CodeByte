@@ -421,11 +421,17 @@ export const getDoctorQueue = async (facilityId = 'PHC_MAIN') => {
     return (Array.isArray(rawList) ? rawList : []).map((item, index) => {
         const id = item.id || index + 1;
         const token = item.token || item.token_id || `P-00${id}`;
-        const patientName = item.name || item.patient_id?.name || (token.startsWith('P-') ? `Patient ${token.replace(/\D/g, '').replace(/^0+/, '')}` : `Patient ${id}`);
+        const numMatch = (token || '').match(/\d+/);
+        const pNum = numMatch ? parseInt(numMatch[0], 10) : id;
+        const patientName = `Patient ${pNum}`;
         const ageGender = item.ageGender || (item.patient_id ? `${item.patient_id.age || '40'} / ${item.patient_id.gender?.charAt(0) || 'M'}` : '40 / M');
         const complaint = item.complaint || item.chief_complaint || 'Routine clinical consultation.';
         const status = item.status || 'Waiting';
         const priority = item.priority || 'Routine';
+
+        if (item.patient_id) {
+            item.patient_id.name = patientName;
+        }
 
         return {
             ...item,
@@ -446,7 +452,15 @@ export const getDoctorQueue = async (facilityId = 'PHC_MAIN') => {
 export const lookupEncounterByToken = async (tokenId) => {
     try {
         const response = await api.get(`/doctor/token/${encodeURIComponent(tokenId)}`);
-        return response.data;
+        const data = response.data;
+        if (data) {
+            const numMatch = (data.token_id || tokenId || '').match(/\d+/);
+            const pNum = numMatch ? parseInt(numMatch[0], 10) : 1;
+            if (data.patient_id) {
+                data.patient_id.name = `Patient ${pNum}`;
+            }
+        }
+        return data;
     } catch (error) {
         console.warn(`[doctorApi] lookupEncounterByToken fallback for "${tokenId}":`, error.message);
         const p = getPatientByToken(tokenId);
@@ -475,7 +489,15 @@ export const lookupEncounterByToken = async (tokenId) => {
 export const getClinicalBriefing = async (encounterId) => {
     try {
         const response = await api.get(`/doctor/encounter/${encounterId}/briefing`);
-        return response.data;
+        const data = response.data;
+        if (data) {
+            const numMatch = (data.encounterId || encounterId || '').match(/\d+/);
+            const pNum = numMatch ? parseInt(numMatch[0], 10) : 1;
+            if (data.patient) {
+                data.patient.name = `Patient ${pNum}`;
+            }
+        }
+        return data;
     } catch (error) {
         console.warn(`[doctorApi] getClinicalBriefing fallback for "${encounterId}":`, error.message);
         const p = getPatientByToken(encounterId);

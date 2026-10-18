@@ -35,12 +35,20 @@ const getDoctorQueue = async (req, res) => {
         const mapped = encounters.map((enc, idx) => {
             const p = enc.patient_id;
             const token = enc.token_id || `P-00${idx + 1}`;
+            const numMatch = token.match(/\d+/);
+            const patientNum = numMatch ? parseInt(numMatch[0], 10) : (idx + 1);
+            const patientDisplayName = `Patient ${patientNum}`;
+            const pObj = p ? (p.toObject ? p.toObject() : { ...p }) : null;
+            if (pObj) {
+                pObj.name = patientDisplayName;
+            }
+
             return {
                 id: idx + 1,
                 _id: enc._id,
                 token,
                 token_id: token,
-                name: p?.name || `Patient ${idx + 1}`,
+                name: patientDisplayName,
                 ageGender: p ? `${p.age || 40} / ${p.gender?.charAt(0) || 'M'}` : '40 / M',
                 complaint: enc.chief_complaint,
                 chief_complaint: enc.chief_complaint,
@@ -48,7 +56,7 @@ const getDoctorQueue = async (req, res) => {
                 status: enc.status === 'IN_QUEUE' ? 'Waiting' : enc.status === 'IN_CONSULTATION' ? 'In Consultation' : enc.status === 'COMPLETED' ? 'Completed' : enc.status,
                 priority: enc.priority || (enc.severity >= 7 ? 'High' : enc.severity >= 5 ? 'Moderate' : 'Routine'),
                 createdAt: enc.createdAt,
-                patient_id: p
+                patient_id: pObj
             };
         });
 
@@ -81,7 +89,14 @@ const lookupByToken = async (req, res) => {
             return res.status(404).json({ message: `No encounter found for token: ${tokenId}` });
         }
 
-        res.json(encounter);
+        const tokenMatch = (encounter.token_id || tokenId || '').match(/\d+/);
+        const pNum = tokenMatch ? parseInt(tokenMatch[0], 10) : 1;
+        const encObj = encounter.toObject ? encounter.toObject() : { ...encounter };
+        if (encObj.patient_id) {
+            encObj.patient_id.name = `Patient ${pNum}`;
+        }
+
+        res.json(encObj);
     } catch (error) {
         console.error('[doctorController] lookupByToken error:', error.message);
         res.status(500).json({ message: 'Failed to look up token' });
@@ -102,6 +117,13 @@ const getClinicalBriefing = async (req, res) => {
         }
 
         await encounter.populate('patient_id', 'name age gender phone bloodGroup allergies chronicConditions abhaId languagePreference');
+
+        const tokenMatch = (encounter.token_id || req.params.id || '').match(/\d+/);
+        const pNum = tokenMatch ? parseInt(tokenMatch[0], 10) : 1;
+        const patObj = encounter.patient_id ? (encounter.patient_id.toObject ? encounter.patient_id.toObject() : { ...encounter.patient_id }) : null;
+        if (patObj) {
+            patObj.name = `Patient ${pNum}`;
+        }
 
         // Fetch latest vitals for this encounter
         const vitals = await Vitals.findOne({ encounter_id: encounter._id })
@@ -135,7 +157,7 @@ const getClinicalBriefing = async (req, res) => {
 
         res.json({
             encounterId: encounter.token_id || encounter._id,
-            patient: encounter.patient_id,
+            patient: patObj,
             currentEncounter: {
                 chief_complaint: encounter.chief_complaint,
                 diagnosis: encounter.diagnosis || '',

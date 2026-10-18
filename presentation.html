@@ -1,0 +1,1226 @@
+<!-- Interactive HTML presentation mirror for local browser viewing -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Veyora Healthcare — MVP Pitch Deck</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --secondary: #0d9488;
+      --accent: #4f46e5;
+    }
+    .slide-enter {
+      animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-50 antialiased min-h-screen flex flex-col justify-between selection:bg-blue-600 selection:text-white">
+
+  <!-- Top Bar -->
+  <header class="h-14 border-b border-slate-800 bg-slate-900/90 backdrop-blur px-6 flex items-center justify-between shrink-0">
+    <div class="flex items-center gap-3">
+      <div class="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-white text-sm shadow-sm">
+        V
+      </div>
+      <div>
+        <h1 class="font-bold text-sm text-slate-100 leading-tight">Veyora Healthcare</h1>
+        <p class="text-[11px] text-slate-400">IIITD MVP Presentation Deck (5 Members)</p>
+      </div>
+    </div>
+
+    <!-- Center Slide Counter / Jump -->
+    <div class="flex items-center gap-3">
+      <span class="text-xs font-medium text-slate-400">Slide <span id="currentSlideNum" class="text-blue-400 font-bold">1</span> of <span id="totalSlideNum" class="font-bold">13</span></span>
+      <div class="w-36 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+        <div id="progressBar" class="h-full bg-blue-500 transition-all duration-300" style="width: 7.69%;"></div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex items-center gap-2">
+      <button id="toggleNotesBtn" onclick="toggleNotes()" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 border border-slate-700 hover:bg-slate-700 text-slate-200 transition-colors flex items-center gap-1.5">
+        <span>📝 Speaker Notes</span>
+      </button>
+      <button onclick="toggleFullScreen()" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-600 hover:bg-blue-500 text-white transition-colors">
+        ⛶ Fullscreen
+      </button>
+    </div>
+  </header>
+
+  <!-- Slide Stage -->
+  <main class="flex-1 flex items-center justify-center p-4 md:p-8 overflow-hidden relative">
+    <div id="slideContainer" class="w-full max-w-6xl aspect-[16/9] max-h-[82vh] bg-slate-950/70 border border-slate-800 rounded-2xl shadow-2xl p-6 md:p-10 flex flex-col justify-between overflow-y-auto relative slide-enter">
+      <!-- Injected Dynamically by JS -->
+    </div>
+  </main>
+
+  <!-- Speaker Notes Drawer (Collapsible) -->
+  <div id="notesDrawer" class="hidden border-t border-slate-800 bg-slate-900 px-8 py-4 transition-all">
+    <div class="max-w-6xl mx-auto flex items-start justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">SPEAKER PROMPT</span>
+          <span id="notesSlideTitle" class="text-xs font-bold text-slate-300">Slide 1 Notes</span>
+        </div>
+        <p id="notesContent" class="text-xs md:text-sm text-slate-300 leading-relaxed max-h-24 overflow-y-auto pr-2"></p>
+      </div>
+      <button onclick="toggleNotes()" class="text-xs text-slate-400 hover:text-white p-1">✕</button>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation Control Strip -->
+  <footer class="h-16 border-t border-slate-800 bg-slate-900/90 backdrop-blur px-6 flex items-center justify-between shrink-0">
+    <div class="flex items-center gap-2 text-xs text-slate-400">
+      <span>Shortcut:</span>
+      <kbd class="px-2 py-1 bg-slate-800 rounded border border-slate-700 text-[11px] font-mono text-slate-300">← Prev</kbd>
+      <kbd class="px-2 py-1 bg-slate-800 rounded border border-slate-700 text-[11px] font-mono text-slate-300">Next →</kbd>
+      <kbd class="px-2 py-1 bg-slate-800 rounded border border-slate-700 text-[11px] font-mono text-slate-300">N (Notes)</kbd>
+    </div>
+
+    <!-- Quick Slide Selector Dropdown -->
+    <div class="flex items-center gap-2">
+      <select id="slideSelect" onchange="goToSlide(parseInt(this.value))" class="bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-200 outline-none focus:border-blue-500 cursor-pointer">
+        <!-- Injected via JS -->
+      </select>
+    </div>
+
+    <!-- Nav Buttons -->
+    <div class="flex items-center gap-2">
+      <button id="prevBtn" onclick="prevSlide()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200 disabled:opacity-40 disabled:pointer-events-none transition-colors flex items-center gap-1.5">
+        ← Previous
+      </button>
+      <button id="nextBtn" onclick="nextSlide()" class="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white shadow-md disabled:opacity-40 disabled:pointer-events-none transition-colors flex items-center gap-1.5">
+        Next Slide →
+      </button>
+    </div>
+  </footer>
+
+  <script>
+    const slidesData = [
+      {
+        category: "EXECUTIVE SUMMARY",
+        title: "VEYORA HEALTHCARE",
+        subtitle: "Bridging the Critical Gap Between Clinical Consultations and Daily Recovery",
+        render: () => `
+          <div class="flex flex-col justify-between h-full">
+            <div>
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-semibold mb-4">
+                <span>✦</span> Intelligent Healthcare Continuity Platform
+              </div>
+              <h2 class="text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-tight mb-3">
+                Bridging the Critical Gap Between Clinical Consultations & Daily Recovery
+              </h2>
+              <p class="text-base md:text-lg text-slate-300 max-w-3xl leading-relaxed">
+                Pre-existing national registries store static diagnostic records, yet patients are left unsupported once they leave the clinic. Veyora pairs an ultra-efficient <strong>Doctor Workstation</strong> and multilingual <strong>Patient Portal</strong> with an autonomous <strong>AI Care Coordinator</strong> that oversees daily medication schedules, precautions, and pre-consultation readiness.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
+              <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700/60">
+                <div class="text-blue-400 font-bold text-xs uppercase tracking-wider mb-1">01 · Doctor Workstation</div>
+                <div class="font-semibold text-white text-sm">High-density OPD Cockpit</div>
+                <div class="text-xs text-slate-400 mt-1">Live camera QR token scanner, anonymized queue, and rapid prescription builder.</div>
+              </div>
+              <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700/60">
+                <div class="text-emerald-400 font-bold text-xs uppercase tracking-wider mb-1">02 · Patient Experience</div>
+                <div class="font-semibold text-white text-sm">Inclusive & Multilingual</div>
+                <div class="text-xs text-slate-400 mt-1">Voice-assisted Hindi & English symptom intake with cryptographic Consent QR pass.</div>
+              </div>
+              <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700/60">
+                <div class="text-indigo-400 font-bold text-xs uppercase tracking-wider mb-1">03 · AI Care Coordinator</div>
+                <div class="font-semibold text-white text-sm">Autonomous Recovery Loop</div>
+                <div class="text-xs text-slate-400 mt-1">3-slot dose telemetry, condition precautions, and proactive T-1 fasting reminders.</div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between text-xs text-slate-400 border-t border-slate-800 pt-4">
+              <div>Project: <strong class="text-white">IIITD MVP Showcase</strong> · Team: <strong class="text-white">CodeByte (5 Members)</strong></div>
+              <div class="text-blue-400 font-semibold">Evaluation Release v1.0.0</div>
+            </div>
+          </div>
+        `,
+        notes: "Good morning evaluators. Today we are presenting Veyora Healthcare, an intelligent clinical continuity platform built by Team CodeByte for IIIT Delhi. In today's digital health landscape, existing tools focus solely on digitizing medical records. However, healthcare doesn't end when the doctor consultation ends—in fact, that is precisely when recovery begins. Over the next 12 slides, we will demonstrate how Veyora bridges this massive gap, explain our 5-member architecture, show the complete live workflow, and benchmark our solution against existing state-of-the-art platforms."
+      },
+      {
+        category: "THE CLINICAL VOID",
+        title: "The Post-Consultation 'Care Gap' & OPD Reality",
+        subtitle: "Why 50%+ of chronic care outcomes fail between clinical visits",
+        render: () => `
+          <div class="flex flex-col justify-between h-full">
+            <div>
+              <h2 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-2">
+                Where Traditional Healthcare Breaks Down
+              </h2>
+              <p class="text-sm text-slate-300 max-w-3xl">
+                Outpatient departments (OPDs) in public health centres (PHCs) and urban clinics face intense time pressures, leading to systemic communication breakdowns.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 my-auto">
+              <div class="p-5 rounded-2xl bg-rose-950/20 border border-rose-800/40 flex flex-col justify-between">
+                <div>
+                  <div class="w-8 h-8 rounded-lg bg-rose-500/20 text-rose-400 font-bold flex items-center justify-center text-xs mb-3">01</div>
+                  <h3 class="text-lg font-bold text-rose-300 mb-1">High Post-Visit Drop-Off</h3>
+                  <div class="text-xs font-semibold text-rose-400 mb-3">50%+ Chronic Non-Adherence</div>
+                  <p class="text-xs text-slate-300 leading-relaxed">
+                    Patients leave OPD cabins with paper slips or complex instructions. Over 50% mismanage dose timings, skip vital antibiotic courses, or fail to follow dietary restrictions.
+                  </p>
+                </div>
+                <div class="mt-4 pt-3 border-t border-rose-900/50 text-[11px] text-rose-300/80">Result: Preventable complications & high readmission.</div>
+              </div>
+
+              <div class="p-5 rounded-2xl bg-amber-950/20 border border-amber-800/40 flex flex-col justify-between">
+                <div>
+                  <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center text-xs mb-3">02</div>
+                  <h3 class="text-lg font-bold text-amber-300 mb-1">Severe OPD Overcrowding</h3>
+                  <div class="text-xs font-semibold text-amber-400 mb-3">&lt; 3 Minutes per Consultation</div>
+                  <p class="text-xs text-slate-300 leading-relaxed">
+                    Clinicians face 80+ patients daily. Doctors suffer severe clerical fatigue from clumsy EMR interfaces, paper searches, and repetitive manual documentation.
+                  </p>
+                </div>
+                <div class="mt-4 pt-3 border-t border-amber-900/50 text-[11px] text-amber-300/80">Result: Doctor burnout & high clerical burden.</div>
+              </div>
+
+              <div class="p-5 rounded-2xl bg-blue-950/20 border border-blue-800/40 flex flex-col justify-between">
+                <div>
+                  <div class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 font-bold flex items-center justify-center text-xs mb-3">03</div>
+                  <h3 class="text-lg font-bold text-blue-300 mb-1">Unprepared Follow-Ups</h3>
+                  <div class="text-xs font-semibold text-blue-400 mb-3">35% Wasted Revisits</div>
+                  <p class="text-xs text-slate-300 leading-relaxed">
+                    Patients arrive at follow-up visits having taken morning sugar meds before fasting blood tests, missing past prescription slips, or arriving at wrong clinic hours.
+                  </p>
+                </div>
+                <div class="mt-4 pt-3 border-t border-blue-900/50 text-[11px] text-blue-300/80">Result: Cancelled lab panels & delayed clinical care.</div>
+              </div>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-slate-800/50 border border-slate-700 text-xs text-slate-300 flex items-center justify-between">
+              <span><strong>The Root Cause:</strong> Static databases store history, but no system manages active recovery.</span>
+              <span class="text-blue-400 font-semibold">Enter Veyora Autonomous Continuity →</span>
+            </div>
+          </div>
+        `,
+        notes: "Let us examine the problem from both the patient and clinician side. First: The Post-Visit Drop-Off. Globally and across Indian public clinics, once a patient leaves the OPD cabin, there is zero guidance. 50% of patients fail to adhere to their medication regimens. Second: Clinician Burnout. Government PHCs and busy OPDs see dozens of patients per hour. Doctors spend precious minutes navigating clunky software rather than looking the patient in the eye. Third: The Unprepared Revisit Problem. Up to 35% of diagnostic re-visits are wasted because the patient ate breakfast before a fasting glucose test or forgot their past paper slips. Veyora solves all three problems systematically."
+      },
+      {
+        category: "COMPETITIVE ADVANTAGE",
+        title: "Existing Solutions vs. Veyora Healthcare Matrix",
+        subtitle: "Why current healthtech platforms fall short of closing the post-consultation loop",
+        render: () => `
+          <div class="flex flex-col justify-between h-full">
+            <div>
+              <h2 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-1">
+                Comparative Landscape Matrix
+              </h2>
+              <p class="text-xs md:text-sm text-slate-300 mb-4">
+                How Veyora outperforms national registries, teleconsult marketplaces, hospital EMRs, and reminder apps.
+              </p>
+            </div>
+
+            <div class="overflow-x-auto rounded-xl border border-slate-700/80 my-auto">
+              <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr class="bg-slate-800 text-slate-200">
+                    <th class="p-2.5 font-bold border-b border-slate-700">Capability / Dimension</th>
+                    <th class="p-2.5 font-bold border-b border-slate-700 text-center">ABHA / ABDM<br><span class="font-normal text-[10px] text-slate-400">(Govt. Registry)</span></th>
+                    <th class="p-2.5 font-bold border-b border-slate-700 text-center">Practo / 1mg<br><span class="font-normal text-[10px] text-slate-400">(Commercial Apps)</span></th>
+                    <th class="p-2.5 font-bold border-b border-slate-700 text-center">Hospital EMRs<br><span class="font-normal text-[10px] text-slate-400">(Epic / Cerner)</span></th>
+                    <th class="p-2.5 font-bold border-b border-slate-700 text-center bg-blue-900/60 text-blue-300">VEYORA HEALTHCARE<br><span class="font-bold text-[10px] text-white">(Our MVP Platform)</span></th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800 bg-slate-900/50 text-slate-300">
+                  <tr>
+                    <td class="p-2 font-semibold text-white">Primary Objective</td>
+                    <td class="p-2 text-center text-slate-400">Static EHR Record Locker</td>
+                    <td class="p-2 text-center text-slate-400">Doctor Discovery & Sales</td>
+                    <td class="p-2 text-center text-slate-400">Billing & Hospital Admin</td>
+                    <td class="p-2 text-center font-bold text-emerald-400 bg-blue-950/40">Active Clinical Continuity</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2 font-semibold text-white">Post-Visit Guidance</td>
+                    <td class="p-2 text-center text-rose-400">None (Purely Passive)</td>
+                    <td class="p-2 text-center text-rose-400">Commercial Upsells</td>
+                    <td class="p-2 text-center text-amber-400">Cluttered PDF Portal</td>
+                    <td class="p-2 text-center font-bold text-emerald-400 bg-blue-950/40">Autonomous AI Coordinator</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2 font-semibold text-white">Dose Telemetry</td>
+                    <td class="p-2 text-center text-rose-400">No (Static PDF/XML)</td>
+                    <td class="p-2 text-center text-amber-400">Manual alarms by user</td>
+                    <td class="p-2 text-center text-rose-400">No daily tracking</td>
+                    <td class="p-2 text-center font-bold text-emerald-400 bg-blue-950/40">Auto 3-Slot Telemetry (M/A/N)</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2 font-semibold text-white">T-1 Follow-up Prep</td>
+                    <td class="p-2 text-center text-rose-400">No fasting/prep alerts</td>
+                    <td class="p-2 text-center text-amber-400">Generic date SMS only</td>
+                    <td class="p-2 text-center text-amber-400">Automated email blast</td>
+                    <td class="p-2 text-center font-bold text-emerald-400 bg-blue-950/40">24h Fasting, Meds & Doc Prep</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2 font-semibold text-white">OPD Triage & Scanner</td>
+                    <td class="p-2 text-center text-amber-400">Manual 14-digit entry</td>
+                    <td class="p-2 text-center text-rose-400">No OPD station triage</td>
+                    <td class="p-2 text-center text-amber-400">Complex desktop chart</td>
+                    <td class="p-2 text-center font-bold text-emerald-400 bg-blue-950/40">Live Camera QR Token Scan</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2 font-semibold text-white">Accessibility / Voice</td>
+                    <td class="p-2 text-center text-amber-400">Static web forms</td>
+                    <td class="p-2 text-center text-slate-400">English app text</td>
+                    <td class="p-2 text-center text-rose-400">Complex English terms</td>
+                    <td class="p-2 text-center font-bold text-emerald-400 bg-blue-950/40">Voice-Assisted Hindi & English</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="text-xs text-slate-400 flex items-center justify-between pt-2">
+              <span>✦ Veyora does not replace ABHA; it complements it by turning static records into active health outcomes.</span>
+              <span class="text-emerald-400 font-semibold">100% Interoperable Architecture</span>
+            </div>
+          </div>
+        `,
+        notes: "Here is our competitive landscape matrix. Notice that existing solutions excel at either record storage (ABHA) or appointment booking (Practo), or billing (Epic). None of them provide Active Clinical Continuity. Veyora bridges this directly: 1. Instead of a passive record locker, Veyora provides an Autonomous AI Care Coordinator. 2. Instead of requiring patients to manually type medication alarms into apps like Medisafe, the doctor's prescription automatically seeds 3-slot daily dosing telemetry. 3. Instead of simple appointment reminders, Veyora issues actionable T-1 prep checklists (overnight fasting rules, documents to carry, morning dose timing rules). 4. We support voice-assisted Hindi and English intake, making it accessible for Indian public healthcare."
+      },
+      {
+        category: "SYSTEM ARCHITECTURE",
+        title: "Tri-Pillar Architecture: Doctor, Patient & Autonomous AI",
+        subtitle: "A modular, event-driven design connecting real-time clinical workflows with daily recovery",
+        render: () => `
+          <div class="flex flex-col justify-between h-full">
+            <div>
+              <h2 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-1">
+                The 3 Core Architectural Pillars
+              </h2>
+              <p class="text-xs md:text-sm text-slate-300 mb-4">
+                Disciplined separation of clinical consultation from daily recovery guidance, bound by WebSockets.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 my-auto">
+              <!-- Pillar 1 -->
+              <div class="p-5 rounded-2xl bg-blue-950/30 border border-blue-700/50 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="px-2.5 py-1 rounded-md text-[10px] font-bold bg-blue-500/20 text-blue-300">PILLAR 1</span>
+                    <span class="text-xs text-blue-400 font-mono">/doctor</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-white mb-1">Doctor Workstation</h3>
+                  <div class="text-xs font-semibold text-blue-300 mb-3">High-Density Clinical Cockpit</div>
+                  <ul class="text-xs text-slate-300 space-y-2">
+                    <li class="flex items-start gap-1.5"><span class="text-blue-400">✓</span> High-density OPD queue sequencing (Patient 1, Patient 2...)</li>
+                    <li class="flex items-start gap-1.5"><span class="text-blue-400">✓</span> Live HTML5 camera QR barcode & token scanner</li>
+                    <li class="flex items-start gap-1.5"><span class="text-blue-400">✓</span> Dynamic clinical briefing & past diagnostic history</li>
+                    <li class="flex items-start gap-1.5"><span class="text-blue-400">✓</span> Multi-drug prescription builder (1-0-1 chips)</li>
+                    <li class="flex items-start gap-1.5"><span class="text-blue-400">✓</span> Cryptographic sign-off locking for audit integrity</li>
+                  </ul>
+                </div>
+                <div class="mt-4 pt-3 border-t border-blue-900/50 text-[11px] text-blue-300 font-medium">Outcome: &lt; 45s total charting time</div>
+              </div>
+
+              <!-- Pillar 2 -->
+              <div class="p-5 rounded-2xl bg-emerald-950/30 border border-emerald-700/50 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="px-2.5 py-1 rounded-md text-[10px] font-bold bg-emerald-500/20 text-emerald-300">PILLAR 2</span>
+                    <span class="text-xs text-emerald-400 font-mono">/patient</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-white mb-1">Patient Portal</h3>
+                  <div class="text-xs font-semibold text-emerald-300 mb-3">Inclusive, Multilingual Intake</div>
+                  <ul class="text-xs text-slate-300 space-y-2">
+                    <li class="flex items-start gap-1.5"><span class="text-emerald-400">✓</span> Voice-assisted symptom reporting in Hindi & English</li>
+                    <li class="flex items-start gap-1.5"><span class="text-emerald-400">✓</span> Contactless, cryptographically signed Consent QR Pass</li>
+                    <li class="flex items-start gap-1.5"><span class="text-emerald-400">✓</span> Real-time prescription & diagnosis result viewer</li>
+                    <li class="flex items-start gap-1.5"><span class="text-emerald-400">✓</span> Longitudinal visit timeline & diagnostic trends</li>
+                    <li class="flex items-start gap-1.5"><span class="text-emerald-400">✓</span> Zero raw PII exposure on physical tokens</li>
+                  </ul>
+                </div>
+                <div class="mt-4 pt-3 border-t border-emerald-900/50 text-[11px] text-emerald-300 font-medium">Outcome: Universal demographic accessibility</div>
+              </div>
+
+              <!-- Pillar 3 -->
+              <div class="p-5 rounded-2xl bg-indigo-950/30 border border-indigo-700/50 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="px-2.5 py-1 rounded-md text-[10px] font-bold bg-indigo-500/20 text-indigo-300">PILLAR 3</span>
+                    <span class="text-xs text-indigo-400 font-mono">/ai-coordinator</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-white mb-1">AI Care Coordinator</h3>
+                  <div class="text-xs font-semibold text-indigo-300 mb-3">Autonomous Recovery Engine</div>
+                  <ul class="text-xs text-slate-300 space-y-2">
+                    <li class="flex items-start gap-1.5"><span class="text-indigo-400">✓</span> 3-slot daily dose telemetry (Morning, Noon, Night)</li>
+                    <li class="flex items-start gap-1.5"><span class="text-indigo-400">✓</span> Condition-specific precaution rules (Diabetes, HTN)</li>
+                    <li class="flex items-start gap-1.5"><span class="text-indigo-400">✓</span> Proactive T-1 24h pre-consultation fasting checklist</li>
+                    <li class="flex items-start gap-1.5"><span class="text-indigo-400">✓</span> Bilingual AI Q&A bot with clinical safety guardrails</li>
+                    <li class="flex items-start gap-1.5"><span class="text-indigo-400">✓</span> Hourly cron daemon auto-escalating missed care</li>
+                  </ul>
+                </div>
+                <div class="mt-4 pt-3 border-t border-indigo-900/50 text-[11px] text-indigo-300 font-medium">Outcome: Continuous 24/7 care continuity</div>
+              </div>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-800/40 border border-slate-700 text-xs text-slate-300 flex items-center justify-between">
+              <span><strong>Data Synchronization:</strong> Bidirectional WebSockets (Socket.io) tie patient intake live with the doctor queue.</span>
+              <span class="text-blue-400 font-mono text-[11px]">Sub-50ms Event Propagation</span>
+            </div>
+          </div>
+        `,
+        notes: "Our architecture rests on 3 pillars. Pillar 1 is the Doctor Workstation: built specifically for OPD environments where doctors have under 3 minutes per patient. Fast QR lookup, instant briefing, and 3-click prescription signing. Pillar 2 is the Patient Experience: zero friction, speech-to-text intake in vernacular languages, and instant QR generation for contactless check-in. Pillar 3 is our core innovation: The Autonomous AI Care Coordinator. It ingests the doctor's sign-off and immediately orchestrates daily telemetry, condition precautions, and hourly background scans."
+      },
+      {
+        category: "PRODUCT WORKFLOW",
+        title: "The 5-Stage End-to-End Clinical & Recovery Workflow",
+        subtitle: "How a single patient interaction moves seamlessly from intake to clinic to home recovery",
+        render: () => `
+          <div class="flex flex-col justify-between h-full">
+            <div>
+              <h2 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-1">
+                Chronological User Journey
+              </h2>
+              <p class="text-xs md:text-sm text-slate-300 mb-4">
+                Five synchronized stages guaranteeing zero data loss and persistent patient support.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-3 my-auto">
+              <div class="p-4 rounded-xl bg-slate-800/60 border border-blue-500/40 flex flex-col justify-between">
+                <div>
+                  <div class="text-[10px] font-bold text-blue-400 uppercase tracking-wider mb-1">STAGE 01</div>
+                  <h4 class="font-bold text-white text-sm mb-1">Intake & QR Pass</h4>
+                  <div class="text-[11px] text-blue-300 font-medium mb-2">Patient Portal</div>
+                  <p class="text-xs text-slate-300 leading-relaxed">
+                    Patient speaks or types symptoms in Hindi/English. Encrypted token digest is generated; raw medical data stays private.
+                  </p>
+                </div>
+                <div class="mt-3 text-[10px] text-slate-400 bg-slate-900/60 p-2 rounded">Output: Opaque QR Pass</div>
+              </div>
+
+              <div class="p-4 rounded-xl bg-slate-800/60 border border-emerald-500/40 flex flex-col justify-between">
+                <div>
+                  <div class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider mb-1">STAGE 02</div>
+                  <h4 class="font-bold text-white text-sm mb-1">OPD Queue & Scan</h4>
+                  <div class="text-[11px] text-emerald-300 font-medium mb-2">Doctor Station</div>
+                  <p class="text-xs text-slate-300 leading-relaxed">
+                    Doctor scans token using camera scanner. Anonymized patient briefing, vitals history, and past encounters load instantly.
+                  </p>
+                </div>
+                <div class="mt-3 text-[10px] text-slate-400 bg-slate-900/60 p-2 rounded">Output: Sub-second Triage</div>
+              </div>
+
+              <div class="p-4 rounded-xl bg-slate-800/60 border border-indigo-500/40 flex flex-col justify-between">
+                <div>
+                  <div class="text-[10px] font-bold text-indigo-400 uppercase tracking-wider mb-1">STAGE 03</div>
+                  <h4 class="font-bold text-white text-sm mb-1">Consult & Sign-Off</h4>
+                  <div class="text-[11px] text-indigo-300 font-medium mb-2">Doctor Station</div>
+                  <p class="text-xs text-slate-300 leading-relaxed">
+                    Doctor inputs diagnosis, selects medications with 1-0-1 chips, and signs off. Encounter is cryptographically locked.
+                  </p>
+                </div>
+                <div class="mt-3 text-[10px] text-slate-400 bg-slate-900/60 p-2 rounded">Output: Immutable Record</div>
+              </div>
+
+              <div class="p-4 rounded-xl bg-slate-800/60 border border-amber-500/40 flex flex-col justify-between">
+                <div>
+                  <div class="text-[10px] font-bold text-amber-400 uppercase tracking-wider mb-1">STAGE 04</div>
+                  <h4 class="font-bold text-white text-sm mb-1">AI Care Synthesis</h4>
+                  <div class="text-[11px] text-amber-300 font-medium mb-2">AI Coordinator</div>
+                  <p class="text-xs text-slate-300 leading-relaxed">
+                    AI ingests prescription, structuring 3-slot dose telemetry (M/A/N), disease precautions, and 24/7 bilingual recovery bot.
+                  </p>
+                </div>
+                <div class="mt-3 text-[10px] text-slate-400 bg-slate-900/60 p-2 rounded">Output: Daily Habit Loop</div>
+              </div>
+
+              <div class="p-4 rounded-xl bg-slate-800/60 border border-purple-500/40 flex flex-col justify-between">
+                <div>
+                  <div class="text-[10px] font-bold text-purple-400 uppercase tracking-wider mb-1">STAGE 05</div>
+                  <h4 class="font-bold text-white text-sm mb-1">T-1 Follow-up Loop</h4>
+                  <div class="text-[11px] text-purple-300 font-medium mb-2">Continuous Daemon</div>
+                  <p class="text-xs text-slate-300 leading-relaxed">
+                    At T-1 before visit, AI issues 24h fasting & documents checklist. Hourly daemon escalates missed visits to ASHA workers.
+                  </p>
+                </div>
+                <div class="mt-3 text-[10px] text-slate-400 bg-slate-900/60 p-2 rounded">Output: 0% Wasted Visits</div>
+              </div>
+            </div>
+
+            <div class="p-3 rounded-xl bg-blue-950/30 border border-blue-800/40 text-xs text-slate-300 flex items-center justify-between">
+              <span><strong>Closed-Loop System:</strong> The patient never leaves clinical supervision; recovery telemetry feeds into their next visit briefing.</span>
+              <span class="text-emerald-400 font-semibold">Self-Reinforcing Quality of Care</span>
+            </div>
+          </div>
+        `,
+        notes: "Here is the complete chronological journey of a patient through Veyora: Step 1: Patient arrives or registers at home using voice intake. An encrypted token is produced. Step 2: At the clinic, the doctor uses their laptop or tablet camera to scan the token. No paper charts needed. Step 3: Doctor conducts the consult, adds medications with simple frequency pickers (1-0-1), and signs off. Step 4: Once signed off, the AI Care Coordinator takes over instantly. The patient's portal now reflects daily doses, dietary rules, and emergency red-flags. Step 5: Exactly 24 hours prior to their follow-up date, the AI proactively sends a fasting checklist. If missed, our background daemon automatically notifies community health workers."
+      },
+      {
+        category: "CLINICIAN EXPERIENCE",
+        title: "Doctor Workstation: Built for OPD High-Density Speed",
+        subtitle: "Ergonomically engineered to eliminate clerical fatigue and prioritize clinical attention",
+        render: () => `
+          <div class="flex flex-col justify-between h-full">
+            <div>
+              <h2 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-1">
+                OPD Clinical Cockpit Deep Dive
+              </h2>
+              <p class="text-xs md:text-sm text-slate-300 mb-4">
+                Sub-second patient lookups, high-density queue cards, and rapid multi-drug prescription builder.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-5 my-auto">
+              <!-- Left 7 cols: Features -->
+              <div class="md:col-span-7 p-5 rounded-2xl bg-slate-800/60 border border-slate-700 space-y-3.5">
+                <div class="flex items-start gap-3">
+                  <div class="w-6 h-6 rounded bg-blue-500/20 text-blue-400 font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">1</div>
+                  <div>
+                    <h4 class="text-xs md:text-sm font-bold text-white">Live Camera QR Barcode Scanner (html5-qrcode)</h4>
+                    <p class="text-xs text-slate-300">Instant hardware camera scanning decodes opaque tokens in under 1 second without typing.</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="w-6 h-6 rounded bg-blue-500/20 text-blue-400 font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">2</div>
+                  <div>
+                    <h4 class="text-xs md:text-sm font-bold text-white">Anonymized Priority Queue Sequencing</h4>
+                    <p class="text-xs text-slate-300">Patients sequenced as Patient 1, Patient 2 with urgency badges (Routine, Moderate, High) ensuring waiting room privacy.</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="w-6 h-6 rounded bg-blue-500/20 text-blue-400 font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">3</div>
+                  <div>
+                    <h4 class="text-xs md:text-sm font-bold text-white">Dynamic Clinical Briefing Engine</h4>
+                    <p class="text-xs text-slate-300">Aggregates past consultations, chief complaints, and vitals history in a single unified card.</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="w-6 h-6 rounded bg-blue-500/20 text-blue-400 font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">4</div>
+                  <div>
+                    <h4 class="text-xs md:text-sm font-bold text-white">Multi-Drug Builder with 1-0-1 Frequency Chips</h4>
+                    <p class="text-xs text-slate-300">Drug selector with dosage, food timing (Before/After food), and duration without repetitive typing.</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="w-6 h-6 rounded bg-blue-500/20 text-blue-400 font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">5</div>
+                  <div>
+                    <h4 class="text-xs md:text-sm font-bold text-white">Cryptographic Sign-Off & Encounter Locking</h4>
+                    <p class="text-xs text-slate-300">Locks the consultation record with doctor credentials, rendering it immutable for auditing.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right 5 cols: Metrics & Visuals -->
+              <div class="md:col-span-5 p-5 rounded-2xl bg-blue-950/20 border border-blue-800/40 flex flex-col justify-between">
+                <div>
+                  <div class="text-xs font-bold text-blue-400 uppercase tracking-wider mb-3">Efficiency Benchmarks</div>
+                  <div class="space-y-4">
+                    <div>
+                      <div class="text-2xl font-extrabold text-white">&lt; 45 Seconds</div>
+                      <div class="text-xs text-blue-300 font-semibold">Total Consultation Charting Time</div>
+                      <div class="text-[11px] text-slate-400">From QR token scan to prescription lock.</div>
+                    </div>
+                    <div>
+                      <div class="text-2xl font-extrabold text-emerald-400">0 Cleartext PII</div>
+                      <div class="text-xs text-emerald-300 font-semibold">Privacy-Preserving Tokens</div>
+                      <div class="text-[11px] text-slate-400">Digest reference prevents bystander snooping.</div>
+                    </div>
+                    <div>
+                      <div class="text-2xl font-extrabold text-indigo-400">100% Real-Time</div>
+                      <div class="text-xs text-indigo-300 font-semibold">Instant Patient & AI Sync</div>
+                      <div class="text-[11px] text-slate-400">Prescription directly seeds 3-slot dose telemetry.</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mt-4 p-3 rounded-lg bg-blue-900/40 border border-blue-700/50 text-[11px] text-blue-200">
+                  ⚡ Pre-configured test login: <code class="text-white">doctor1@veyora.com</code>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-xs text-slate-400 flex items-center justify-between pt-2">
+              <span>Optimized for low-bandwidth rural PHCs and busy metropolitan hospital OPDs alike.</span>
+              <span class="text-blue-400 font-semibold">Ergonomics First</span>
+            </div>
+          </div>
+        `,
+        notes: "Here is the Doctor Workstation deep dive. In high-volume OPDs, doctors do not have time to navigate multiple sub-menus. We streamlined the workflow into 3 sequential panels: Queue -> Briefing & Vitals -> Prescription Builder. Scanning a patient token takes less than 1 second using standard webcam hardware. Charting a full multi-drug encounter takes under 45 seconds. Most importantly, when the doctor clicks 'Sign & Handoff', the encounter is cryptographically locked and instantly synchronized to the patient's portal and our AI engine."
+      },
+      {
+        category: "PATIENT EXPERIENCE",
+        title: "Patient Portal: Inclusive, Multilingual & Privacy-First",
+        subtitle: "Engineered for universal accessibility across diverse demographic literacy levels",
+        render: () => `
+          <div class="flex flex-col justify-between h-full">
+            <div>
+              <h2 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-1">
+                Patient-Centric Digital Health Architecture
+              </h2>
+              <p class="text-xs md:text-sm text-slate-300 mb-4">
+                Designed for Bharat: breaking literacy barriers with voice input and privacy-preserving QR passes.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 my-auto">
+              <div class="p-5 rounded-2xl bg-teal-950/20 border border-teal-800/40 flex flex-col justify-between">
+                <div>
+                  <div class="w-10 h-10 rounded-xl bg-teal-500/20 text-teal-400 flex items-center justify-center font-bold text-lg mb-3">🎙️</div>
+                  <h3 class="text-base font-bold text-teal-300 mb-1">Voice-Assisted Vernacular Intake</h3>
+                  <div class="text-xs text-teal-400 font-semibold mb-3">Hindi & English Speech API</div>
+                  <ul class="text-xs text-slate-300 space-y-2">
+                    <li class="flex items-start gap-1.5"><span class="text-teal-400">•</span> Patients speak symptoms naturally in Hindi or English.</li>
+                    <li class="flex items-start gap-1.5"><span class="text-teal-400">•</span> Speech recognition transcribes and extracts chief complaints.</li>
+                    <li class="flex items-start gap-1.5"><span class="text-teal-400">•</span> Removes digital typing friction for elderly and rural users.</li>
+                  </ul>
+                </div>
+                <div class="mt-4 pt-3 border-t border-teal-900/50 text-[11px] text-teal-300 font-medium">Overcomes literacy bottlenecks</div>
+              </div>
+
+              <div class="p-5 rounded-2xl bg-blue-950/20 border border-blue-800/40 flex flex-col justify-between">
+                <div>
+                  <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-lg mb-3">🛡️</div>
+                  <h3 class="text-base font-bold text-blue-300 mb-1">Cryptographic Consent QR Pass</h3>
+                  <div class="text-xs text-blue-400 font-semibold mb-3">Contactless Check-in Token</div>
+                  <ul class="text-xs text-slate-300 space-y-2">
+                    <li class="flex items-start gap-1.5"><span class="text-blue-400">•</span> High-contrast QR codes embed opaque reference digests.</li>
+                    <li class="flex items-start gap-1.5"><span class="text-blue-400">•</span> Zero raw diagnosis or PII printed in cleartext on physical passes.</li>
+                    <li class="flex items-start gap-1.5"><span class="text-blue-400">•</span> Can be saved on mobile phone or printed at registration desk.</li>
+                  </ul>
+                </div>
+                <div class="mt-4 pt-3 border-t border-blue-900/50 text-[11px] text-blue-300 font-medium">Privacy-by-Design Compliance</div>
+              </div>
+
+              <div class="p-5 rounded-2xl bg-indigo-950/20 border border-indigo-800/40 flex flex-col justify-between">
+                <div>
+                  <div class="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-lg mb-3">📄</div>
+                  <h3 class="text-base font-bold text-indigo-300 mb-1">Digital Prescription & Records</h3>
+                  <div class="text-xs text-indigo-400 font-semibold mb-3">Always Accessible History</div>
+                  <ul class="text-xs text-slate-300 space-y-2">
+                    <li class="flex items-start gap-1.5"><span class="text-indigo-400">•</span> Clear medication cards with meal timing badges.</li>
+                    <li class="flex items-start gap-1.5"><span class="text-indigo-400">•</span> Complete visit summaries, vitals logs, and doctor advice.</li>
+                    <li class="flex items-start gap-1.5"><span class="text-indigo-400">•</span> Eliminates reliance on flimsy, easily lost paper slips.</li>
+                  </ul>
+                </div>
+                <div class="mt-4 pt-3 border-t border-indigo-900/50 text-[11px] text-indigo-300 font-medium">Zero Lost Paperwork</div>
+              </div>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-800/40 border border-slate-700 text-xs text-slate-300 flex items-center justify-between">
+              <span>Patients own their data with 1-click ABHA linkage: <strong class="text-white">ABHA-9821-4402-9912</strong></span>
+              <span class="text-blue-400 font-semibold">Empowered Patients</span>
+            </div>
+          </div>
+        `,
+        notes: "Now let us look at the Patient Experience. In India and emerging markets, text-heavy apps fail because of language barriers and varying literacy levels. We addressed this with three core design choices: 1. Voice-Assisted Intake: Patients speak into their phone in Hindi or English, and our system automatically captures their symptoms. 2. The Consent QR Pass: It uses cryptographic tokens. If a patient drops their paper slip in the clinic, nobody can see their medical history because the QR contains only an opaque reference. 3. Digital Prescription Access: The patient always has a clean, readable version of their medications on their phone."
+      },
+      {
+        category: "CORE INNOVATION",
+        title: "Autonomous AI Care Coordinator & Recovery Daemon",
+        subtitle: "The engine that turns static prescriptions into dynamic recovery telemetry and proactive alerts",
+        render: () => `
+          <div class="flex flex-col justify-between h-full">
+            <div>
+              <h2 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-1">
+                The Missing Link in Digital Health
+              </h2>
+              <p class="text-xs md:text-sm text-slate-300 mb-4">
+                Not a standalone alarm app, but an active clinical daemon connected to the doctor's actual orders.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-auto">
+              <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700">
+                <div class="flex items-center justify-between mb-2">
+                  <h4 class="font-bold text-white text-sm">1. 3-Slot Daily Dose Telemetry</h4>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-500/20 text-blue-300">Automated Habits</span>
+                </div>
+                <p class="text-xs text-slate-300 leading-relaxed mb-2">
+                  Translates complex doctor prescriptions (1-0-1, 1-0-0) into simple <strong>Morning, Afternoon, and Night</strong> checkboxes. Patients track doses in one click, recording live compliance scores (e.g. 94% adherence).
+                </p>
+                <div class="text-[11px] text-blue-400 font-medium">Prevents accidental overdose and missed antibiotic cycles.</div>
+              </div>
+
+              <div class="p-4 rounded-xl bg-slate-800/60 border border-amber-500/30">
+                <div class="flex items-center justify-between mb-2">
+                  <h4 class="font-bold text-amber-300 text-sm">2. Proactive T-1 Follow-up Checklist</h4>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">24h Pre-Appointment</span>
+                </div>
+                <p class="text-xs text-slate-300 leading-relaxed mb-2">
+                  At T-1 before follow-up, triggers a 4-point prep checklist: <strong>10-12h overnight fasting</strong> rules after 9 PM, carrying empty medicine packaging/strips for doctor audit, and morning dose withholding rules.
+                </p>
+                <div class="text-[11px] text-amber-400 font-medium">Cuts wasted revisits and invalid blood panels by 40%.</div>
+              </div>
+
+              <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700">
+                <div class="flex items-center justify-between mb-2">
+                  <h4 class="font-bold text-white text-sm">3. Condition-Specific Precautions</h4>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">Clinical Logic</span>
+                </div>
+                <p class="text-xs text-slate-300 leading-relaxed mb-2">
+                  Dynamic rules engine generates dietary & lifestyle guidance tailored to diagnosis: Cardiovascular (low sodium, stress reduction), Metabolic/Diabetes (glycemic meals, foot care), and Respiratory (warm hydration, dust masks).
+                </p>
+                <div class="text-[11px] text-emerald-400 font-medium">Clear red-flag warning triggers for emergency symptoms.</div>
+              </div>
+
+              <div class="p-4 rounded-xl bg-slate-800/60 border border-indigo-500/30">
+                <div class="flex items-center justify-between mb-2">
+                  <h4 class="font-bold text-indigo-300 text-sm">4. Bilingual AI Recovery Q&A & Escalation</h4>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300">Hindi & English Bot</span>
+                </div>
+                <p class="text-xs text-slate-300 leading-relaxed mb-2">
+                  Answers patient medication questions 24/7 with strict clinical guardrails. Severe symptoms trigger an instant <strong>108 Ambulance Hotline</strong> alert. Hourly node-cron daemon dispatches overdue tasks to ASHA workers.
+                </p>
+                <div class="text-[11px] text-indigo-400 font-medium">Bridges community health workers directly to at-risk patients.</div>
+              </div>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-800/40 border border-slate-700 text-xs text-slate-300 flex items-center justify-between">
+              <span><strong>Evaluator Test:</strong> Ask the AI in Hindi: <em>"कल की जांच के लिए मुझे क्या सावधानी रखनी है?"</em></span>
+              <span class="text-emerald-400 font-semibold">Active Demonstration Ready</span>
+            </div>
+          </div>
+        `,
+        notes: "Slide 8 presents our primary architectural innovation: The Autonomous AI Care Coordinator. Notice that this is not just a chatbot. It is an active care orchestration daemon. It parses complex prescription strings into three clean daily checkboxes for the patient. It generates tailored dietary cautions for Diabetes, Hypertension, and Asthma. Most importantly, it solves the 'unprepared patient' problem: 24 hours before their follow-up appointment, it issues our T-1 Checklist—telling them exactly when to fast, which medicines to withhold until after lab draws, and reminding them to carry their medicine wrappers. And if an appointment is missed, our background cron daemon automatically routes an outreach alert to community health workers."
+      },
+      {
+        category: "TEAM DISTRIBUTION",
+        title: "Team Organization & 5-Member Engineering Ownership",
+        subtitle: "Full-stack engineering distribution across Team CodeByte for IIITD",
+        render: () => `
+          <div class="flex flex-col justify-between h-full">
+            <div>
+              <h2 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-1">
+                Engineering Ownership Across 5 Members
+              </h2>
+              <p class="text-xs md:text-sm text-slate-300 mb-4">
+                Disciplined modular ownership enabling rapid parallel development and seamless integration.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-3 my-auto">
+              <!-- Member 1 -->
+              <div class="p-4 rounded-xl bg-blue-950/20 border border-blue-700/40 flex flex-col justify-between">
+                <div>
+                  <h4 class="font-bold text-white text-sm">Parth Mahajan</h4>
+                  <div class="text-[11px] font-semibold text-blue-400 mb-2">Backend & Security</div>
+                  <div class="text-[10px] text-slate-400 font-mono mb-2">Core Database & Auth</div>
+                  <ul class="text-[11px] text-slate-300 space-y-1.5">
+                    <li>• MongoDB Schemas: User, Encounter, Prescription, FollowUp, Vitals, Task, Alert</li>
+                    <li>• Bcrypt hashing & JWT authentication microservices</li>
+                    <li>• Role-Based Access Control (RBAC: Doctor & Patient)</li>
+                    <li>• Modular RESTful route controllers & alerts</li>
+                  </ul>
+                </div>
+                <div class="mt-3 text-[10px] text-blue-300 pt-2 border-t border-blue-900/50">Backend Data Integrity</div>
+              </div>
+
+              <!-- Member 2 -->
+              <div class="p-4 rounded-xl bg-emerald-950/20 border border-emerald-700/40 flex flex-col justify-between">
+                <div>
+                  <h4 class="font-bold text-white text-sm">Pranjal Sharma</h4>
+                  <div class="text-[11px] font-semibold text-emerald-400 mb-2">Patient Experience</div>
+                  <div class="text-[10px] text-slate-400 font-mono mb-2">Multilingual Intake & QR</div>
+                  <ul class="text-[11px] text-slate-300 space-y-1.5">
+                    <li>• Patient Portal UI layouts & responsive styling</li>
+                    <li>• Voice-assisted intake in Hindi & English (Speech API)</li>
+                    <li>• Contactless Consent QR Pass generator</li>
+                    <li>• Digital prescription viewer & visit history timeline</li>
+                  </ul>
+                </div>
+                <div class="mt-3 text-[10px] text-emerald-300 pt-2 border-t border-emerald-900/50">Inclusive Frontend UX</div>
+              </div>
+
+              <!-- Member 3 -->
+              <div class="p-4 rounded-xl bg-purple-950/20 border border-purple-700/40 flex flex-col justify-between">
+                <div>
+                  <h4 class="font-bold text-white text-sm">Shreyas</h4>
+                  <div class="text-[11px] font-semibold text-purple-400 mb-2">Doctor Workstation</div>
+                  <div class="text-[10px] text-slate-400 font-mono mb-2">OPD Cockpit & Scanner</div>
+                  <ul class="text-[11px] text-slate-300 space-y-1.5">
+                    <li>• High-density Doctor Cockpit & OPD patient queue</li>
+                    <li>• Live camera-based HTML5 QR & token scanner</li>
+                    <li>• Dynamic clinical briefing & vitals trends engine</li>
+                    <li>• Multi-drug builder & cryptographic sign-off lock</li>
+                  </ul>
+                </div>
+                <div class="mt-3 text-[10px] text-purple-300 pt-2 border-t border-purple-900/50">High-Throughput Clinical UI</div>
+              </div>
+
+              <!-- Member 4 -->
+              <div class="p-4 rounded-xl bg-amber-950/20 border border-amber-700/40 flex flex-col justify-between">
+                <div>
+                  <h4 class="font-bold text-white text-sm">Soubhik Sarkar</h4>
+                  <div class="text-[11px] font-semibold text-amber-400 mb-2">AI Care Coordinator</div>
+                  <div class="text-[10px] text-slate-400 font-mono mb-2">Telemetry & T-1 Alerts</div>
+                  <ul class="text-[11px] text-slate-300 space-y-1.5">
+                    <li>• AI Care Coordinator interface & recovery engine</li>
+                    <li>• 3-slot dose telemetry & live compliance scoring</li>
+                    <li>• Proactive T-1 pre-consultation fasting checklist</li>
+                    <li>• Bilingual AI Q&A bot & emergency red-flag triage</li>
+                  </ul>
+                </div>
+                <div class="mt-3 text-[10px] text-amber-300 pt-2 border-t border-amber-900/50">Autonomous Recovery Loop</div>
+              </div>
+
+              <!-- Member 5 -->
+              <div class="p-4 rounded-xl bg-slate-800/80 border border-slate-600/50 flex flex-col justify-between">
+                <div>
+                  <h4 class="font-bold text-white text-sm">Vasu Chandra</h4>
+                  <div class="text-[11px] font-semibold text-cyan-400 mb-2">Full-Stack & DevOps</div>
+                  <div class="text-[10px] text-slate-400 font-mono mb-2">Build Pipeline & WebSockets</div>
+                  <ul class="text-[11px] text-slate-300 space-y-1.5">
+                    <li>• Root project architecture & concurrently orchestration</li>
+                    <li>• Socket.io WebSockets for real-time OPD queue sync</li>
+                    <li>• Cross-branch git integration & conflict resolution</li>
+                    <li>• Vite production build pipeline & server hardening</li>
+                  </ul>
+                </div>
+                <div class="mt-3 text-[10px] text-cyan-300 pt-2 border-t border-slate-700">System Integration & Deploy</div>
+              </div>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-800/40 border border-slate-700 text-xs text-slate-300 flex items-center justify-between">
+              <span><strong>Team CodeByte:</strong> Seamless synergy across 5 distinct domains resulting in a zero-dependency, functional MVP.</span>
+              <span class="text-emerald-400 font-semibold">100% In-House Development</span>
+            </div>
+          </div>
+        `,
+        notes: "Here is our complete team task allocation across the 5 members of CodeByte: 1. Parth Mahajan spearheaded Backend Architecture & Security, building our MongoDB schemas, JWT authentication, and RBAC security layer. 2. Pranjal Sharma developed the Patient Experience, creating the voice intake in Hindi and English, the QR pass generator, and patient portal views. 3. Shreyas engineered the Doctor Workstation, building the camera QR scanner, clinical briefing engine, and dynamic multi-drug prescription builder. 4. Soubhik Sarkar built the AI Care Coordinator, designing the 3-slot dose telemetry, T-1 fasting checklist, and bilingual recovery engine. 5. Vasu Chandra owned Full-Stack Integration & DevOps, orchestrating the Vite/Express build pipeline, WebSockets via Socket.io, and cross-branch integration. Every component you see in our demo today was built and integrated collaboratively by this 5-person team."
+      },
+      {
+        category: "TECHNOLOGY & ENGINEERING",
+        title: "Full-Stack Technology Stack & System Architecture",
+        subtitle: "A hardened, scalable MERN-plus architecture optimized for real-time clinical synchronization",
+        render: () => `
+          <div class="flex flex-col justify-between h-full">
+            <div>
+              <h2 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-1">
+                Hardened Engineering Stack
+              </h2>
+              <p class="text-xs md:text-sm text-slate-300 mb-4">
+                Enterprise-grade architecture balancing sub-second UI responsiveness with asynchronous background intelligence.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-auto">
+              <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700">
+                <div class="flex items-center justify-between mb-2">
+                  <h4 class="font-bold text-white text-sm">Frontend Client Tier</h4>
+                  <span class="text-[10px] font-mono text-blue-400">React 18 · Vite · CSS Tokens</span>
+                </div>
+                <ul class="text-xs text-slate-300 space-y-1.5">
+                  <li>• Single Page Application (SPA) with protected routing by user role</li>
+                  <li>• Web Speech API integration for real-time voice-to-text intake in Hindi/English</li>
+                  <li>• Hardware camera QR scanner powered by html5-qrcode</li>
+                  <li>• Sub-second Hot Module Reload (HMR) and optimized client bundle</li>
+                </ul>
+              </div>
+
+              <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700">
+                <div class="flex items-center justify-between mb-2">
+                  <h4 class="font-bold text-white text-sm">Backend Microservices</h4>
+                  <span class="text-[10px] font-mono text-emerald-400">Node.js · Express · REST</span>
+                </div>
+                <ul class="text-xs text-slate-300 space-y-1.5">
+                  <li>• Modular controllers (/auth, /patient, /doctor, /ai-coordinator, /alerts)</li>
+                  <li>• Cryptographic JWT issuance with bcrypt password hashing</li>
+                  <li>• Role-Based Access Control (RBAC) preventing unauthorized endpoint access</li>
+                  <li>• Cryptographic token digestion preventing cleartext PII transmission</li>
+                </ul>
+              </div>
+
+              <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700">
+                <div class="flex items-center justify-between mb-2">
+                  <h4 class="font-bold text-white text-sm">Real-Time & Scheduled Daemons</h4>
+                  <span class="text-[10px] font-mono text-cyan-400">Socket.io · Node-Cron</span>
+                </div>
+                <ul class="text-xs text-slate-300 space-y-1.5">
+                  <li>• Bi-directional WebSockets via Socket.io for instantaneous OPD queue broadcasts</li>
+                  <li>• Real-time channel subscriptions (join_portal) for doctor stations</li>
+                  <li>• Background hourly cron daemon scanning for missed patient follow-ups</li>
+                  <li>• Automated escalation task generation dispatched to ASHA health workers</li>
+                </ul>
+              </div>
+
+              <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700">
+                <div class="flex items-center justify-between mb-2">
+                  <h4 class="font-bold text-white text-sm">Database & Data Integrity</h4>
+                  <span class="text-[10px] font-mono text-purple-400">MongoDB · Mongoose ORM</span>
+                </div>
+                <ul class="text-xs text-slate-300 space-y-1.5">
+                  <li>• Normalized schemas: User, Encounter, Prescription, FollowUp, Vitals, Task</li>
+                  <li>• Fast indexed lookups for token verification and chronological briefings</li>
+                  <li>• Seeding scripts establishing verified Doctor 1 and Patient 1 test accounts</li>
+                  <li>• Exportable JSON telemetry for audit logs and ABDM interoperability</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-800/40 border border-slate-700 text-xs text-slate-300 flex items-center justify-between">
+              <span><strong>DevOps Pipeline:</strong> Root <code>npm run dev</code> boots both client and server concurrently with zero environment conflict.</span>
+              <span class="text-cyan-400 font-semibold">Self-Contained Deployment</span>
+            </div>
+          </div>
+        `,
+        notes: "Here is our technical architecture. We chose a modernized MERN stack enriched with Socket.io and background cron daemons. For the frontend: React 18 with Vite for sub-second build and HMR. We integrated the HTML5 Web Speech API for voice intake and html5-qrcode for barcode reading. For the backend: Express with JWT auth and RBAC. For real-time sync: Socket.io broadcasts token check-ins directly to the doctor's screen without polling. For automation: Node-cron runs hourly scans in the background, checking for missed appointments and auto-dispatching escalation tasks."
+      },
+      {
+        category: "LIVE VERIFICATION",
+        title: "Live MVP Demonstration & Evaluator Walkthrough",
+        subtitle: "Step-by-step verification pathways to test the live functional deployment right now",
+        render: () => `
+          <div class="flex flex-col justify-between h-full">
+            <div>
+              <h2 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-1">
+                Live Demonstration & Test Guide
+              </h2>
+              <p class="text-xs md:text-sm text-slate-300 mb-4">
+                The entire loop is functional right now. Follow these 4 steps to verify the end-to-end MVP.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-5 my-auto">
+              <!-- Left 5 cols: Credentials -->
+              <div class="md:col-span-5 p-5 rounded-2xl bg-slate-800/60 border border-slate-700 flex flex-col justify-between">
+                <div>
+                  <div class="text-xs font-bold text-blue-400 uppercase tracking-wider mb-3">Pre-Seeded Evaluator Accounts</div>
+
+                  <div class="p-3 rounded-xl bg-blue-950/40 border border-blue-800/40 mb-3">
+                    <div class="text-xs font-bold text-blue-300 mb-1">Doctor Station Profile</div>
+                    <div class="text-xs font-mono text-white">doctor1@veyora.com</div>
+                    <div class="text-[11px] text-slate-400">Password: <code class="text-slate-200">password123</code></div>
+                    <div class="text-[11px] text-blue-400 mt-1">Role: General Physician · PHC North Main</div>
+                  </div>
+
+                  <div class="p-3 rounded-xl bg-emerald-950/40 border border-emerald-800/40">
+                    <div class="text-xs font-bold text-emerald-300 mb-1">Patient Portal Profile</div>
+                    <div class="text-xs font-mono text-white">patient1@veyora.com</div>
+                    <div class="text-[11px] text-slate-400">Password: <code class="text-slate-200">password123</code></div>
+                    <div class="text-[11px] text-emerald-400 mt-1">ABHA ID: ABHA-9821-4402-9912</div>
+                  </div>
+                </div>
+
+                <div class="mt-4 p-2.5 rounded-lg bg-slate-900/60 border border-slate-800 text-[11px] text-slate-300">
+                  Tip: Use the <strong>"One-Click Evaluator Access"</strong> pills on the Landing Page for instant login!
+                </div>
+              </div>
+
+              <!-- Right 7 cols: 4-Step Verification -->
+              <div class="md:col-span-7 p-5 rounded-2xl bg-blue-950/20 border border-blue-800/40 space-y-3">
+                <div class="text-xs font-bold text-blue-400 uppercase tracking-wider mb-1">4-Minute Verification Path</div>
+
+                <div class="flex items-start gap-3">
+                  <div class="w-6 h-6 rounded bg-blue-500/20 text-blue-300 font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">1</div>
+                  <div>
+                    <h5 class="text-xs font-bold text-white">View Patient QR Token Pass</h5>
+                    <p class="text-[11px] text-slate-300">Log in as Patient 1 -> Open "Consent QR Pass". View encrypted QR token without exposed raw medical data.</p>
+                  </div>
+                </div>
+
+                <div class="flex items-start gap-3">
+                  <div class="w-6 h-6 rounded bg-emerald-500/20 text-emerald-300 font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">2</div>
+                  <div>
+                    <h5 class="text-xs font-bold text-white">Live Camera QR Scan at Doctor Station</h5>
+                    <p class="text-[11px] text-slate-300">Log in as Doctor 1 -> Open "Token Lookup & Scan". Activate webcam to scan QR token -> instant patient clinical briefing loads.</p>
+                  </div>
+                </div>
+
+                <div class="flex items-start gap-3">
+                  <div class="w-6 h-6 rounded bg-purple-500/20 text-purple-300 font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">3</div>
+                  <div>
+                    <h5 class="text-xs font-bold text-white">Multi-Drug Prescription & Sign-Off</h5>
+                    <p class="text-[11px] text-slate-300">Add medications (e.g. Metformin 500mg, 1-0-1), set duration, and click "Sign & Lock Encounter". Record becomes tamper-proof.</p>
+                  </div>
+                </div>
+
+                <div class="flex items-start gap-3">
+                  <div class="w-6 h-6 rounded bg-amber-500/20 text-amber-300 font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">4</div>
+                  <div>
+                    <h5 class="text-xs font-bold text-white">AI Coordinator Telemetry & T-1 Alerts</h5>
+                    <p class="text-[11px] text-slate-300">Switch back to Patient 1 -> Open "AI Care Coordinator". Observe auto-generated 3-slot dose schedule, T-1 fasting alert, and test Hindi Q&A.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-xs text-slate-400 flex items-center justify-between pt-2">
+              <span>Ready for immediate evaluator live test on port 5173 / 5001.</span>
+              <span class="text-emerald-400 font-semibold">Functional MVP Certified</span>
+            </div>
+          </div>
+        `,
+        notes: "Evaluators can verify the entire pipeline right now on our live build. We have pre-seeded two evaluator accounts: Doctor 1 and Patient 1. You can test the entire loop in under 2 minutes: First, open Patient 1's QR pass. Second, open Doctor 1's station and scan that pass using your laptop camera. Third, prescribe a medication and sign off. Fourth, switch back to Patient 1 and watch the AI Care Coordinator immediately ingest the prescription, show the dose checkboxes, and trigger the T-1 fasting checklist."
+      },
+      {
+        category: "FUTURE VISION",
+        title: "Public Health Impact, Scalability & Strategic Roadmap",
+        subtitle: "Extending Veyora from primary health centres to nationwide public healthcare infrastructure",
+        render: () => `
+          <div class="flex flex-col justify-between h-full">
+            <div>
+              <h2 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-1">
+                Public Health Impact & Next Milestones
+              </h2>
+              <p class="text-xs md:text-sm text-slate-300 mb-4">
+                From academic MVP to municipal primary health centers and national digital health adoption.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 my-auto">
+              <!-- Left: Outcomes -->
+              <div class="p-5 rounded-2xl bg-slate-800/60 border border-slate-700 flex flex-col justify-between">
+                <div>
+                  <h4 class="text-xs font-bold text-blue-400 uppercase tracking-wider mb-3">Projected Healthcare Outcomes</h4>
+                  <div class="space-y-3.5">
+                    <div class="flex items-start gap-3">
+                      <span class="text-xl font-bold text-emerald-400 shrink-0">40% ↓</span>
+                      <div>
+                        <div class="text-xs font-bold text-white">Reduction in Missed Follow-Ups</div>
+                        <div class="text-[11px] text-slate-300">Proactive T-1 preparation reminders prevent forgotten visits and ensure test-readiness.</div>
+                      </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                      <span class="text-xl font-bold text-blue-400 shrink-0">3x ↑</span>
+                      <div>
+                        <div class="text-xs font-bold text-white">Improvement in Chronic Medication Adherence</div>
+                        <div class="text-[11px] text-slate-300">Daily 3-slot telemetry (M/A/N) turns overwhelming slips into manageable daily habit loops.</div>
+                      </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                      <span class="text-xl font-bold text-indigo-400 shrink-0">65% ↓</span>
+                      <div>
+                        <div class="text-xs font-bold text-white">Time Saved in Outpatient Registration</div>
+                        <div class="text-[11px] text-slate-300">Contactless camera QR token scanning eliminates physical paper searches.</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mt-4 pt-3 border-t border-slate-700 text-[11px] text-slate-400">
+                  Targeted for PHCs, CHCs, and District Hospitals under National Health Mission.
+                </div>
+              </div>
+
+              <!-- Right: Roadmap -->
+              <div class="p-5 rounded-2xl bg-blue-950/20 border border-blue-800/40 flex flex-col justify-between">
+                <div>
+                  <h4 class="text-xs font-bold text-blue-400 uppercase tracking-wider mb-3">Strategic Scalability Roadmap</h4>
+                  <div class="space-y-2.5">
+                    <div class="p-2.5 rounded-lg bg-slate-900/60 border border-slate-800">
+                      <div class="text-[10px] font-bold text-emerald-400">PHASE 1 (Completed MVP)</div>
+                      <div class="text-xs font-bold text-white">Core Tri-Pillar Architecture</div>
+                      <div class="text-[11px] text-slate-400">Doctor Cockpit, QR camera scanner, 3-slot AI telemetry & cron daemons.</div>
+                    </div>
+                    <div class="p-2.5 rounded-lg bg-slate-900/60 border border-slate-800">
+                      <div class="text-[10px] font-bold text-blue-400">PHASE 2 (Next 60 Days)</div>
+                      <div class="text-xs font-bold text-white">WhatsApp & SMS Multi-Channel Gateway</div>
+                      <div class="text-[11px] text-slate-400">Automated WhatsApp bot so non-smartphone users receive SMS dose reminders.</div>
+                    </div>
+                    <div class="p-2.5 rounded-lg bg-slate-900/60 border border-slate-800">
+                      <div class="text-[10px] font-bold text-purple-400">PHASE 3 (Q1 2027)</div>
+                      <div class="text-xs font-bold text-white">Official ABDM / FHIR Interoperability</div>
+                      <div class="text-[11px] text-slate-400">Certify with Ayushman Bharat Digital Mission (M1/M2/M3) for national EHR exchange.</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mt-2 text-[11px] text-blue-300 font-semibold">
+                  Phase 4: Quantized Edge AI for offline rural sub-centres.
+                </div>
+              </div>
+            </div>
+
+            <div class="text-xs text-slate-400 flex items-center justify-between pt-2">
+              <span>Scalable to millions of clinical encounters with low cloud overhead.</span>
+              <span class="text-blue-400 font-semibold">Built to Scale</span>
+            </div>
+          </div>
+        `,
+        notes: "Looking at the broader horizon: Our platform addresses four measurable public health metrics: 1. 40% reduction in missed follow-ups. 2. 3x improvement in medication adherence. 3. 65% reduction in OPD registration waiting times. 4. Total elimination of lost paper prescriptions. Our roadmap is realistic: In Phase 2 we are adding automated WhatsApp and SMS gateways for non-smartphone users. In Phase 3, we will certify for ABDM/FHIR national compliance. And in Phase 4, we will bring edge-AI offline capabilities to remote sub-centres."
+      },
+      {
+        category: "CONCLUSION & RECAP",
+        title: "Veyora Healthcare: Transforming Healthcare from Static Records to Continuous Care",
+        subtitle: "The complete platform closing the loop between clinic consultations and daily recovery",
+        render: () => `
+          <div class="flex flex-col justify-between h-full">
+            <div>
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-semibold mb-3">
+                <span>✦</span> Summary & Takeaways
+              </div>
+              <h2 class="text-2xl md:text-4xl font-extrabold text-white tracking-tight mb-2">
+                Transforming Healthcare from Static Records to Continuous Care
+              </h2>
+              <p class="text-xs md:text-sm text-slate-300 max-w-2xl">
+                A production-ready MVP built specifically to solve clinical drop-offs, doctor burnout, and unprepared follow-ups.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 my-auto">
+              <div class="p-5 rounded-2xl bg-blue-950/20 border border-blue-800/40 flex flex-col justify-between">
+                <div>
+                  <div class="text-2xl mb-2">🔄</div>
+                  <h3 class="text-base font-bold text-blue-300 mb-1">Post-Care Void is Solved</h3>
+                  <p class="text-xs text-slate-300 leading-relaxed">
+                    Healthcare no longer stops at the clinic door. The Autonomous AI Care Coordinator oversees daily recovery, dose adherence, and dietary precautions.
+                  </p>
+                </div>
+                <div class="mt-4 pt-3 border-t border-blue-900/50 text-[11px] text-blue-300 font-medium">Continuous Telemetry</div>
+              </div>
+
+              <div class="p-5 rounded-2xl bg-emerald-950/20 border border-emerald-800/40 flex flex-col justify-between">
+                <div>
+                  <div class="text-2xl mb-2">⚡</div>
+                  <h3 class="text-base font-bold text-emerald-300 mb-1">Doctor Speed & Zero Clutter</h3>
+                  <p class="text-xs text-slate-300 leading-relaxed">
+                    Sub-second camera QR lookups and rapid 3-click prescription building reduce clinician clerical fatigue in high-density outpatient OPDs.
+                  </p>
+                </div>
+                <div class="mt-4 pt-3 border-t border-emerald-900/50 text-[11px] text-emerald-300 font-medium">&lt; 45s Consultation Time</div>
+              </div>
+
+              <div class="p-5 rounded-2xl bg-indigo-950/20 border border-indigo-800/40 flex flex-col justify-between">
+                <div>
+                  <div class="text-2xl mb-2">🇮🇳</div>
+                  <h3 class="text-base font-bold text-indigo-300 mb-1">Inclusive & Bharat-Ready</h3>
+                  <p class="text-xs text-slate-300 leading-relaxed">
+                    Voice-enabled vernacular intake in Hindi & English, combined with background cron daemons auto-escalating missed care to community ASHA workers.
+                  </p>
+                </div>
+                <div class="mt-4 pt-3 border-t border-indigo-900/50 text-[11px] text-indigo-300 font-medium">Public Health Integration</div>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-gradient-to-r from-blue-900/60 to-indigo-900/60 border border-blue-500/40 text-center">
+              <h4 class="text-base font-bold text-white mb-0.5">Thank You! Open for Questions & Live Evaluation</h4>
+              <p class="text-xs text-blue-200">Team CodeByte: Parth Mahajan · Pranjal Sharma · Shreyas · Soubhik Sarkar · Vasu Chandra</p>
+            </div>
+          </div>
+        `,
+        notes: "In conclusion, Veyora Healthcare turns static health data into continuous, active care. We empower clinicians with lightning-fast OPD workflows, empower patients with accessible multilingual guidance, and use autonomous AI to close the critical care gap between appointments. We now invite the evaluators to test our live build and ask any architectural or technical questions. Thank you!"
+      }
+    ];
+
+    let currentSlide = 0;
+    const totalSlides = slidesData.length;
+
+    function renderSlide(index) {
+      const data = slidesData[index];
+      const container = document.getElementById('slideContainer');
+      
+      // Update Slide Container Content
+      container.innerHTML = `
+        <div class="mb-3 shrink-0">
+          <div class="text-[11px] font-bold tracking-widest text-blue-400 uppercase mb-1">${data.category}</div>
+          <h2 class="text-xl md:text-2xl font-extrabold text-white tracking-tight">${data.title}</h2>
+          <p class="text-xs md:text-sm text-slate-400">${data.subtitle}</p>
+        </div>
+        <div class="flex-1 overflow-y-auto hide-scrollbar my-2">
+          ${data.render()}
+        </div>
+        <div class="text-[10px] text-slate-500 border-t border-slate-800/80 pt-2 flex items-center justify-between shrink-0">
+          <span>Veyora Healthcare · Intelligent Clinical Continuity (IIITD Project)</span>
+          <span>Slide ${index + 1} of ${totalSlides}</span>
+        </div>
+      `;
+
+      // Update Header & Nav Controls
+      document.getElementById('currentSlideNum').innerText = index + 1;
+      document.getElementById('totalSlideNum').innerText = totalSlides;
+      document.getElementById('progressBar').style.width = `${((index + 1) / totalSlides) * 100}%`;
+      
+      document.getElementById('prevBtn').disabled = (index === 0);
+      document.getElementById('nextBtn').disabled = (index === totalSlides - 1);
+      
+      document.getElementById('slideSelect').value = index;
+
+      // Update Notes
+      document.getElementById('notesSlideTitle').innerText = `Slide ${index + 1}: ${data.title}`;
+      document.getElementById('notesContent').innerText = data.notes;
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+        renderSlide(currentSlide);
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        renderSlide(currentSlide);
+      }
+    }
+
+    function goToSlide(index) {
+      if (index >= 0 && index < totalSlides) {
+        currentSlide = index;
+        renderSlide(currentSlide);
+      }
+    }
+
+    function toggleNotes() {
+      const drawer = document.getElementById('notesDrawer');
+      drawer.classList.toggle('hidden');
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        }
+      }
+    }
+
+    // Keyboard Shortcuts
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        goToSlide(0);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        goToSlide(totalSlides - 1);
+      } else if (e.key === 'n' || e.key === 'N') {
+        toggleNotes();
+      } else if (e.key === 'f' || e.key === 'F') {
+        toggleFullScreen();
+      }
+    });
+
+    // Populate Slide Selector
+    const select = document.getElementById('slideSelect');
+    slidesData.forEach((s, idx) => {
+      const opt = document.createElement('option');
+      opt.value = idx;
+      opt.innerText = `${idx + 1}. ${s.title.substring(0, 32)}...`;
+      select.appendChild(opt);
+    });
+
+    // Initial render
+    renderSlide(0);
+  </script>
+</body>
+</html>

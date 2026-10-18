@@ -60,11 +60,11 @@ function GreetingBanner({ lang, userName }) {
 }
 
 const QUICK_CARDS = [
-  { to: '/patient/ai-coordinator', icon: Sparkles,  label: 'AI Care Coordinator', labelHi: 'एआई केयर समन्वयक', color: '#044e42', bg: '#ccfbf1' },
-  { to: '/patient/qr-pass',        icon: QrCode,    label: 'My QR Pass',          labelHi: 'मेरा QR पास',       color: '#3b82f6', bg: '#eff6ff' },
-  { to: '/patient/history',        icon: Clock,     label: 'Visit History',       labelHi: 'यात्रा इतिहास',     color: '#10b981', bg: '#d1fae5' },
-  { to: '/patient/followup',       icon: RefreshCw, label: 'Follow-up',           labelHi: 'फॉलो-अप',           color: '#8b5cf6', bg: '#ede9fe' },
-  { to: '/patient/medicines',      icon: Pill,      label: 'Medicines',           labelHi: 'दवाइयाँ',           color: '#f59e0b', bg: '#fef3c7' },
+  { to: '/patient/ai-coordinator', icon: Sparkles,  label: 'AI Care Coordinator', labelHi: 'एआई केयर समन्वयक', color: '#0284c7', bg: '#f0f9ff' },
+  { to: '/patient/qr-pass',        icon: QrCode,    label: 'My QR Pass',          labelHi: 'मेरा QR पास',       color: '#0284c7', bg: '#f0f9ff' },
+  { to: '/patient/history',        icon: Clock,     label: 'Visit History',       labelHi: 'यात्रा इतिहास',     color: '#059669', bg: '#ecfdf5' },
+  { to: '/patient/followup',       icon: RefreshCw, label: 'Follow-up',           labelHi: 'फॉलो-अप',           color: '#0284c7', bg: '#f0f9ff' },
+  { to: '/patient/medicines',      icon: Pill,      label: 'Medicines',           labelHi: 'दवाइयाँ',           color: '#d97706', bg: '#fffbeb' },
 ];
 
 function QuickAccessCards({ lang }) {

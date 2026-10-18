@@ -7,8 +7,9 @@ import {
   ShieldCheck,
   LogOut,
   LogIn,
-  Sparkles,
-  Home
+  Activity,
+  Home,
+  Bot
 } from 'lucide-react';
 
 export default function Navbar() {
@@ -21,14 +22,19 @@ export default function Navbar() {
     navigate('/login');
   };
 
-  const isActive = (path) => location.pathname.startsWith(path);
+  const isActive = (path) => {
+    if (path === '/') return location.pathname === '/';
+    return location.pathname.startsWith(path);
+  };
 
   return (
     <nav style={{
-      background: '#044e42',
-      borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-      color: '#ffffff',
-      padding: '0.65rem 1.5rem',
+      background: 'rgba(255, 255, 255, 0.92)',
+      backdropFilter: 'blur(12px)',
+      WebkitBackdropFilter: 'blur(12px)',
+      borderBottom: '1px solid #e2e8f0',
+      color: '#0f172a',
+      padding: '0.65rem 1.75rem',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
@@ -37,158 +43,221 @@ export default function Navbar() {
       position: 'sticky',
       top: 0,
       zIndex: 100,
-      boxShadow: '0 2px 10px rgba(0, 0, 0, 0.15)'
+      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.02)',
+      transition: 'all 180ms ease'
     }}>
-      {/* Brand */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-        <Link to="/" style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.5rem',
-          color: '#ffffff',
-          textDecoration: 'none',
-          fontWeight: '800',
-          fontSize: '1.15rem',
-          letterSpacing: '-0.02em'
-        }}>
-          <div style={{
-            width: '28px',
-            height: '28px',
-            borderRadius: '8px',
-            background: 'rgba(255, 255, 255, 0.2)',
+      {/* Brand Logo & Name */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+        <Link
+          to="/"
+          style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center'
+            gap: '0.6rem',
+            color: '#0f172a',
+            textDecoration: 'none',
+            fontWeight: '800',
+            fontSize: '1.1rem',
+            letterSpacing: '-0.025em'
+          }}
+        >
+          <div style={{
+            width: '32px',
+            height: '32px',
+            borderRadius: '9px',
+            background: '#f0f9ff',
+            border: '1px solid #bae6fd',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#0284c7',
+            boxShadow: '0 1px 2px rgba(2, 132, 199, 0.08)'
           }}>
-            <Sparkles size={16} color="#5eead4" />
+            <Activity size={17} strokeWidth={2.5} />
           </div>
-          <span>Veyora Healthcare</span>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.35rem' }}>
+            <span>Veyora</span>
+            <span style={{
+              fontSize: '0.68rem',
+              fontWeight: '700',
+              color: '#0284c7',
+              textTransform: 'uppercase',
+              letterSpacing: '0.04em'
+            }}>
+              Clinical
+            </span>
+          </div>
         </Link>
 
-        {/* Portal Links */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.85rem' }}>
+        {/* Navigation Links */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.84rem' }}>
           <Link
             to="/"
             style={{
-              padding: '0.35rem 0.65rem',
+              padding: '0.4rem 0.75rem',
               borderRadius: '8px',
               textDecoration: 'none',
-              color: location.pathname === '/' ? '#ffffff' : '#99f6e4',
-              background: location.pathname === '/' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
-              fontWeight: location.pathname === '/' ? '700' : '500',
-              display: 'flex',
+              color: isActive('/') ? '#0f172a' : '#64748b',
+              background: isActive('/') ? '#f1f5f9' : 'transparent',
+              fontWeight: isActive('/') ? '600' : '500',
+              display: 'inline-flex',
               alignItems: 'center',
-              gap: '0.3rem'
+              gap: '0.35rem',
+              border: isActive('/') ? '1px solid #e2e8f0' : '1px solid transparent',
+              transition: 'all 140ms ease'
             }}
           >
-            <Home size={14} />
+            <Home size={14} color={isActive('/') ? '#0284c7' : '#94a3b8'} />
             Overview
           </Link>
 
           <Link
             to="/patient"
             style={{
-              padding: '0.35rem 0.65rem',
+              padding: '0.4rem 0.75rem',
               borderRadius: '8px',
               textDecoration: 'none',
-              color: isActive('/patient') ? '#ffffff' : '#99f6e4',
-              background: isActive('/patient') ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
-              fontWeight: isActive('/patient') ? '700' : '500',
-              display: 'flex',
+              color: isActive('/patient') ? '#0f172a' : '#64748b',
+              background: isActive('/patient') ? '#f1f5f9' : 'transparent',
+              fontWeight: isActive('/patient') ? '600' : '500',
+              display: 'inline-flex',
               alignItems: 'center',
-              gap: '0.3rem'
+              gap: '0.35rem',
+              border: isActive('/patient') ? '1px solid #e2e8f0' : '1px solid transparent',
+              transition: 'all 140ms ease'
             }}
           >
-            <User size={14} />
-            Patient Portal (AI Care)
+            <Bot size={14} color={isActive('/patient') ? '#0284c7' : '#94a3b8'} />
+            <span>Patient & AI Care</span>
           </Link>
 
           <Link
             to="/doctor"
             style={{
-              padding: '0.35rem 0.65rem',
+              padding: '0.4rem 0.75rem',
               borderRadius: '8px',
               textDecoration: 'none',
-              color: isActive('/doctor') ? '#ffffff' : '#99f6e4',
-              background: isActive('/doctor') ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
-              fontWeight: isActive('/doctor') ? '700' : '500',
-              display: 'flex',
+              color: isActive('/doctor') ? '#0f172a' : '#64748b',
+              background: isActive('/doctor') ? '#f1f5f9' : 'transparent',
+              fontWeight: isActive('/doctor') ? '600' : '500',
+              display: 'inline-flex',
               alignItems: 'center',
-              gap: '0.3rem'
+              gap: '0.35rem',
+              border: isActive('/doctor') ? '1px solid #e2e8f0' : '1px solid transparent',
+              transition: 'all 140ms ease'
             }}
           >
-            <Stethoscope size={14} />
-            Doctor Portal
+            <Stethoscope size={14} color={isActive('/doctor') ? '#0284c7' : '#94a3b8'} />
+            <span>Doctor Portal</span>
           </Link>
         </div>
       </div>
 
-      {/* Right Session Status */}
+      {/* Right Session Status & Actions */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
         {isAuthenticated && user ? (
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '0.4rem',
-              background: 'rgba(255, 255, 255, 0.15)',
-              padding: '0.25rem 0.65rem',
+              gap: '0.45rem',
+              background: '#f8fafc',
+              border: '1px solid #e2e8f0',
+              padding: '0.3rem 0.75rem',
               borderRadius: '20px',
-              fontSize: '0.8rem'
+              fontSize: '0.82rem'
             }}>
-              <span style={{ fontWeight: '700', color: '#ffffff' }}>{user.name}</span>
+              <div style={{
+                width: '18px',
+                height: '18px',
+                borderRadius: '50%',
+                background: '#0284c7',
+                color: '#ffffff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '0.68rem',
+                fontWeight: '700'
+              }}>
+                {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+              </div>
+              <span style={{ fontWeight: '600', color: '#0f172a' }}>{user.name}</span>
               <span style={{
-                background: '#0f766e',
-                color: '#ccfbf1',
-                padding: '0.1rem 0.45rem',
-                borderRadius: '10px',
-                fontSize: '0.7rem',
+                background: '#f0f9ff',
+                color: '#0369a1',
+                border: '1px solid #bae6fd',
+                padding: '0.08rem 0.4rem',
+                borderRadius: '8px',
+                fontSize: '0.68rem',
                 fontWeight: '700',
-                textTransform: 'uppercase'
+                textTransform: 'uppercase',
+                letterSpacing: '0.03em'
               }}>
                 {user.role}
               </span>
             </div>
+
             <button
               onClick={handleLogout}
+              title="Sign Out"
               style={{
-                background: 'rgba(239, 68, 68, 0.2)',
-                border: '1px solid rgba(239, 68, 68, 0.4)',
-                color: '#fecaca',
+                background: 'transparent',
+                border: '1px solid #e2e8f0',
+                color: '#64748b',
                 padding: '0.35rem 0.65rem',
                 borderRadius: '8px',
                 fontSize: '0.78rem',
                 fontWeight: '600',
                 cursor: 'pointer',
-                display: 'flex',
+                display: 'inline-flex',
                 alignItems: 'center',
-                gap: '0.3rem'
+                gap: '0.3rem',
+                transition: 'all 140ms ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = '#e11d48';
+                e.currentTarget.style.borderColor = '#fecdd3';
+                e.currentTarget.style.background = '#fff1f2';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = '#64748b';
+                e.currentTarget.style.borderColor = '#e2e8f0';
+                e.currentTarget.style.background = 'transparent';
               }}
             >
               <LogOut size={13} />
-              Logout
+              <span>Logout</span>
             </button>
           </div>
         ) : (
-          <Link
-            to="/login"
-            style={{
-              background: '#ffffff',
-              color: '#044e42',
-              textDecoration: 'none',
-              padding: '0.35rem 0.9rem',
-              borderRadius: '10px',
-              fontSize: '0.82rem',
-              fontWeight: '700',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.35rem',
-              boxShadow: '0 2px 6px rgba(0,0,0,0.1)'
-            }}
-          >
-            <LogIn size={14} />
-            Sign In
-          </Link>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Link
+              to="/login"
+              style={{
+                background: '#0284c7',
+                color: '#ffffff',
+                textDecoration: 'none',
+                padding: '0.45rem 1rem',
+                borderRadius: '8px',
+                fontSize: '0.82rem',
+                fontWeight: '600',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                boxShadow: '0 1px 2px rgba(2, 132, 199, 0.2)',
+                transition: 'all 140ms ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#0369a1';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = '#0284c7';
+              }}
+            >
+              <LogIn size={13} />
+              <span>Sign In</span>
+            </Link>
+          </div>
         )}
       </div>
     </nav>

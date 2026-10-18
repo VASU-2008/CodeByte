@@ -65,78 +65,80 @@ export default function PatientQueue() {
 
     const cardStyle = {
         background: '#ffffff',
-        borderRadius: '24px',
-        border: '1px solid rgba(148, 163, 184, 0.25)',
-        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.05)',
-        padding: '1.75rem',
+        borderRadius: '12px',
+        border: '1px solid #e2e8f0',
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.03)',
+        padding: '1.5rem',
         marginBottom: '1.5rem'
     };
 
     return (
-        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '1040px', margin: '0 auto', fontFamily: "'Inter', system-ui, sans-serif" }}>
             <div style={cardStyle}>
                 {/* Header Row */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
                     <div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <h2 style={{ margin: 0, fontSize: '1.35rem', fontWeight: '800', color: '#0f172a' }}>
-                                Today's Patient Queue
+                            <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '700', color: '#0f172a' }}>
+                                Clinical Patient Queue
                             </h2>
-                            <span style={{ fontSize: '0.72rem', background: '#eff6ff', color: '#2563eb', padding: '0.15rem 0.6rem', borderRadius: '12px', fontWeight: '700', border: '1px solid #bfdbfe' }}>
-                                Live Stream
+                            <span style={{ fontSize: '0.72rem', background: '#f0f9ff', color: '#0369a1', padding: '0.15rem 0.55rem', borderRadius: '9999px', fontWeight: '600', border: '1px solid #bae6fd' }}>
+                                Real-Time Stream
                             </span>
                         </div>
-                        <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.82rem', color: '#64748b' }}>
-                            Primary Health Centre · Real-time patient triage stream
+                        <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.8rem', color: '#64748b' }}>
+                            Primary Health Centre · Real-time patient triage & token sequence
                         </p>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.82rem', color: '#64748b' }}>
-                        <Calendar size={15} color="#64748b" />
-                        <span>Mon, 13 Jan 2025</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.8rem', color: '#64748b', background: '#f8fafc', border: '1px solid #e2e8f0', padding: '0.3rem 0.7rem', borderRadius: '6px' }}>
+                        <Calendar size={14} color="#64748b" />
+                        <span>Today · Active Session</span>
                     </div>
                 </div>
 
-                {/* Catchy Interactive Filter Tabs */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.65rem', marginBottom: '1.25rem' }}>
+                {/* Filter Tabs */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.25rem' }}>
                     {[
                         { key: 'ALL', label: 'All Patients', count: patients.length },
                         { key: 'WAITING', label: 'Waiting', count: patients.filter(p => p.status === 'Waiting').length },
                         { key: 'IN_CONSULTATION', label: 'In Consultation', count: patients.filter(p => p.status === 'In Consultation').length },
                         { key: 'COMPLETED', label: 'Completed', count: patients.filter(p => p.status === 'Completed').length }
-                    ].map(tab => (
-                        <button
-                            key={tab.key}
-                            type="button"
-                            onClick={() => setActiveTab(tab.key)}
-                            style={{
-                                background: activeTab === tab.key ? 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)' : '#f1f5f9',
-                                color: activeTab === tab.key ? '#ffffff' : '#475569',
-                                border: activeTab === tab.key ? 'none' : '1px solid rgba(148, 163, 184, 0.25)',
-                                padding: '0.45rem 0.95rem',
-                                borderRadius: '20px',
-                                fontSize: '0.82rem',
-                                fontWeight: '700',
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.45rem',
-                                boxShadow: activeTab === tab.key ? '0 4px 12px rgba(59, 130, 246, 0.3)' : 'none',
-                                transition: 'all 0.15s ease'
-                            }}
-                        >
-                            <span>{tab.label}</span>
-                            <span style={{
-                                background: activeTab === tab.key ? 'rgba(255, 255, 255, 0.25)' : '#e2e8f0',
-                                color: activeTab === tab.key ? '#ffffff' : '#64748b',
-                                padding: '0.1rem 0.45rem',
-                                borderRadius: '10px',
-                                fontSize: '0.72rem'
-                            }}>
-                                {tab.count}
-                            </span>
-                        </button>
-                    ))}
+                    ].map(tab => {
+                        const isActive = activeTab === tab.key;
+                        return (
+                            <button
+                                key={tab.key}
+                                type="button"
+                                onClick={() => setActiveTab(tab.key)}
+                                style={{
+                                    background: isActive ? '#0284c7' : '#ffffff',
+                                    color: isActive ? '#ffffff' : '#475569',
+                                    border: isActive ? '1px solid #0284c7' : '1px solid #e2e8f0',
+                                    padding: '0.4rem 0.85rem',
+                                    borderRadius: '6px',
+                                    fontSize: '0.8rem',
+                                    fontWeight: '600',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.45rem',
+                                    transition: 'all 0.15s ease'
+                                }}
+                            >
+                                <span>{tab.label}</span>
+                                <span style={{
+                                    background: isActive ? 'rgba(255, 255, 255, 0.25)' : '#f1f5f9',
+                                    color: isActive ? '#ffffff' : '#64748b',
+                                    padding: '0.1rem 0.45rem',
+                                    borderRadius: '4px',
+                                    fontSize: '0.72rem'
+                                }}>
+                                    {tab.count}
+                                </span>
+                            </button>
+                        );
+                    })}
                 </div>
 
                 {/* Search Bar */}
@@ -144,133 +146,134 @@ export default function PatientQueue() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.65rem',
-                    background: '#f8fafc',
-                    border: '1px solid rgba(148, 163, 184, 0.25)',
-                    borderRadius: '16px',
-                    padding: '0.65rem 1rem',
-                    marginBottom: '1.5rem'
+                    background: '#ffffff',
+                    border: '1px solid #cbd5e1',
+                    borderRadius: '8px',
+                    padding: '0.55rem 0.85rem',
+                    marginBottom: '1.25rem'
                 }}>
                     <Search size={16} color="#94a3b8" />
                     <input
                         type="text"
-                        placeholder="Search patient name, token (e.g. P-001), or symptoms..."
+                        placeholder="Search patient name, token ID (e.g. P-001), or symptoms..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         style={{
                             border: 'none',
                             outline: 'none',
                             background: 'transparent',
-                            fontSize: '0.88rem',
-                            color: '#1e293b',
+                            fontSize: '0.85rem',
+                            color: '#0f172a',
                             width: '100%'
                         }}
                     />
                 </div>
 
-                {/* Catchy & Clean Table */}
-                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.88rem' }}>
-                    <thead>
-                        <tr style={{ borderBottom: '1px solid #e2e8f0', color: '#64748b', fontSize: '0.78rem', textAlign: 'left' }}>
-                            <th style={{ padding: '0.75rem 0.6rem' }}>#</th>
-                            <th style={{ padding: '0.75rem 0.6rem' }}>Patient</th>
-                            <th style={{ padding: '0.75rem 0.6rem' }}>Age / Gender</th>
-                            <th style={{ padding: '0.75rem 0.6rem' }}>Token ID</th>
-                            <th style={{ padding: '0.75rem 0.6rem' }}>Status</th>
-                            <th style={{ padding: '0.75rem 0.6rem', textAlign: 'right' }}>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredPatients.map((patient) => {
-                            const isWaiting = patient.status === 'Waiting';
-                            const isInConsult = patient.status === 'In Consultation';
-                            const isCompleted = patient.status === 'Completed';
+                {/* Editorial Clean Table */}
+                <div style={{ overflowX: 'auto' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
+                        <thead>
+                            <tr style={{ borderBottom: '1px solid #e2e8f0', color: '#64748b', fontSize: '0.75rem', textAlign: 'left', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                                <th style={{ padding: '0.65rem 0.75rem', fontWeight: '600' }}>#</th>
+                                <th style={{ padding: '0.65rem 0.75rem', fontWeight: '600' }}>Patient</th>
+                                <th style={{ padding: '0.65rem 0.75rem', fontWeight: '600' }}>Demographics</th>
+                                <th style={{ padding: '0.65rem 0.75rem', fontWeight: '600' }}>Token ID</th>
+                                <th style={{ padding: '0.65rem 0.75rem', fontWeight: '600' }}>Status</th>
+                                <th style={{ padding: '0.65rem 0.75rem', textAlign: 'right', fontWeight: '600' }}>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {filteredPatients.map((patient) => {
+                                const isWaiting = patient.status === 'Waiting';
+                                const isInConsult = patient.status === 'In Consultation';
 
-                            const statusBg = isWaiting ? '#fef3c7' : isInConsult ? '#edf2fe' : '#dcfce7';
-                            const statusColor = isWaiting ? '#b45309' : isInConsult ? '#2563eb' : '#15803d';
+                                const statusBg = isWaiting ? '#fffbeb' : isInConsult ? '#f0f9ff' : '#f0fdf4';
+                                const statusBorder = isWaiting ? '#fde68a' : isInConsult ? '#bae6fd' : '#bbf7d0';
+                                const statusColor = isWaiting ? '#b45309' : isInConsult ? '#0369a1' : '#166534';
 
-                            return (
-                                <tr 
-                                    key={patient.id} 
-                                    style={{ 
-                                        borderBottom: '1px solid #f1f5f9',
-                                        transition: 'background 0.15s ease'
-                                    }}
-                                >
-                                    <td style={{ padding: '1rem 0.6rem', color: '#64748b', fontWeight: '600' }}>
-                                        {patient.id}
-                                    </td>
-                                    <td style={{ padding: '1rem 0.6rem' }}>
-                                        <div style={{ fontWeight: '800', color: '#0f172a' }}>{patient.name}</div>
-                                        <div style={{ fontSize: '0.74rem', color: '#64748b', marginTop: '0.1rem' }}>{patient.complaint}</div>
-                                    </td>
-                                    <td style={{ padding: '1rem 0.6rem', color: '#475569' }}>
-                                        {patient.ageGender}
-                                    </td>
-                                    <td style={{ padding: '1rem 0.6rem' }}>
-                                        <span style={{ background: '#f1f5f9', color: '#334155', padding: '0.2rem 0.55rem', borderRadius: '6px', fontWeight: '700', fontSize: '0.78rem' }}>
-                                            {patient.token}
-                                        </span>
-                                    </td>
-                                    <td style={{ padding: '1rem 0.6rem' }}>
-                                        <span style={{
-                                            background: statusBg,
-                                            color: statusColor,
-                                            padding: '0.25rem 0.65rem',
-                                            borderRadius: '12px',
-                                            fontSize: '0.75rem',
-                                            fontWeight: '700',
-                                            display: 'inline-flex',
-                                            alignItems: 'center',
-                                            gap: '0.3rem'
-                                        }}>
-                                            {isWaiting && <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#b45309' }}></span>}
-                                            {patient.status}
-                                        </span>
-                                    </td>
-                                    <td style={{ padding: '1rem 0.6rem', textAlign: 'right' }}>
-                                        {isWaiting ? (
-                                            <button
-                                                onClick={() => handleAction(patient)}
-                                                style={{
-                                                    background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
-                                                    color: '#ffffff',
-                                                    border: 'none',
-                                                    padding: '0.5rem 1.25rem',
-                                                    borderRadius: '16px',
-                                                    fontWeight: '600',
-                                                    fontSize: '0.82rem',
-                                                    cursor: 'pointer',
-                                                    boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)',
-                                                    transition: 'all 0.15s ease'
-                                                }}
-                                            >
-                                                Start
-                                            </button>
-                                        ) : (
-                                            <button
-                                                onClick={() => handleAction(patient)}
-                                                style={{
-                                                    background: '#ffffff',
-                                                    color: '#2563eb',
-                                                    border: '1.5px solid #bfdbfe',
-                                                    padding: '0.5rem 1.25rem',
-                                                    borderRadius: '16px',
-                                                    fontWeight: '600',
-                                                    fontSize: '0.82rem',
-                                                    cursor: 'pointer',
-                                                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)',
-                                                    transition: 'all 0.15s ease'
-                                                }}
-                                            >
-                                                View
-                                            </button>
-                                        )}
-                                    </td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
+                                return (
+                                    <tr 
+                                        key={patient.id} 
+                                        style={{ 
+                                            borderBottom: '1px solid #f1f5f9',
+                                            transition: 'background 0.15s ease'
+                                        }}
+                                    >
+                                        <td style={{ padding: '0.875rem 0.75rem', color: '#64748b', fontWeight: '500' }}>
+                                            {patient.id}
+                                        </td>
+                                        <td style={{ padding: '0.875rem 0.75rem' }}>
+                                            <div style={{ fontWeight: '600', color: '#0f172a' }}>{patient.name}</div>
+                                            <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.1rem' }}>{patient.complaint}</div>
+                                        </td>
+                                        <td style={{ padding: '0.875rem 0.75rem', color: '#475569' }}>
+                                            {patient.ageGender}
+                                        </td>
+                                        <td style={{ padding: '0.875rem 0.75rem' }}>
+                                            <span style={{ background: '#f8fafc', color: '#334155', border: '1px solid #e2e8f0', padding: '0.15rem 0.45rem', borderRadius: '4px', fontWeight: '600', fontSize: '0.75rem', fontFamily: 'monospace' }}>
+                                                {patient.token}
+                                            </span>
+                                        </td>
+                                        <td style={{ padding: '0.875rem 0.75rem' }}>
+                                            <span style={{
+                                                background: statusBg,
+                                                border: `1px solid ${statusBorder}`,
+                                                color: statusColor,
+                                                padding: '0.2rem 0.55rem',
+                                                borderRadius: '9999px',
+                                                fontSize: '0.72rem',
+                                                fontWeight: '600',
+                                                display: 'inline-flex',
+                                                alignItems: 'center',
+                                                gap: '0.3rem'
+                                            }}>
+                                                {isWaiting && <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#b45309' }}></span>}
+                                                {patient.status}
+                                            </span>
+                                        </td>
+                                        <td style={{ padding: '0.875rem 0.75rem', textAlign: 'right' }}>
+                                            {isWaiting ? (
+                                                <button
+                                                    onClick={() => handleAction(patient)}
+                                                    style={{
+                                                        background: '#0284c7',
+                                                        color: '#ffffff',
+                                                        border: 'none',
+                                                        padding: '0.4rem 0.95rem',
+                                                        borderRadius: '6px',
+                                                        fontWeight: '600',
+                                                        fontSize: '0.78rem',
+                                                        cursor: 'pointer',
+                                                        transition: 'all 0.15s ease'
+                                                    }}
+                                                >
+                                                    Start
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    onClick={() => handleAction(patient)}
+                                                    style={{
+                                                        background: '#ffffff',
+                                                        color: '#0284c7',
+                                                        border: '1px solid #cbd5e1',
+                                                        padding: '0.4rem 0.95rem',
+                                                        borderRadius: '6px',
+                                                        fontWeight: '600',
+                                                        fontSize: '0.78rem',
+                                                        cursor: 'pointer',
+                                                        transition: 'all 0.15s ease'
+                                                    }}
+                                                >
+                                                    View
+                                                </button>
+                                            )}
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );

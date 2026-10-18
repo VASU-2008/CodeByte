@@ -54,11 +54,11 @@ export default function ClinicalBriefing() {
 
     const cardStyle = {
         background: '#ffffff',
-        borderRadius: '24px',
-        border: '1px solid rgba(148, 163, 184, 0.25)',
-        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.05)',
-        padding: '1.75rem',
-        marginBottom: '1.5rem'
+        borderRadius: '12px',
+        border: '1px solid #e2e8f0',
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.03)',
+        padding: '1.5rem',
+        marginBottom: '1.25rem'
     };
 
     const tabContentStyle = {
@@ -67,7 +67,7 @@ export default function ClinicalBriefing() {
     };
 
     return (
-        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '1040px', margin: '0 auto', fontFamily: "'Inter', system-ui, sans-serif" }}>
             {/* Back Button */}
             <button
                 onClick={() => navigate('/doctor/queue')}
@@ -78,24 +78,24 @@ export default function ClinicalBriefing() {
                     background: 'none',
                     border: 'none',
                     color: '#64748b',
-                    fontSize: '0.88rem',
+                    fontSize: '0.825rem',
                     fontWeight: '600',
                     cursor: 'pointer',
                     marginBottom: '1rem',
                     padding: 0
                 }}
             >
-                <ArrowLeft size={16} />
+                <ArrowLeft size={15} />
                 <span>Back to Patient Queue</span>
             </button>
 
             {/* Quick Patient Switcher Bar */}
             <div style={{
                 background: '#ffffff',
-                borderRadius: '20px',
-                border: '1px solid rgba(148, 163, 184, 0.25)',
-                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
-                padding: '0.85rem 1.25rem',
+                borderRadius: '10px',
+                border: '1px solid #e2e8f0',
+                boxShadow: '0 1px 2px rgba(0, 0, 0, 0.02)',
+                padding: '0.75rem 1rem',
                 marginBottom: '1.25rem',
                 display: 'flex',
                 alignItems: 'center',
@@ -532,24 +532,24 @@ export default function ClinicalBriefing() {
                     )}
                 </div>
 
-                {/* Big Full-Width Clean CTA Button */}
+                {/* Action Button */}
                 <button
                     onClick={handleContinue}
                     style={{
                         width: '100%',
-                        background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+                        background: '#0284c7',
                         color: '#ffffff',
                         border: 'none',
-                        padding: '1rem',
-                        borderRadius: '20px',
+                        padding: '0.75rem 1rem',
+                        borderRadius: '8px',
                         fontWeight: '600',
-                        fontSize: '0.96rem',
+                        fontSize: '0.9rem',
                         cursor: 'pointer',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         gap: '0.5rem',
-                        boxShadow: '0 4px 14px rgba(59, 130, 246, 0.35)',
+                        boxShadow: '0 1px 2px rgba(2, 132, 199, 0.2)',
                         transition: 'all 0.15s ease'
                     }}
                 >

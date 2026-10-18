@@ -127,26 +127,26 @@ export default function TokenLookupScan() {
 
     const cardStyle = {
         background: '#ffffff',
-        borderRadius: '24px',
-        border: '1px solid rgba(148, 163, 184, 0.25)',
-        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.05)',
-        padding: '1.75rem',
-        marginBottom: '1.5rem'
+        borderRadius: '12px',
+        border: '1px solid #e2e8f0',
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.03)',
+        padding: '1.5rem',
+        marginBottom: '1.25rem'
     };
 
     return (
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', fontFamily: "'Inter', system-ui, sans-serif" }}>
             <div style={cardStyle}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
-                    <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: '#edf2fe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2563eb' }}>
-                        <QrCode size={20} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
+                    <div style={{ width: '38px', height: '38px', borderRadius: '8px', background: '#f0f9ff', border: '1px solid #bae6fd', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0284c7' }}>
+                        <QrCode size={18} />
                     </div>
                     <div>
-                        <h2 style={{ margin: 0, fontSize: '1.2rem', fontWeight: '800', color: '#0f172a' }}>
-                            Patient Token Lookup & QR Scan
+                        <h2 style={{ margin: 0, fontSize: '1.15rem', fontWeight: '700', color: '#0f172a' }}>
+                            Patient Token Lookup & Optical Scan
                         </h2>
-                        <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b' }}>
-                            Scan QR pass via camera or enter token ID for authorized consultation access
+                        <p style={{ margin: 0, fontSize: '0.78rem', color: '#64748b' }}>
+                            Scan QR pass via optical webcam or enter token ID for authorized consultation access
                         </p>
                     </div>
                 </div>
@@ -154,9 +154,9 @@ export default function TokenLookupScan() {
                 {/* Camera / Optical Viewfinder Box */}
                 <div style={{
                     background: '#f8fafc',
-                    border: '2px dashed rgba(148, 163, 184, 0.45)',
-                    borderRadius: '20px',
-                    padding: isCameraActive ? '1rem' : '2rem',
+                    border: '1px dashed #cbd5e1',
+                    borderRadius: '10px',
+                    padding: isCameraActive ? '1rem' : '1.75rem',
                     textAlign: 'center',
                     marginBottom: '1.5rem'
                 }}>
@@ -372,24 +372,24 @@ export default function TokenLookupScan() {
                             onClick={handleProceed}
                             style={{
                                 width: '100%',
-                                background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+                                background: '#0284c7',
                                 color: '#ffffff',
                                 border: 'none',
-                                padding: '0.95rem',
-                                borderRadius: '20px',
+                                padding: '0.75rem 1rem',
+                                borderRadius: '8px',
                                 fontWeight: '600',
-                                fontSize: '0.94rem',
+                                fontSize: '0.9rem',
                                 cursor: 'pointer',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 gap: '0.5rem',
-                                boxShadow: '0 4px 14px rgba(59, 130, 246, 0.35)',
+                                boxShadow: '0 1px 2px rgba(2, 132, 199, 0.2)',
                                 transition: 'all 0.15s ease'
                             }}
                         >
                             Open Clinical Briefing
-                            <ArrowRight size={16} />
+                            <ArrowRight size={15} />
                         </button>
                     </div>
                 )}

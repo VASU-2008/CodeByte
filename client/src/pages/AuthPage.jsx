@@ -144,116 +144,138 @@ export default function AuthPage() {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #f0fdf4 0%, #f8fafc 50%, #eff6ff 100%)',
+      background: 'var(--bg-page, #f8fafc)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '2rem 1rem'
+      padding: '2.5rem 1rem',
+      fontFamily: "'Inter', system-ui, -apple-system, sans-serif"
     }}>
       <div style={{
         width: '100%',
-        maxWidth: '540px',
+        maxWidth: '480px',
         background: '#ffffff',
-        borderRadius: '24px',
-        boxShadow: '0 20px 45px rgba(15, 23, 42, 0.08)',
+        borderRadius: '16px',
         border: '1px solid #e2e8f0',
+        boxShadow: '0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04)',
         overflow: 'hidden'
       }}>
         {/* Header Ribbon */}
         <div style={{
-          background: 'linear-gradient(135deg, #044e42 0%, #0f766e 100%)',
-          padding: '2rem 2rem 1.75rem',
-          color: '#ffffff',
+          padding: '2rem 2rem 1.5rem',
+          borderBottom: '1px solid #f1f5f9',
           textAlign: 'center',
-          position: 'relative'
+          background: 'linear-gradient(180deg, #f8fafc 0%, #ffffff 100%)'
         }}>
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.4rem',
-            background: 'rgba(255, 255, 255, 0.15)',
-            backdropFilter: 'blur(8px)',
-            padding: '0.3rem 0.85rem',
-            borderRadius: '20px',
-            fontSize: '0.8rem',
-            fontWeight: '600',
-            marginBottom: '0.75rem'
-          }}>
-            <Sparkles size={14} />
-            Unified Health Authentication
+          {/* Brand Mark */}
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.625rem', marginBottom: '1rem' }}>
+            <div style={{
+              width: '36px',
+              height: '36px',
+              borderRadius: '10px',
+              background: '#0284c7',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#ffffff',
+              boxShadow: '0 2px 8px rgba(2, 132, 199, 0.25)'
+            }}>
+              <Activity size={20} strokeWidth={2.5} />
+            </div>
+            <span style={{ fontSize: '1.25rem', fontWeight: '700', color: '#0f172a', letterSpacing: '-0.02em' }}>
+              Veyora <span style={{ color: '#0284c7' }}>Health</span>
+            </span>
           </div>
-          <h1 style={{ fontSize: '1.65rem', fontWeight: '800', margin: 0, letterSpacing: '-0.02em' }}>
-            Veyora Healthcare
+
+          <h1 style={{ fontSize: '1.35rem', fontWeight: '700', color: '#0f172a', margin: '0 0 0.35rem', letterSpacing: '-0.02em' }}>
+            {isRegisterMode ? 'Create your clinical account' : 'Sign in to your clinical workspace'}
           </h1>
-          <p style={{ margin: '0.35rem 0 0', fontSize: '0.88rem', color: '#ccfbf1', opacity: 0.9 }}>
-            Three portals · One connected care continuity engine
+          <p style={{ margin: 0, fontSize: '0.875rem', color: '#64748b' }}>
+            {isRegisterMode
+              ? 'Register for patient care or clinical practitioner access'
+              : 'Secure role-based access for healthcare providers and patients'}
           </p>
 
           {/* Quick Demo Fill Pills */}
           <div style={{
             marginTop: '1.25rem',
             paddingTop: '1rem',
-            borderTop: '1px solid rgba(255, 255, 255, 0.2)',
+            borderTop: '1px solid #f1f5f9',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             gap: '0.5rem',
             flexWrap: 'wrap'
           }}>
-            <span style={{ fontSize: '0.75rem', opacity: 0.8, marginRight: '4px' }}>1-Click Demo:</span>
+            <span style={{ fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>1-Click Evaluator:</span>
             <button
               type="button"
               onClick={() => handleQuickDemo('doctor')}
               style={{
-                background: 'rgba(255, 255, 255, 0.2)',
-                color: '#ffffff',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
-                padding: '0.25rem 0.65rem',
-                borderRadius: '14px',
+                background: '#f0fdf4',
+                color: '#166534',
+                border: '1px solid #bbf7d0',
+                padding: '0.3rem 0.75rem',
+                borderRadius: '9999px',
                 fontSize: '0.75rem',
                 fontWeight: '600',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                transition: 'all 0.15s ease'
               }}
             >
-              👨‍⚕️ Doctor
+              <Stethoscope size={13} />
+              <span>Doctor Portal</span>
             </button>
             <button
               type="button"
               onClick={() => handleQuickDemo('patient')}
               style={{
-                background: 'rgba(255, 255, 255, 0.2)',
-                color: '#ffffff',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
-                padding: '0.25rem 0.65rem',
-                borderRadius: '14px',
+                background: '#f0f9ff',
+                color: '#0369a1',
+                border: '1px solid #bae6fd',
+                padding: '0.3rem 0.75rem',
+                borderRadius: '9999px',
                 fontSize: '0.75rem',
                 fontWeight: '600',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                transition: 'all 0.15s ease'
               }}
             >
-              🏥 Patient
+              <User size={13} />
+              <span>Patient Portal</span>
             </button>
           </div>
         </div>
 
         {/* Tab Switcher: Login / Register */}
         <div style={{
-          display: 'flex',
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
           borderBottom: '1px solid #e2e8f0',
-          background: '#f8fafc'
+          background: '#f8fafc',
+          padding: '0.25rem',
+          margin: '1.25rem 1.75rem 0',
+          borderRadius: '10px'
         }}>
           <Link
             to="/login"
             style={{
-              flex: 1,
               textAlign: 'center',
-              padding: '0.85rem',
-              fontSize: '0.92rem',
-              fontWeight: !isRegisterMode ? '700' : '500',
-              color: !isRegisterMode ? '#044e42' : '#64748b',
-              borderBottom: !isRegisterMode ? '3px solid #044e42' : 'none',
+              padding: '0.5rem',
+              fontSize: '0.85rem',
+              fontWeight: !isRegisterMode ? '600' : '500',
+              color: !isRegisterMode ? '#0f172a' : '#64748b',
               background: !isRegisterMode ? '#ffffff' : 'transparent',
-              textDecoration: 'none'
+              borderRadius: '8px',
+              textDecoration: 'none',
+              boxShadow: !isRegisterMode ? '0 1px 3px rgba(0,0,0,0.06)' : 'none',
+              transition: 'all 0.15s ease'
             }}
           >
             Sign In
@@ -261,80 +283,81 @@ export default function AuthPage() {
           <Link
             to="/register"
             style={{
-              flex: 1,
               textAlign: 'center',
-              padding: '0.85rem',
-              fontSize: '0.92rem',
-              fontWeight: isRegisterMode ? '700' : '500',
-              color: isRegisterMode ? '#044e42' : '#64748b',
-              borderBottom: isRegisterMode ? '3px solid #044e42' : 'none',
+              padding: '0.5rem',
+              fontSize: '0.85rem',
+              fontWeight: isRegisterMode ? '600' : '500',
+              color: isRegisterMode ? '#0f172a' : '#64748b',
               background: isRegisterMode ? '#ffffff' : 'transparent',
-              textDecoration: 'none'
+              borderRadius: '8px',
+              textDecoration: 'none',
+              boxShadow: isRegisterMode ? '0 1px 3px rgba(0,0,0,0.06)' : 'none',
+              transition: 'all 0.15s ease'
             }}
           >
             Create Account
           </Link>
         </div>
 
-        <div style={{ padding: '2rem' }}>
+        <div style={{ padding: '1.5rem 1.75rem 2rem' }}>
           {/* Notifications */}
           {errorMessage && (
             <div style={{
               background: '#fef2f2',
               border: '1px solid #fecaca',
-              color: '#b91c1c',
-              padding: '0.75rem 1rem',
-              borderRadius: '12px',
-              fontSize: '0.85rem',
+              color: '#991b1b',
+              padding: '0.75rem 0.875rem',
+              borderRadius: '10px',
+              fontSize: '0.825rem',
               marginBottom: '1.25rem',
               display: 'flex',
-              alignItems: 'center',
+              alignItems: 'flex-start',
               gap: '0.5rem'
             }}>
-              <AlertCircle size={18} style={{ flexShrink: 0 }} />
-              <span>{errorMessage}</span>
+              <AlertCircle size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
+              <span style={{ lineHeight: 1.4 }}>{errorMessage}</span>
             </div>
           )}
 
           {successMessage && (
             <div style={{
-              background: '#ecfdf5',
-              border: '1px solid #a7f3d0',
-              color: '#047857',
-              padding: '0.75rem 1rem',
-              borderRadius: '12px',
-              fontSize: '0.85rem',
+              background: '#f0fdf4',
+              border: '1px solid #bbf7d0',
+              color: '#166534',
+              padding: '0.75rem 0.875rem',
+              borderRadius: '10px',
+              fontSize: '0.825rem',
               marginBottom: '1.25rem',
               display: 'flex',
               alignItems: 'center',
               gap: '0.5rem'
             }}>
-              <CheckCircle2 size={18} style={{ flexShrink: 0 }} />
+              <CheckCircle2 size={16} style={{ flexShrink: 0 }} />
               <span>{successMessage}</span>
             </div>
           )}
 
-          {/* Role Picker (For Registration or Role Switching) */}
-          <div style={{ marginBottom: '1.5rem' }}>
+          {/* Role Picker */}
+          <div style={{ marginBottom: '1.25rem' }}>
             <label style={{
               display: 'block',
-              fontSize: '0.82rem',
+              fontSize: '0.75rem',
               fontWeight: '700',
-              color: '#334155',
+              color: '#475569',
               marginBottom: '0.5rem',
               textTransform: 'uppercase',
               letterSpacing: '0.04em'
             }}>
-              Select Your Healthcare Role
+              Select Role
             </label>
             <div style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(2, 1fr)',
-              gap: '0.75rem'
+              gap: '0.625rem'
             }}>
               {[
-                { id: 'patient', label: 'Patient (with AI Care)', icon: User, color: '#0284c7', bg: '#f0f9ff' },
-                { id: 'doctor', label: 'Doctor', icon: Stethoscope, color: '#059669', bg: '#f0fdf4' }
+                { id: 'patient', label: 'Patient', sub: 'with AI Care Coordinator', icon: User },
+                { id: 'doctor', label: 'Doctor', sub: 'Clinical Consultation', icon: Stethoscope }
               ].map(r => {
                 const Icon = r.icon;
                 const isSelected = role === r.id;
@@ -344,25 +367,31 @@ export default function AuthPage() {
                     type="button"
                     onClick={() => handleRoleSelect(r.id)}
                     style={{
-                      background: isSelected ? r.bg : '#ffffff',
-                      border: isSelected ? `2px solid ${r.color}` : '1px solid #e2e8f0',
-                      borderRadius: '14px',
-                      padding: '0.85rem 0.5rem',
+                      background: isSelected ? '#f0f9ff' : '#ffffff',
+                      border: isSelected ? '1.5px solid #0284c7' : '1px solid #e2e8f0',
+                      borderRadius: '10px',
+                      padding: '0.75rem 0.75rem',
                       display: 'flex',
                       flexDirection: 'column',
-                      alignItems: 'center',
-                      gap: '0.4rem',
+                      alignItems: 'flex-start',
+                      gap: '0.2rem',
                       cursor: 'pointer',
+                      textAlign: 'left',
                       transition: 'all 0.15s ease'
                     }}
                   >
-                    <Icon size={20} color={isSelected ? r.color : '#64748b'} />
-                    <span style={{
-                      fontSize: '0.82rem',
-                      fontWeight: isSelected ? '700' : '600',
-                      color: isSelected ? '#0f172a' : '#64748b'
-                    }}>
-                      {r.label}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', width: '100%' }}>
+                      <Icon size={16} color={isSelected ? '#0284c7' : '#64748b'} />
+                      <span style={{
+                        fontSize: '0.85rem',
+                        fontWeight: '600',
+                        color: isSelected ? '#0284c7' : '#0f172a'
+                      }}>
+                        {r.label}
+                      </span>
+                    </div>
+                    <span style={{ fontSize: '0.72rem', color: '#64748b' }}>
+                      {r.sub}
                     </span>
                   </button>
                 );
@@ -370,30 +399,32 @@ export default function AuthPage() {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {/* Registration specific: Full Name */}
             {isRegisterMode && (
               <div>
-                <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '600', color: '#334155', marginBottom: '0.35rem' }}>
+                <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: '600', color: '#334155', marginBottom: '0.35rem' }}>
                   Full Name
                 </label>
                 <div style={{ position: 'relative' }}>
-                  <User size={18} color="#94a3b8" style={{ position: 'absolute', left: 12, top: 12 }} />
+                  <User size={16} color="#94a3b8" style={{ position: 'absolute', left: 12, top: 12 }} />
                   <input
                     type="text"
                     name="name"
                     required
-                    placeholder={role === 'doctor' ? 'Dr. John Doe' : 'Jane Doe'}
+                    placeholder={role === 'doctor' ? 'Dr. Sarah Jenkins' : 'Patient 1'}
                     value={formData.name}
                     onChange={handleChange}
                     style={{
                       width: '100%',
-                      padding: '0.7rem 1rem 0.7rem 2.4rem',
-                      borderRadius: '12px',
+                      padding: '0.65rem 0.85rem 0.65rem 2.25rem',
+                      borderRadius: '8px',
                       border: '1px solid #cbd5e1',
-                      fontSize: '0.9rem',
+                      fontSize: '0.875rem',
                       outline: 'none',
-                      background: '#f8fafc'
+                      background: '#ffffff',
+                      boxSizing: 'border-box',
+                      color: '#0f172a'
                     }}
                   />
                 </div>
@@ -402,26 +433,28 @@ export default function AuthPage() {
 
             {/* Email Address */}
             <div>
-              <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '600', color: '#334155', marginBottom: '0.35rem' }}>
+              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: '600', color: '#334155', marginBottom: '0.35rem' }}>
                 Email Address
               </label>
               <div style={{ position: 'relative' }}>
-                <Mail size={18} color="#94a3b8" style={{ position: 'absolute', left: 12, top: 12 }} />
+                <Mail size={16} color="#94a3b8" style={{ position: 'absolute', left: 12, top: 12 }} />
                 <input
                   type="email"
                   name="email"
                   required
-                  placeholder="your.email@example.com"
+                  placeholder={role === 'doctor' ? 'doctor1@veyora.com' : 'patient1@veyora.com'}
                   value={formData.email}
                   onChange={handleChange}
                   style={{
                     width: '100%',
-                    padding: '0.7rem 1rem 0.7rem 2.4rem',
-                    borderRadius: '12px',
+                    padding: '0.65rem 0.85rem 0.65rem 2.25rem',
+                    borderRadius: '8px',
                     border: '1px solid #cbd5e1',
-                    fontSize: '0.9rem',
+                    fontSize: '0.875rem',
                     outline: 'none',
-                    background: '#f8fafc'
+                    background: '#ffffff',
+                    boxSizing: 'border-box',
+                    color: '#0f172a'
                   }}
                 />
               </div>
@@ -429,26 +462,28 @@ export default function AuthPage() {
 
             {/* Password */}
             <div>
-              <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '600', color: '#334155', marginBottom: '0.35rem' }}>
+              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: '600', color: '#334155', marginBottom: '0.35rem' }}>
                 Password
               </label>
               <div style={{ position: 'relative' }}>
-                <Lock size={18} color="#94a3b8" style={{ position: 'absolute', left: 12, top: 12 }} />
+                <Lock size={16} color="#94a3b8" style={{ position: 'absolute', left: 12, top: 12 }} />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   name="password"
                   required
-                  placeholder="At least 6 characters"
+                  placeholder="••••••••••••"
                   value={formData.password}
                   onChange={handleChange}
                   style={{
                     width: '100%',
-                    padding: '0.7rem 2.4rem 0.7rem 2.4rem',
-                    borderRadius: '12px',
+                    padding: '0.65rem 2.25rem 0.65rem 2.25rem',
+                    borderRadius: '8px',
                     border: '1px solid #cbd5e1',
-                    fontSize: '0.9rem',
+                    fontSize: '0.875rem',
                     outline: 'none',
-                    background: '#f8fafc'
+                    background: '#ffffff',
+                    boxSizing: 'border-box',
+                    color: '#0f172a'
                   }}
                 />
                 <button
@@ -456,15 +491,15 @@ export default function AuthPage() {
                   onClick={() => setShowPassword(p => !p)}
                   style={{
                     position: 'absolute',
-                    right: 12,
-                    top: 12,
+                    right: 10,
+                    top: 10,
                     background: 'none',
                     border: 'none',
                     cursor: 'pointer',
                     color: '#94a3b8'
                   }}
                 >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
             </div>
@@ -473,11 +508,11 @@ export default function AuthPage() {
             {isRegisterMode && (
               <>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '600', color: '#334155', marginBottom: '0.35rem' }}>
+                  <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: '600', color: '#334155', marginBottom: '0.35rem' }}>
                     Phone Number (Optional)
                   </label>
                   <div style={{ position: 'relative' }}>
-                    <Phone size={18} color="#94a3b8" style={{ position: 'absolute', left: 12, top: 12 }} />
+                    <Phone size={16} color="#94a3b8" style={{ position: 'absolute', left: 12, top: 12 }} />
                     <input
                       type="tel"
                       name="phone"
@@ -486,12 +521,14 @@ export default function AuthPage() {
                       onChange={handleChange}
                       style={{
                         width: '100%',
-                        padding: '0.7rem 1rem 0.7rem 2.4rem',
-                        borderRadius: '12px',
+                        padding: '0.65rem 0.85rem 0.65rem 2.25rem',
+                        borderRadius: '8px',
                         border: '1px solid #cbd5e1',
-                        fontSize: '0.9rem',
+                        fontSize: '0.875rem',
                         outline: 'none',
-                        background: '#f8fafc'
+                        background: '#ffffff',
+                        boxSizing: 'border-box',
+                        color: '#0f172a'
                       }}
                     />
                   </div>
@@ -499,9 +536,9 @@ export default function AuthPage() {
 
                 {/* Patient Specific: Age, Gender, Blood Group */}
                 {role === 'patient' && (
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.65rem' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.5rem' }}>
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: '600', color: '#334155', marginBottom: '0.25rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '600', color: '#334155', marginBottom: '0.25rem' }}>
                         Age
                       </label>
                       <input
@@ -512,16 +549,16 @@ export default function AuthPage() {
                         onChange={handleChange}
                         style={{
                           width: '100%',
-                          padding: '0.65rem',
-                          borderRadius: '10px',
+                          padding: '0.6rem 0.5rem',
+                          borderRadius: '8px',
                           border: '1px solid #cbd5e1',
-                          fontSize: '0.85rem',
-                          background: '#f8fafc'
+                          fontSize: '0.825rem',
+                          boxSizing: 'border-box'
                         }}
                       />
                     </div>
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: '600', color: '#334155', marginBottom: '0.25rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '600', color: '#334155', marginBottom: '0.25rem' }}>
                         Gender
                       </label>
                       <select
@@ -530,11 +567,12 @@ export default function AuthPage() {
                         onChange={handleChange}
                         style={{
                           width: '100%',
-                          padding: '0.65rem',
-                          borderRadius: '10px',
+                          padding: '0.6rem 0.5rem',
+                          borderRadius: '8px',
                           border: '1px solid #cbd5e1',
-                          fontSize: '0.85rem',
-                          background: '#f8fafc'
+                          fontSize: '0.825rem',
+                          background: '#ffffff',
+                          boxSizing: 'border-box'
                         }}
                       >
                         <option value="Male">Male</option>
@@ -543,7 +581,7 @@ export default function AuthPage() {
                       </select>
                     </div>
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: '600', color: '#334155', marginBottom: '0.25rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '600', color: '#334155', marginBottom: '0.25rem' }}>
                         Blood
                       </label>
                       <select
@@ -552,11 +590,12 @@ export default function AuthPage() {
                         onChange={handleChange}
                         style={{
                           width: '100%',
-                          padding: '0.65rem',
-                          borderRadius: '10px',
+                          padding: '0.6rem 0.5rem',
+                          borderRadius: '8px',
                           border: '1px solid #cbd5e1',
-                          fontSize: '0.85rem',
-                          background: '#f8fafc'
+                          fontSize: '0.825rem',
+                          background: '#ffffff',
+                          boxSizing: 'border-box'
                         }}
                       >
                         {['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'].map(b => (
@@ -570,7 +609,7 @@ export default function AuthPage() {
                 {/* Doctor Specific: Specialization */}
                 {role === 'doctor' && (
                   <div>
-                    <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '600', color: '#334155', marginBottom: '0.35rem' }}>
+                    <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: '600', color: '#334155', marginBottom: '0.35rem' }}>
                       Clinical Specialization
                     </label>
                     <input
@@ -581,11 +620,12 @@ export default function AuthPage() {
                       onChange={handleChange}
                       style={{
                         width: '100%',
-                        padding: '0.7rem 1rem',
-                        borderRadius: '12px',
+                        padding: '0.65rem 0.85rem',
+                        borderRadius: '8px',
                         border: '1px solid #cbd5e1',
-                        fontSize: '0.9rem',
-                        background: '#f8fafc'
+                        fontSize: '0.875rem',
+                        background: '#ffffff',
+                        boxSizing: 'border-box'
                       }}
                     />
                   </div>
@@ -599,19 +639,19 @@ export default function AuthPage() {
               disabled={loading}
               style={{
                 marginTop: '0.5rem',
-                background: '#044e42',
+                background: '#0284c7',
                 color: '#ffffff',
                 border: 'none',
-                borderRadius: '14px',
-                padding: '0.85rem',
-                fontSize: '0.95rem',
-                fontWeight: '700',
+                borderRadius: '8px',
+                padding: '0.75rem 1rem',
+                fontSize: '0.875rem',
+                fontWeight: '600',
                 cursor: loading ? 'not-allowed' : 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '0.5rem',
-                boxShadow: '0 4px 12px rgba(4, 78, 66, 0.25)',
+                boxShadow: '0 1px 2px rgba(2, 132, 199, 0.2)',
                 transition: 'all 0.15s ease'
               }}
             >
@@ -625,13 +665,29 @@ export default function AuthPage() {
           </form>
 
           {/* Bottom Switcher */}
-          <div style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '0.85rem', color: '#64748b' }}>
+          <div style={{ marginTop: '1.25rem', textAlign: 'center', fontSize: '0.825rem', color: '#64748b' }}>
             {isRegisterMode ? (
-              <span>Already registered? <Link to="/login" style={{ color: '#044e42', fontWeight: '700' }}>Sign In</Link></span>
+              <span>Already registered? <Link to="/login" style={{ color: '#0284c7', fontWeight: '600', textDecoration: 'none' }}>Sign In</Link></span>
             ) : (
-              <span>New to Veyora? <Link to="/register" style={{ color: '#044e42', fontWeight: '700' }}>Create an account</Link></span>
+              <span>New to Veyora? <Link to="/register" style={{ color: '#0284c7', fontWeight: '600', textDecoration: 'none' }}>Create an account</Link></span>
             )}
           </div>
+        </div>
+
+        {/* Minimal Trust Badge Footer */}
+        <div style={{
+          padding: '0.875rem 1.75rem',
+          background: '#f8fafc',
+          borderTop: '1px solid #f1f5f9',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '0.5rem',
+          fontSize: '0.75rem',
+          color: '#64748b'
+        }}>
+          <ShieldCheck size={14} color="#059669" />
+          <span>256-bit TLS encryption · HIPAA-ready · ABHA compatible</span>
         </div>
       </div>
     </div>

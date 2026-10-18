@@ -55,6 +55,18 @@ app.use('/api/alerts', require('./routes/alertRoutes'));
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok', service: 'Veyora Healthcare Backend', timestamp: new Date() }));
 
+// Serve built production frontend if available
+const path = require('path');
+const fs = require('fs');
+const clientDist = path.join(__dirname, '../client/dist');
+if (fs.existsSync(clientDist)) {
+    app.use(express.static(clientDist));
+    app.get('*', (req, res, next) => {
+        if (req.path.startsWith('/api') || req.path.startsWith('/socket.io')) return next();
+        res.sendFile(path.join(clientDist, 'index.html'));
+    });
+}
+
 // Scheduled Automation Daemon (Simulates VeyoraAI follow-up tracking & adherence telemetry)
 cron.schedule('0 * * * *', async () => {
     try {

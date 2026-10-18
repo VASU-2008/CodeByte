@@ -1,88 +1,106 @@
 /* ============================================================
-   Veyora Healthcare — Global Styles & Nordic Wellness Glass
-   Design System (Patient Portal scoped, no Tailwind)
+   Veyora Healthcare — Premium SaaS Design System
+   Visual Language: Linear / Stripe / Apple Healthcare Grade
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-sans: 'Outfit', 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-/* ─── CSS Custom Properties ─────────────────────────────── */
+/* ─── Unified Design Tokens ───────────────────────────────── */
 :root {
-  /* Patient Portal Palette */
-  --pp-primary:        #3b82f6;
-  --pp-primary-dark:   #2563eb;
-  --pp-primary-light:  #93c5fd;
-  --pp-lavender:       #e0e7ff;
-  --pp-lavender-mid:   #c7d2fe;
-  --pp-bg:             #f8fafc;
-  --pp-bg-subtle:      #f1f5f9;
-  --pp-surface:        rgba(255,255,255,0.82);
+  /* Core Clinical Palette */
+  --bg-page:           #f8fafc;
+  --bg-surface:        #ffffff;
+  --bg-subtle:         #f1f5f9;
+  --bg-hover:          #f8fafc;
+  
+  --text-primary:      #0f172a; /* Slate 900 */
+  --text-secondary:    #475569; /* Slate 600 */
+  --text-muted:        #94a3b8; /* Slate 400 */
+  --text-inverse:      #ffffff;
+
+  --accent-primary:    #0284c7; /* Clinical Sky Blue */
+  --accent-hover:      #0369a1;
+  --accent-light:      #f0f9ff;
+  --accent-border:     #bae6fd;
+  
+  --border-subtle:     #e2e8f0;
+  --border-hairline:   #f1f5f9;
+  --border-strong:     #cbd5e1;
+
+  --status-success:    #059669;
+  --status-success-bg: #ecfdf5;
+  --status-success-bd: #a7f3d0;
+
+  --status-warning:    #d97706;
+  --status-warning-bg: #fffbeb;
+  --status-warning-bd: #fde68a;
+
+  --status-danger:     #e11d48;
+  --status-danger-bg:  #fff1f2;
+  --status-danger-bd:  #fecdd3;
+
+  /* Legacy Patient Portal aliases for backward compatibility */
+  --pp-primary:        var(--accent-primary);
+  --pp-primary-dark:   var(--accent-hover);
+  --pp-primary-light:  var(--accent-border);
+  --pp-lavender:       var(--accent-light);
+  --pp-lavender-mid:   #e0f2fe;
+  --pp-bg:             var(--bg-page);
+  --pp-bg-subtle:      var(--bg-subtle);
+  --pp-surface:        rgba(255, 255, 255, 0.95);
   --pp-surface-solid:  #ffffff;
-  --pp-border:         rgba(148,163,184,0.25);
-  --pp-border-strong:  rgba(148,163,184,0.45);
-  --pp-text-primary:   #0f172a;
-  --pp-text-secondary: #475569;
-  --pp-text-muted:     #94a3b8;
-  --pp-success:        #10b981;
-  --pp-success-bg:     #d1fae5;
-  --pp-warning:        #f59e0b;
-  --pp-warning-bg:     #fef3c7;
-  --pp-danger:         #ef4444;
-  --pp-danger-bg:      #fee2e2;
-  --pp-emergency:      #dc2626;
-  --pp-emergency-bg:   #fef2f2;
+  --pp-border:         var(--border-subtle);
+  --pp-border-strong:  var(--border-strong);
+  --pp-text-primary:   var(--text-primary);
+  --pp-text-secondary: var(--text-secondary);
+  --pp-text-muted:     var(--text-muted);
+  --pp-success:        var(--status-success);
+  --pp-success-bg:     var(--status-success-bg);
+  --pp-warning:        var(--status-warning);
+  --pp-warning-bg:     var(--status-warning-bg);
+  --pp-danger:         var(--status-danger);
+  --pp-danger-bg:      var(--status-danger-bg);
+  --pp-emergency:      #be123c;
+  --pp-emergency-bg:   #ffe4e6;
 
-  /* Spacing */
-  --space-xs:  0.25rem;
+  /* Spatial Scale */
+  --space-3xs: 0.125rem;
+  --space-2xs: 0.25rem;
+  --space-xs:  0.375rem;
   --space-sm:  0.5rem;
-  --space-md:  1rem;
-  --space-lg:  1.5rem;
-  --space-xl:  2rem;
-  --space-2xl: 3rem;
+  --space-md:  0.75rem;
+  --space-base: 1rem;
+  --space-lg:  1.25rem;
+  --space-xl:  1.5rem;
+  --space-2xl: 2rem;
+  --space-3xl: 2.5rem;
+  --space-4xl: 3rem;
 
-  /* Border radius */
-  --radius-sm:  0.5rem;
-  --radius-md:  0.75rem;
-  --radius-lg:  1rem;
-  --radius-xl:  1.25rem;
-  --radius-2xl: 1.5rem;
-  --radius-3xl: 2rem;
+  /* Controlled Radius Scale */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: 24px;
   --radius-full: 9999px;
 
-  /* Shadows */
-  --shadow-sm:  0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-  --shadow-md:  0 4px 16px rgba(0,0,0,0.07), 0 2px 6px rgba(0,0,0,0.05);
-  --shadow-lg:  0 10px 40px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.05);
-  --shadow-xl:  0 20px 60px rgba(0,0,0,0.1), 0 8px 24px rgba(0,0,0,0.06);
-
-  /* Typography */
-  --font-sans:  'Outfit', 'DM Sans', system-ui, -apple-system, sans-serif;
-  --font-size-xs:   0.75rem;
-  --font-size-sm:   0.875rem;
-  --font-size-md:   1rem;
-  --font-size-lg:   1.125rem;
-  --font-size-xl:   1.25rem;
-  --font-size-2xl:  1.5rem;
-  --font-size-3xl:  1.875rem;
-  --font-size-4xl:  2.25rem;
+  /* Subtle, Flat-Clean Shadows */
+  --shadow-hairline: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-card:     0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+  --shadow-elevated: 0 4px 14px rgba(0, 0, 0, 0.06);
+  --shadow-popover:  0 12px 28px -6px rgba(0, 0, 0, 0.09), 0 4px 10px -4px rgba(0, 0, 0, 0.04);
 
   /* Transitions */
-  --transition-fast:   150ms ease;
-  --transition-normal: 250ms ease;
-  --transition-slow:   400ms ease;
-
-  /* Z-index scale */
-  --z-base:    0;
-  --z-raised:  10;
-  --z-overlay: 100;
-  --z-modal:   200;
-  --z-toast:   300;
-  --z-sidebar: 50;
+  --transition-fast:   140ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-normal: 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-smooth: 280ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ─── Reset & Base ───────────────────────────────────────── */
@@ -280,3 +298,130 @@ input, textarea, select { font-family: var(--font-sans); font-size: var(--font-s
 /* ─── Responsive Utilities ────────────────────────────────── */
 @media (max-width: 768px) { .pp-hide-mobile { display: none !important; } }
 @media (min-width: 769px) { .pp-hide-desktop { display: none !important; } }
+
+/* ============================================================
+   Veyora Unified Design System Utilities (.vy-*)
+   ============================================================ */
+
+.vy-surface {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.vy-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 1.5rem;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.vy-card-interactive {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.vy-card-interactive:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-elevated);
+  transform: translateY(-1px);
+}
+
+.vy-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--accent-primary);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.55rem 1.15rem;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  box-shadow: var(--shadow-hairline);
+  transition: all var(--transition-fast);
+}
+.vy-btn-primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+  box-shadow: var(--shadow-elevated);
+}
+.vy-btn-primary:active:not(:disabled) {
+  transform: scale(0.99);
+}
+
+.vy-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.55rem 1.15rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  cursor: pointer;
+  box-shadow: var(--shadow-hairline);
+  transition: all var(--transition-fast);
+}
+.vy-btn-secondary:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--border-strong);
+}
+
+.vy-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+.vy-badge-blue {
+  background: var(--accent-light);
+  color: var(--accent-hover);
+  border: 1px solid var(--accent-border);
+}
+.vy-badge-green {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+  border: 1px solid var(--status-success-bd);
+}
+.vy-badge-amber {
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+  border: 1px solid var(--status-warning-bd);
+}
+.vy-badge-red {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  border: 1px solid var(--status-danger-bd);
+}
+.vy-badge-neutral {
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+}
+
+/* Reduced motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -291,8 +291,8 @@ export default function AICareCoordinator({ lang = 'en' }) {
   if (loading) {
     return (
       <div style={{ padding: '3rem 1rem', textAlign: 'center', color: '#64748b' }}>
-        <RefreshCw size={36} className="animate-spin" style={{ margin: '0 auto 1rem', color: '#044e42' }} />
-        <p style={{ fontWeight: 600 }}>Loading your AI Care Coordinator...</p>
+        <RefreshCw size={32} className="animate-spin" style={{ margin: '0 auto 1rem', color: '#0284c7' }} />
+        <p style={{ fontWeight: 600, fontSize: '0.9rem' }}>Loading your AI Care Coordinator...</p>
       </div>
     );
   }
@@ -316,60 +316,49 @@ export default function AICareCoordinator({ lang = 'en' }) {
   const adherencePct = totalDoseSlots > 0 ? Math.round((takenCount / totalDoseSlots) * 100) : 100;
 
   return (
-    <div style={{ maxWidth: '1000px', margin: '0 auto', fontFamily: 'Inter, system-ui, sans-serif' }}>
+    <div style={{ maxWidth: '1040px', margin: '0 auto', fontFamily: "'Inter', system-ui, sans-serif" }}>
       {/* Hero Care Header */}
       <div style={{
-        background: 'linear-gradient(135deg, #044e42 0%, #065f46 60%, #0f766e 100%)',
-        color: '#ffffff',
-        borderRadius: '24px',
-        padding: '2rem',
-        marginBottom: '1.75rem',
-        boxShadow: '0 10px 25px rgba(4, 78, 66, 0.2)',
-        position: 'relative',
-        overflow: 'hidden'
+        background: '#ffffff',
+        border: '1px solid #e2e8f0',
+        borderRadius: '12px',
+        padding: '1.75rem',
+        marginBottom: '1.25rem',
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.03)'
       }}>
-        <div style={{
-          position: 'absolute',
-          top: '-30px',
-          right: '-30px',
-          width: '180px',
-          height: '180px',
-          background: 'rgba(255, 255, 255, 0.06)',
-          borderRadius: '50%',
-          pointerEvents: 'none'
-        }} />
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.65rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
           <div style={{
-            width: '38px',
-            height: '38px',
-            borderRadius: '12px',
-            background: 'rgba(255, 255, 255, 0.2)',
+            width: '32px',
+            height: '32px',
+            borderRadius: '8px',
+            background: '#f0f9ff',
+            border: '1px solid #bae6fd',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
           }}>
-            <Bot size={22} color="#5eead4" />
+            <Bot size={18} color="#0284c7" />
           </div>
           <span style={{
-            background: 'rgba(94, 234, 212, 0.2)',
-            color: '#5eead4',
+            background: '#f0f9ff',
+            color: '#0369a1',
             fontSize: '0.72rem',
-            fontWeight: '800',
-            padding: '0.2rem 0.6rem',
-            borderRadius: '10px',
+            fontWeight: '700',
+            padding: '0.15rem 0.55rem',
+            borderRadius: '9999px',
             textTransform: 'uppercase',
-            letterSpacing: '0.06em'
+            letterSpacing: '0.04em',
+            border: '1px solid #bae6fd'
           }}>
             {isHindi ? 'एआई केयर समन्वयक' : 'Autonomous AI Care Coordinator'}
           </span>
         </div>
 
-        <h1 style={{ fontSize: '1.75rem', fontWeight: '900', margin: '0 0 0.5rem', letterSpacing: '-0.02em' }}>
+        <h1 style={{ fontSize: '1.45rem', fontWeight: '700', color: '#0f172a', margin: '0 0 0.35rem', letterSpacing: '-0.02em' }}>
           {isHindi ? 'आपकी निरंतर स्वास्थ्य देखभाल' : 'Post-Consultation Care Continuity'}
         </h1>
 
-        <p style={{ fontSize: '0.92rem', color: '#ccfbf1', maxWidth: '720px', lineHeight: 1.5, margin: '0 0 1.25rem' }}>
+        <p style={{ fontSize: '0.875rem', color: '#64748b', maxWidth: '780px', lineHeight: 1.5, margin: '0 0 1.25rem' }}>
           {isHindi
             ? 'ABHA केवल आपके पुराने पर्चों को संग्रहीत करता है, परंतु Veyora AI परामर्श के बाद प्रतिदिन आपकी दवाइयों की खुराक, सावधानियों और आगामी जांच की निगरानी करता है।'
             : 'Pre-existing solutions like ABHA store static PDF records. Veyora AI Care Coordinator fills the critical recovery loop: tracking your daily doses, precautions, and check-up appointments 24/7.'}
@@ -381,39 +370,39 @@ export default function AICareCoordinator({ lang = 'en' }) {
           gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
           gap: '0.75rem'
         }}>
-          <div style={{ background: 'rgba(255, 255, 255, 0.12)', padding: '0.75rem 1rem', borderRadius: '14px' }}>
-            <div style={{ fontSize: '0.72rem', color: '#99f6e4', fontWeight: '600', textTransform: 'uppercase' }}>
+          <div style={{ background: '#f8fafc', padding: '0.75rem 0.85rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+            <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.03em' }}>
               {isHindi ? 'डॉक्टर का निदान' : 'Primary Diagnosis'}
             </div>
-            <div style={{ fontSize: '0.92rem', fontWeight: '800', color: '#ffffff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            <div style={{ fontSize: '0.875rem', fontWeight: '700', color: '#0f172a', marginTop: '0.15rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {encounter?.diagnosis || 'Clinical Consultation'}
             </div>
           </div>
 
-          <div style={{ background: 'rgba(255, 255, 255, 0.12)', padding: '0.75rem 1rem', borderRadius: '14px' }}>
-            <div style={{ fontSize: '0.72rem', color: '#99f6e4', fontWeight: '600', textTransform: 'uppercase' }}>
+          <div style={{ background: '#f8fafc', padding: '0.75rem 0.85rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+            <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.03em' }}>
               {isHindi ? 'उपचारक चिकित्सक' : 'Attending Clinician'}
             </div>
-            <div style={{ fontSize: '0.92rem', fontWeight: '800', color: '#ffffff' }}>
+            <div style={{ fontSize: '0.875rem', fontWeight: '700', color: '#0f172a', marginTop: '0.15rem' }}>
               {encounter?.clinicianName || 'Dr. Anil Mehta'}
             </div>
           </div>
 
-          <div style={{ background: 'rgba(255, 255, 255, 0.12)', padding: '0.75rem 1rem', borderRadius: '14px' }}>
-            <div style={{ fontSize: '0.72rem', color: '#99f6e4', fontWeight: '600', textTransform: 'uppercase' }}>
+          <div style={{ background: '#f8fafc', padding: '0.75rem 0.85rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+            <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.03em' }}>
               {isHindi ? 'आज की दवा अनुपालन' : "Today's Dose Compliance"}
             </div>
-            <div style={{ fontSize: '0.92rem', fontWeight: '800', color: '#5eead4' }}>
+            <div style={{ fontSize: '0.875rem', fontWeight: '700', color: '#0284c7', marginTop: '0.15rem' }}>
               {adherencePct}% ({takenCount}/{totalDoseSlots} taken)
             </div>
           </div>
 
-          <div style={{ background: 'rgba(255, 255, 255, 0.12)', padding: '0.75rem 1rem', borderRadius: '14px' }}>
-            <div style={{ fontSize: '0.72rem', color: '#99f6e4', fontWeight: '600', textTransform: 'uppercase' }}>
+          <div style={{ background: '#f8fafc', padding: '0.75rem 0.85rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+            <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.03em' }}>
               {isHindi ? 'अगली जांच' : 'Next Check-Up'}
             </div>
-            <div style={{ fontSize: '0.92rem', fontWeight: '800', color: '#fef08a' }}>
-              {followUp?.date ? `${followUp.date} (${followUp.daysRemaining} days left)` : 'In 2 Weeks'}
+            <div style={{ fontSize: '0.875rem', fontWeight: '700', color: '#d97706', marginTop: '0.15rem' }}>
+              {followUp?.date ? `${followUp.date} (${followUp.daysRemaining}d)` : 'In 2 Weeks'}
             </div>
           </div>
         </div>
@@ -422,26 +411,25 @@ export default function AICareCoordinator({ lang = 'en' }) {
       {/* 1-Day-Before Consultation Follow-Up Alert & Checklist Banner */}
       {dayBefore && (
         <div style={{
-          background: 'linear-gradient(135deg, #fffbeb 0%, #fef3c7 40%, #fef9c3 100%)',
-          border: '2px solid #f59e0b',
-          borderRadius: '24px',
-          padding: '1.5rem 1.75rem',
-          marginBottom: '1.75rem',
-          boxShadow: '0 8px 24px rgba(245, 158, 11, 0.15)',
-          position: 'relative',
-          overflow: 'hidden'
+          background: '#fffdf5',
+          border: '1px solid #fde68a',
+          borderRadius: '12px',
+          padding: '1.25rem 1.5rem',
+          marginBottom: '1.25rem',
+          boxShadow: '0 1px 3px rgba(245, 158, 11, 0.05)',
+          position: 'relative'
         }}>
           {/* Header pill & Action */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '0.75rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <span style={{
-                background: '#b45309',
+                background: '#d97706',
                 color: '#ffffff',
                 fontSize: '0.72rem',
-                fontWeight: '900',
-                padding: '0.25rem 0.65rem',
-                borderRadius: '8px',
-                letterSpacing: '0.05em',
+                fontWeight: '700',
+                padding: '0.2rem 0.55rem',
+                borderRadius: '6px',
+                letterSpacing: '0.04em',
                 textTransform: 'uppercase',
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -450,12 +438,12 @@ export default function AICareCoordinator({ lang = 'en' }) {
                 <Clock size={13} /> {isHindi ? 'कल की परामर्श सूचना (T-1)' : 'T-1 Day-Before Consultation Alert'}
               </span>
               <span style={{
-                background: 'rgba(180, 83, 9, 0.12)',
+                background: '#fef3c7',
                 color: '#92400e',
-                fontSize: '0.78rem',
-                fontWeight: '700',
-                padding: '0.25rem 0.6rem',
-                borderRadius: '8px'
+                fontSize: '0.75rem',
+                fontWeight: '600',
+                padding: '0.2rem 0.5rem',
+                borderRadius: '6px'
               }}>
                 {dayBefore.appointmentDate || 'Tomorrow Morning'}
               </span>
@@ -468,30 +456,30 @@ export default function AICareCoordinator({ lang = 'en' }) {
                   handleSendMessage(isHindi ? 'कल की डॉक्टर जांच के लिए मुझे क्या तैयारी करनी चाहिए?' : 'How should I prepare for tomorrow\'s consultation?');
                 }}
                 style={{
-                  background: '#044e42',
+                  background: '#0284c7',
                   color: '#ffffff',
                   border: 'none',
-                  padding: '0.45rem 0.95rem',
-                  borderRadius: '10px',
+                  padding: '0.4rem 0.85rem',
+                  borderRadius: '6px',
                   fontSize: '0.78rem',
-                  fontWeight: '700',
+                  fontWeight: '600',
                   cursor: 'pointer',
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '0.4rem',
-                  boxShadow: '0 2px 8px rgba(4, 78, 66, 0.2)'
+                  transition: 'all 0.15s ease'
                 }}
               >
-                <Bot size={14} color="#5eead4" />
-                {isHindi ? 'एआई से तैयारी पूछें' : 'Ask AI Prep Guidance'}
+                <Bot size={14} color="#ffffff" />
+                <span>{isHindi ? 'एआई से तैयारी पूछें' : 'Ask AI Prep Guidance'}</span>
               </button>
             </div>
           </div>
 
-          <h3 style={{ fontSize: '1.25rem', fontWeight: '900', color: '#78350f', margin: '0 0 0.4rem' }}>
+          <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#92400e', margin: '0 0 0.25rem' }}>
             {isHindi ? (dayBefore.headlineHi || dayBefore.headline) : dayBefore.headline}
           </h3>
-          <p style={{ fontSize: '0.86rem', color: '#92400e', margin: '0 0 1.25rem', lineHeight: 1.5 }}>
+          <p style={{ fontSize: '0.825rem', color: '#78350f', margin: '0 0 1rem', lineHeight: 1.5 }}>
             {isHindi ? (dayBefore.subheadlineHi || dayBefore.subheadline) : dayBefore.subheadline}
           </p>
 
@@ -499,8 +487,8 @@ export default function AICareCoordinator({ lang = 'en' }) {
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-            gap: '0.85rem',
-            marginBottom: '1rem'
+            gap: '0.75rem',
+            marginBottom: '0.85rem'
           }}>
             {dayBefore.checklist?.map((item) => {
               const isDone = !!checklistDone[item.id];
@@ -510,33 +498,32 @@ export default function AICareCoordinator({ lang = 'en' }) {
                   onClick={() => toggleChecklist(item.id)}
                   style={{
                     background: isDone ? '#f0fdf4' : '#ffffff',
-                    border: isDone ? '1.5px solid #22c55e' : '1px solid #fde68a',
-                    borderRadius: '14px',
-                    padding: '0.9rem 1rem',
+                    border: isDone ? '1px solid #86efac' : '1px solid #fde68a',
+                    borderRadius: '8px',
+                    padding: '0.75rem 0.85rem',
                     cursor: 'pointer',
-                    transition: 'all 0.15s ease',
-                    boxShadow: '0 2px 6px rgba(0,0,0,0.03)'
+                    transition: 'all 0.15s ease'
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '0.5rem', marginBottom: '0.4rem' }}>
-                    <div style={{ fontSize: '0.85rem', fontWeight: '800', color: isDone ? '#166534' : '#0f172a' }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '0.5rem', marginBottom: '0.35rem' }}>
+                    <div style={{ fontSize: '0.825rem', fontWeight: '700', color: isDone ? '#166534' : '#0f172a' }}>
                       {isHindi ? (item.titleHi || item.title) : item.title}
                     </div>
                     <div style={{
-                      width: '20px',
-                      height: '20px',
-                      borderRadius: '6px',
+                      width: '18px',
+                      height: '18px',
+                      borderRadius: '4px',
                       border: isDone ? 'none' : '1.5px solid #d97706',
-                      background: isDone ? '#22c55e' : 'transparent',
+                      background: isDone ? '#16a34a' : 'transparent',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       flexShrink: 0
                     }}>
-                      {isDone && <CheckCircle2 size={16} color="#ffffff" />}
+                      {isDone && <CheckCircle2 size={14} color="#ffffff" />}
                     </div>
                   </div>
-                  <p style={{ fontSize: '0.76rem', color: isDone ? '#15803d' : '#64748b', margin: 0, lineHeight: 1.45 }}>
+                  <p style={{ fontSize: '0.75rem', color: isDone ? '#15803d' : '#64748b', margin: 0, lineHeight: 1.4 }}>
                     {isHindi ? (item.descHi || item.desc) : item.desc}
                   </p>
                 </div>
@@ -544,9 +531,9 @@ export default function AICareCoordinator({ lang = 'en' }) {
             })}
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem', fontSize: '0.78rem', color: '#92400e' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem', fontSize: '0.75rem', color: '#92400e' }}>
             <span>
-              💡 <strong>Clinician:</strong> {dayBefore.doctorName || 'Dr. Anil Mehta'} • <strong>Facility:</strong> {dayBefore.facility || 'PHC Main Health Center'}
+              <strong>Clinician:</strong> {dayBefore.doctorName || 'Dr. Anil Mehta'} · <strong>Facility:</strong> {dayBefore.facility || 'PHC Main Health Center'}
             </span>
             <span>
               {Object.values(checklistDone).filter(Boolean).length} of {dayBefore.checklist?.length || 4} preparation steps verified ready
@@ -559,13 +546,13 @@ export default function AICareCoordinator({ lang = 'en' }) {
       <div style={{
         display: 'flex',
         alignItems: 'center',
-        gap: '0.5rem',
+        gap: '0.35rem',
         background: '#ffffff',
-        padding: '0.5rem',
-        borderRadius: '18px',
+        padding: '0.35rem',
+        borderRadius: '10px',
         border: '1px solid #e2e8f0',
-        marginBottom: '1.5rem',
-        boxShadow: '0 2px 10px rgba(0,0,0,0.03)',
+        marginBottom: '1.25rem',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
         overflowX: 'auto'
       }}>
         {[
@@ -582,14 +569,14 @@ export default function AICareCoordinator({ lang = 'en' }) {
               onClick={() => setActiveTab(t.id)}
               style={{
                 flex: 1,
-                minWidth: '160px',
-                padding: '0.65rem 0.9rem',
-                borderRadius: '12px',
+                minWidth: '150px',
+                padding: '0.55rem 0.85rem',
+                borderRadius: '6px',
                 border: 'none',
-                background: isActive ? '#044e42' : 'transparent',
+                background: isActive ? '#0284c7' : 'transparent',
                 color: isActive ? '#ffffff' : '#64748b',
-                fontWeight: isActive ? '700' : '600',
-                fontSize: '0.85rem',
+                fontWeight: isActive ? '600' : '500',
+                fontSize: '0.825rem',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -598,7 +585,7 @@ export default function AICareCoordinator({ lang = 'en' }) {
                 transition: 'all 0.15s ease'
               }}
             >
-              <Icon size={16} />
+              <Icon size={15} />
               <span>{t.label}</span>
             </button>
           );
@@ -678,7 +665,7 @@ export default function AICareCoordinator({ lang = 'en' }) {
                       <div style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '0.25rem' }}>
                         Frequency: <strong>{m.frequency}</strong> • Duration: {m.duration}
                       </div>
-                      <div style={{ fontSize: '0.82rem', color: '#044e42', fontWeight: '600' }}>
+                      <div style={{ fontSize: '0.82rem', color: '#0369a1', fontWeight: '600' }}>
                         📋 {m.instructions}
                       </div>
                     </div>
@@ -924,20 +911,22 @@ export default function AICareCoordinator({ lang = 'en' }) {
             <button
               onClick={() => toast.success('Calendar reminder downloaded to your device!')}
               style={{
-                background: '#044e42',
+                background: '#0284c7',
                 color: '#ffffff',
                 border: 'none',
-                padding: '0.75rem 1.25rem',
-                borderRadius: '12px',
-                fontSize: '0.88rem',
-                fontWeight: '700',
+                padding: '0.65rem 1.25rem',
+                borderRadius: '8px',
+                fontSize: '0.85rem',
+                fontWeight: '600',
                 cursor: 'pointer',
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '0.5rem'
+                gap: '0.5rem',
+                boxShadow: '0 1px 2px rgba(2, 132, 199, 0.2)',
+                transition: 'all 0.15s ease'
               }}
             >
-              <Calendar size={16} />
+              <Calendar size={15} />
               Set Phone Calendar Reminder
             </button>
           </div>
@@ -948,9 +937,9 @@ export default function AICareCoordinator({ lang = 'en' }) {
       {activeTab === 'chat' && (
         <div style={{
           background: '#ffffff',
-          borderRadius: '20px',
+          borderRadius: '12px',
           border: '1px solid #e2e8f0',
-          boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.03)',
           display: 'flex',
           flexDirection: 'column',
           height: '600px',
@@ -958,7 +947,7 @@ export default function AICareCoordinator({ lang = 'en' }) {
         }}>
           {/* Chat Header */}
           <div style={{
-            padding: '1rem 1.5rem',
+            padding: '0.875rem 1.25rem',
             borderBottom: '1px solid #e2e8f0',
             background: '#f8fafc',
             display: 'flex',
@@ -967,29 +956,30 @@ export default function AICareCoordinator({ lang = 'en' }) {
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
               <div style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '50%',
-                background: '#044e42',
-                color: '#5eead4',
+                width: '34px',
+                height: '34px',
+                borderRadius: '8px',
+                background: '#0284c7',
+                color: '#ffffff',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'
               }}>
-                <Bot size={20} />
+                <Bot size={18} />
               </div>
               <div>
-                <h3 style={{ margin: 0, fontSize: '0.95rem', fontWeight: '800', color: '#0f172a' }}>
+                <h3 style={{ margin: 0, fontSize: '0.9rem', fontWeight: '700', color: '#0f172a' }}>
                   Veyora AI Care Companion
                 </h3>
-                <span style={{ fontSize: '0.74rem', color: '#16a34a', fontWeight: '600' }}>
-                  ● Synchronized with your latest medical records
+                <span style={{ fontSize: '0.72rem', color: '#16a34a', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#16a34a' }}></span>
+                  Synchronized with clinical encounter records
                 </span>
               </div>
             </div>
 
-            <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
-              Supports Hindi & English
+            <div style={{ fontSize: '0.72rem', color: '#64748b' }}>
+              English & Hindi Supported
             </div>
           </div>
 
@@ -1012,11 +1002,12 @@ export default function AICareCoordinator({ lang = 'en' }) {
                 }}
               >
                 <div style={{
-                  background: msg.sender === 'user' ? '#044e42' : '#f1f5f9',
+                  background: msg.sender === 'user' ? '#0284c7' : '#f8fafc',
+                  border: msg.sender === 'user' ? 'none' : '1px solid #e2e8f0',
                   color: msg.sender === 'user' ? '#ffffff' : '#0f172a',
-                  padding: '0.85rem 1.1rem',
-                  borderRadius: msg.sender === 'user' ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
-                  fontSize: '0.88rem',
+                  padding: '0.75rem 1rem',
+                  borderRadius: msg.sender === 'user' ? '12px 12px 2px 12px' : '12px 12px 12px 2px',
+                  fontSize: '0.85rem',
                   lineHeight: '1.5',
                   whiteSpace: 'pre-line'
                 }}>
@@ -1034,20 +1025,21 @@ export default function AICareCoordinator({ lang = 'en' }) {
 
                 {/* Suggested Action Chips */}
                 {msg.suggestedActions && msg.suggestedActions.length > 0 && (
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: '0.5rem' }}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', marginTop: '0.5rem' }}>
                     {msg.suggestedActions.map((action, aidx) => (
                       <button
                         key={aidx}
                         onClick={() => handleSendMessage(action)}
                         style={{
-                          background: '#e0f2fe',
+                          background: '#f0f9ff',
                           color: '#0369a1',
-                          border: 'none',
-                          padding: '0.3rem 0.65rem',
-                          borderRadius: '12px',
-                          fontSize: '0.75rem',
+                          border: '1px solid #bae6fd',
+                          padding: '0.25rem 0.6rem',
+                          borderRadius: '9999px',
+                          fontSize: '0.72rem',
                           fontWeight: '600',
-                          cursor: 'pointer'
+                          cursor: 'pointer',
+                          transition: 'all 0.15s ease'
                         }}
                       >
                         {action}
@@ -1059,9 +1051,9 @@ export default function AICareCoordinator({ lang = 'en' }) {
             ))}
 
             {chatLoading && (
-              <div style={{ alignSelf: 'flex-start', display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#64748b', fontSize: '0.82rem', padding: '0.5rem' }}>
-                <Bot size={16} className="animate-spin" color="#044e42" />
-                Veyora AI is analyzing your medical context...
+              <div style={{ alignSelf: 'flex-start', display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#64748b', fontSize: '0.8rem', padding: '0.5rem' }}>
+                <Bot size={15} className="animate-spin" color="#0284c7" />
+                Veyora AI is synthesizing your medical context...
               </div>
             )}
             <div ref={chatBottomRef} />
@@ -1073,7 +1065,7 @@ export default function AICareCoordinator({ lang = 'en' }) {
             background: '#f8fafc',
             borderTop: '1px solid #f1f5f9',
             display: 'flex',
-            gap: '0.5rem',
+            gap: '0.4rem',
             overflowX: 'auto',
             whiteSpace: 'nowrap'
           }}>
@@ -1089,10 +1081,10 @@ export default function AICareCoordinator({ lang = 'en' }) {
                 onClick={() => handleSendMessage(q)}
                 style={{
                   background: '#ffffff',
-                  border: '1px solid #cbd5e1',
-                  borderRadius: '12px',
-                  padding: '0.3rem 0.65rem',
-                  fontSize: '0.74rem',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '9999px',
+                  padding: '0.25rem 0.65rem',
+                  fontSize: '0.72rem',
                   color: '#475569',
                   fontWeight: '600',
                   cursor: 'pointer'
@@ -1110,11 +1102,11 @@ export default function AICareCoordinator({ lang = 'en' }) {
               handleSendMessage();
             }}
             style={{
-              padding: '0.85rem 1rem',
+              padding: '0.75rem 1rem',
               borderTop: '1px solid #e2e8f0',
               display: 'flex',
               alignItems: 'center',
-              gap: '0.75rem',
+              gap: '0.65rem',
               background: '#ffffff'
             }}
           >
@@ -1125,32 +1117,35 @@ export default function AICareCoordinator({ lang = 'en' }) {
               placeholder={isHindi ? 'अपनी दवा, खुराक या सेहत संबंधी सवाल पूछें...' : 'Ask about your medicines, doses, precautions, or checkup...'}
               style={{
                 flex: 1,
-                padding: '0.7rem 1rem',
-                borderRadius: '12px',
+                padding: '0.65rem 0.85rem',
+                borderRadius: '8px',
                 border: '1px solid #cbd5e1',
-                fontSize: '0.88rem',
-                outline: 'none'
+                fontSize: '0.85rem',
+                outline: 'none',
+                boxSizing: 'border-box'
               }}
             />
             <button
               type="submit"
               disabled={chatLoading || !inputMessage.trim()}
               style={{
-                background: '#044e42',
+                background: '#0284c7',
                 color: '#ffffff',
                 border: 'none',
-                padding: '0.7rem 1.25rem',
-                borderRadius: '12px',
-                fontWeight: '700',
-                fontSize: '0.85rem',
+                padding: '0.65rem 1.15rem',
+                borderRadius: '8px',
+                fontWeight: '600',
+                fontSize: '0.825rem',
                 cursor: chatLoading || !inputMessage.trim() ? 'not-allowed' : 'pointer',
                 opacity: chatLoading || !inputMessage.trim() ? 0.6 : 1,
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.4rem'
+                gap: '0.4rem',
+                boxShadow: '0 1px 2px rgba(2, 132, 199, 0.2)',
+                transition: 'all 0.15s ease'
               }}
             >
-              <Send size={15} />
+              <Send size={14} />
               <span>Send</span>
             </button>
           </form>

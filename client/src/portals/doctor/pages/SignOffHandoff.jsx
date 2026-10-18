@@ -53,11 +53,11 @@ export default function SignOffHandoff() {
 
     const cardStyle = {
         background: '#ffffff',
-        borderRadius: '24px',
-        border: '1px solid rgba(148, 163, 184, 0.25)',
-        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.05)',
-        padding: '1.75rem',
-        marginBottom: '1.5rem'
+        borderRadius: '12px',
+        border: '1px solid #e2e8f0',
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.03)',
+        padding: '1.5rem',
+        marginBottom: '1.25rem'
     };
 
     return (
@@ -306,15 +306,15 @@ export default function SignOffHandoff() {
                             disabled={signing || !affirmation}
                             style={{
                                 width: '100%',
-                                background: affirmation ? 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)' : '#94a3b8',
+                                background: affirmation ? '#0284c7' : '#cbd5e1',
                                 color: '#ffffff',
                                 border: 'none',
-                                padding: '1rem',
-                                borderRadius: '20px',
+                                padding: '0.75rem 1rem',
+                                borderRadius: '8px',
                                 fontWeight: '600',
-                                fontSize: '0.96rem',
+                                fontSize: '0.9rem',
                                 cursor: affirmation ? 'pointer' : 'not-allowed',
-                                boxShadow: affirmation ? '0 4px 14px rgba(59, 130, 246, 0.35)' : 'none',
+                                boxShadow: affirmation ? '0 1px 2px rgba(2, 132, 199, 0.2)' : 'none',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',

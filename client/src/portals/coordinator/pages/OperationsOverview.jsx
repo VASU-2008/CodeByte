@@ -285,173 +285,337 @@ export default function OperationsOverview() {
       )}
 
       {/* Hero Header Card */}
-      <section className="rounded-3xl bg-white p-6 sm:p-8 shadow-xs border border-slate-100 relative overflow-hidden">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-600 border border-blue-100">
-                <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-                Veyora Healthcare · VeyoraAI
+      <section
+        style={{
+          background: '#ffffff',
+          borderRadius: '18px',
+          padding: '1.75rem',
+          border: '1px solid #eef2f6',
+          boxShadow: '0 2px 12px rgba(0, 0, 0, 0.03)',
+        }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.25rem' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.4rem' }}>
+              <span
+                style={{
+                  background: '#e6f7f2',
+                  color: '#044e42',
+                  fontSize: '0.75rem',
+                  fontWeight: '700',
+                  padding: '0.2rem 0.65rem',
+                  borderRadius: '20px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.35rem',
+                }}
+              >
+                <Sparkles size={13} />
+                VeyoraAI Node Online
               </span>
-              <span className="text-xs text-slate-400 font-medium">Care Continuity Engine</span>
+              <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Care Continuity Engine</span>
             </div>
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-display font-bold text-slate-900 tracking-tight">
-                Good morning! 👋
-              </h1>
-              <p className="text-sm sm:text-base text-slate-500 mt-1 max-w-xl">
-                Your clinic operations queue is active. You have {activeCount} high-priority patient escalations requiring attention today.
-              </p>
-            </div>
+            <h1 style={{ margin: 0, fontSize: '1.45rem', fontWeight: '800', color: '#0f172a' }}>
+              Operations Overview & Triage Queue
+            </h1>
+            <p style={{ margin: '0.35rem 0 0', fontSize: '0.85rem', color: '#64748b', maxWidth: '600px' }}>
+              Real-time monitoring of rural patient barriers, missed medication telemetry, and 30-min reminder responses.
+            </p>
 
-            <div className="pt-2 flex flex-wrap items-center gap-3">
+            <div style={{ marginTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
               <button
                 onClick={() => setStatusFilter('ACTIVE')}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-all shadow-xs active:scale-95"
+                style={{
+                  background: '#044e42',
+                  color: '#ffffff',
+                  border: 'none',
+                  borderRadius: '10px',
+                  padding: '0.6rem 1.25rem',
+                  fontSize: '0.85rem',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  boxShadow: '0 2px 8px rgba(4, 78, 66, 0.25)',
+                  transition: 'all 0.15s ease',
+                }}
               >
-                <Activity className="w-4 h-4" />
+                <Activity size={16} />
                 Triage Active Escalations
-                <ArrowRight className="w-4 h-4 ml-1" />
+                <ArrowRight size={15} />
               </button>
 
               <button
                 onClick={handleResetDemo}
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-medium text-slate-600 bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-all"
+                style={{
+                  background: '#f8fafc',
+                  color: '#475569',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '10px',
+                  padding: '0.6rem 1rem',
+                  fontSize: '0.8rem',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                }}
               >
-                <RotateCcw className="w-3.5 h-3.5 text-slate-400" />
+                <RotateCcw size={14} color="#64748b" />
                 Reset Demo Data
               </button>
             </div>
           </div>
 
           {/* Active Escalations Live Badge */}
-          <div className="flex items-center gap-3 self-start md:self-auto">
-            <div className="px-5 py-4 rounded-3xl bg-amber-500/10 border border-amber-200/80 shadow-xs flex items-center gap-4">
-              <span className="relative flex h-4 w-4">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-4 w-4 bg-[#d97706]"></span>
-              </span>
-              <div>
-                <div className="text-[11px] font-semibold text-amber-900 uppercase tracking-wider">
-                  Active Escalations
-                </div>
-                <div className="text-xl font-bold text-[#d97706] leading-none mt-0.5">
-                  {activeCount} {activeCount === 1 ? 'Action Required' : 'Actions Required'}
-                </div>
+          <div
+            style={{
+              background: '#fffbeb',
+              border: '1px solid #fef3c7',
+              borderRadius: '16px',
+              padding: '1.1rem 1.5rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '1rem',
+            }}
+          >
+            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#d97706', boxShadow: '0 0 8px rgba(217, 119, 6, 0.6)' }} />
+            <div>
+              <div style={{ fontSize: '0.72rem', fontWeight: '700', color: '#92400e', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                Pending Review
+              </div>
+              <div style={{ fontSize: '1.35rem', fontWeight: '800', color: '#b45309', lineHeight: 1.1 }}>
+                {activeCount} Actions Required
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Quick Nav Metric Cards */}
-      <section className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      {/* 4 Metric Summary Cards (Matches Doctor Portal Pattern) */}
+      <section
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(4, 1fr)',
+          gap: '1.25rem',
+        }}
+      >
         <div
           onClick={() => setCategoryFilter('ALL')}
-          className="rounded-3xl bg-white p-5 border border-slate-100 shadow-xs hover:shadow-md cursor-pointer transition-all flex flex-col items-center text-center space-y-2.5"
+          style={{
+            background: '#fffbeb',
+            borderRadius: '14px',
+            padding: '1.25rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            cursor: 'pointer',
+            transition: 'all 0.15s ease',
+          }}
         >
-          <div className="w-12 h-12 rounded-2xl bg-amber-50 text-[#d97706] flex items-center justify-center font-bold">
-            <AlertTriangle className="w-6 h-6" />
-          </div>
           <div>
-            <div className="text-sm font-bold text-slate-900">{activeCount} Urgent</div>
-            <div className="text-xs text-slate-500 font-medium">Active Escalations</div>
+            <div style={{ fontSize: '1.75rem', fontWeight: '800', color: '#b45309', lineHeight: '1' }}>
+              {activeCount}
+            </div>
+            <div style={{ fontSize: '0.82rem', fontWeight: '600', color: '#b45309', marginTop: '0.35rem' }}>
+              Urgent Escalations
+            </div>
+          </div>
+          <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#fef3c7', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#b45309' }}>
+            <AlertTriangle size={20} />
           </div>
         </div>
 
         <div
           onClick={() => setCategoryFilter('transport')}
-          className="rounded-3xl bg-white p-5 border border-slate-100 shadow-xs hover:shadow-md cursor-pointer transition-all flex flex-col items-center text-center space-y-2.5"
+          style={{
+            background: '#eff6ff',
+            borderRadius: '14px',
+            padding: '1.25rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            cursor: 'pointer',
+            transition: 'all 0.15s ease',
+          }}
         >
-          <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
-            <Car className="w-6 h-6" />
-          </div>
           <div>
-            <div className="text-sm font-bold text-slate-900">{transportCount} Requests</div>
-            <div className="text-xs text-slate-500 font-medium">Transport Barriers</div>
+            <div style={{ fontSize: '1.75rem', fontWeight: '800', color: '#1d4ed8', lineHeight: '1' }}>
+              {transportCount}
+            </div>
+            <div style={{ fontSize: '0.82rem', fontWeight: '600', color: '#1d4ed8', marginTop: '0.35rem' }}>
+              Transport Barriers
+            </div>
+          </div>
+          <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#dbeafe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1d4ed8' }}>
+            <Car size={20} />
           </div>
         </div>
 
         <div
           onClick={() => setCategoryFilter('medication')}
-          className="rounded-3xl bg-white p-5 border border-slate-100 shadow-xs hover:shadow-md cursor-pointer transition-all flex flex-col items-center text-center space-y-2.5"
+          style={{
+            background: '#faf5ff',
+            borderRadius: '14px',
+            padding: '1.25rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            cursor: 'pointer',
+            transition: 'all 0.15s ease',
+          }}
         >
-          <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
-            <Pill className="w-6 h-6" />
-          </div>
           <div>
-            <div className="text-sm font-bold text-slate-900">{medicationCount} Alerts</div>
-            <div className="text-xs text-slate-500 font-medium">Missed Doses</div>
+            <div style={{ fontSize: '1.75rem', fontWeight: '800', color: '#7e22ce', lineHeight: '1' }}>
+              {medicationCount}
+            </div>
+            <div style={{ fontSize: '0.82rem', fontWeight: '600', color: '#7e22ce', marginTop: '0.35rem' }}>
+              Missed Doses
+            </div>
+          </div>
+          <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#f3e8ff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#7e22ce' }}>
+            <Pill size={20} />
           </div>
         </div>
 
         <div
           onClick={() => setStatusFilter('RESOLVED')}
-          className="rounded-3xl bg-white p-5 border border-slate-100 shadow-xs hover:shadow-md cursor-pointer transition-all flex flex-col items-center text-center space-y-2.5"
+          style={{
+            background: '#e8f7f2',
+            borderRadius: '14px',
+            padding: '1.25rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            cursor: 'pointer',
+            transition: 'all 0.15s ease',
+          }}
         >
-          <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
-            <CheckCircle2 className="w-6 h-6" />
-          </div>
           <div>
-            <div className="text-sm font-bold text-slate-900">{resolvedCount} Completed</div>
-            <div className="text-xs text-slate-500 font-medium">Resolved Today</div>
+            <div style={{ fontSize: '1.75rem', fontWeight: '800', color: '#044e42', lineHeight: '1' }}>
+              {resolvedCount}
+            </div>
+            <div style={{ fontSize: '0.82rem', fontWeight: '600', color: '#044e42', marginTop: '0.35rem' }}>
+              Resolved Today
+            </div>
+          </div>
+          <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#cceee5', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#044e42' }}>
+            <CheckCircle2 size={20} />
           </div>
         </div>
       </section>
 
-      {/* Filter and Search Bar */}
-      <section className="rounded-3xl bg-white p-5 border border-slate-100 shadow-xs space-y-4">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+      {/* Filter and Search Bar (Matches Doctor Portal Pattern) */}
+      <section
+        style={{
+          background: '#ffffff',
+          borderRadius: '18px',
+          padding: '1.25rem 1.75rem',
+          border: '1px solid #eef2f6',
+          boxShadow: '0 2px 12px rgba(0, 0, 0, 0.03)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1rem',
+        }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              background: '#f8fafc',
+              border: '1px solid #e2e8f0',
+              borderRadius: '10px',
+              padding: '0.6rem 0.9rem',
+              flex: 1,
+              maxWidth: '480px',
+            }}
+          >
+            <Search size={16} color="#94a3b8" />
             <input
               type="text"
               placeholder="Search by patient, VeyoraAI agent, or village..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 text-sm bg-slate-50 border border-slate-200/80 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-600/20 text-slate-800 placeholder-slate-400"
+              style={{
+                border: 'none',
+                outline: 'none',
+                background: 'transparent',
+                fontSize: '0.88rem',
+                color: '#1e293b',
+                width: '100%',
+              }}
             />
           </div>
 
-          <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-2xl border border-slate-200/60 text-xs font-semibold">
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              background: '#f1f5f9',
+              padding: '0.3rem',
+              borderRadius: '10px',
+              fontSize: '0.82rem',
+              fontWeight: '600',
+            }}
+          >
             <button
               onClick={() => setStatusFilter('ALL')}
-              className={`px-3.5 py-1.5 rounded-xl transition-all ${
-                statusFilter === 'ALL'
-                  ? 'bg-white text-slate-900 shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
+              style={{
+                border: 'none',
+                borderRadius: '8px',
+                padding: '0.45rem 0.85rem',
+                cursor: 'pointer',
+                background: statusFilter === 'ALL' ? '#ffffff' : 'transparent',
+                color: statusFilter === 'ALL' ? '#0f172a' : '#64748b',
+                boxShadow: statusFilter === 'ALL' ? '0 1px 4px rgba(0,0,0,0.06)' : 'none',
+                fontWeight: statusFilter === 'ALL' ? '700' : '500',
+                transition: 'all 0.15s ease',
+              }}
             >
               All ({tasks.length})
             </button>
             <button
               onClick={() => setStatusFilter('ACTIVE')}
-              className={`px-3.5 py-1.5 rounded-xl transition-all flex items-center gap-1.5 ${
-                statusFilter === 'ACTIVE'
-                  ? 'bg-white text-[#d97706] shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
+              style={{
+                border: 'none',
+                borderRadius: '8px',
+                padding: '0.45rem 0.85rem',
+                cursor: 'pointer',
+                background: statusFilter === 'ACTIVE' ? '#ffffff' : 'transparent',
+                color: statusFilter === 'ACTIVE' ? '#b45309' : '#64748b',
+                boxShadow: statusFilter === 'ACTIVE' ? '0 1px 4px rgba(0,0,0,0.06)' : 'none',
+                fontWeight: statusFilter === 'ACTIVE' ? '700' : '500',
+                transition: 'all 0.15s ease',
+              }}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#d97706]"></span>
               Active ({activeCount})
             </button>
             <button
               onClick={() => setStatusFilter('RESOLVED')}
-              className={`px-3.5 py-1.5 rounded-xl transition-all flex items-center gap-1.5 ${
-                statusFilter === 'RESOLVED'
-                  ? 'bg-white text-emerald-700 shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
+              style={{
+                border: 'none',
+                borderRadius: '8px',
+                padding: '0.45rem 0.85rem',
+                cursor: 'pointer',
+                background: statusFilter === 'RESOLVED' ? '#ffffff' : 'transparent',
+                color: statusFilter === 'RESOLVED' ? '#044e42' : '#64748b',
+                boxShadow: statusFilter === 'RESOLVED' ? '0 1px 4px rgba(0,0,0,0.06)' : 'none',
+                fontWeight: statusFilter === 'RESOLVED' ? '700' : '500',
+                transition: 'all 0.15s ease',
+              }}
             >
-              <Check className="w-3 h-3 text-emerald-600" />
               Resolved ({resolvedCount})
             </button>
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100 text-xs">
-          <span className="text-slate-400 font-medium mr-1 flex items-center gap-1">
-            <Filter className="w-3 h-3" /> Filter:
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap', paddingTop: '0.5rem', borderTop: '1px solid #f1f5f9' }}>
+          <span style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: '600', marginRight: '4px' }}>
+            Category:
           </span>
           {[
             { id: 'ALL', label: 'All Categories' },
@@ -463,13 +627,22 @@ export default function OperationsOverview() {
             <button
               key={cat.id}
               onClick={() => setCategoryFilter(cat.id)}
-              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-medium transition-all ${
-                categoryFilter === cat.id
-                  ? 'bg-blue-600 text-white shadow-xs font-semibold'
-                  : 'bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200/80'
-              }`}
+              style={{
+                border: categoryFilter === cat.id ? 'none' : '1px solid #e2e8f0',
+                borderRadius: '20px',
+                padding: '0.35rem 0.85rem',
+                fontSize: '0.78rem',
+                fontWeight: categoryFilter === cat.id ? '700' : '500',
+                cursor: 'pointer',
+                background: categoryFilter === cat.id ? '#044e42' : '#f8fafc',
+                color: categoryFilter === cat.id ? '#ffffff' : '#475569',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                transition: 'all 0.15s ease',
+              }}
             >
-              {cat.icon && <cat.icon className="w-3 h-3" />}
+              {cat.icon && <cat.icon size={13} />}
               {cat.label}
             </button>
           ))}

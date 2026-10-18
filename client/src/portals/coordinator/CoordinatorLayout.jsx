@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink, Outlet, useLocation, Link } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import {
   Activity,
   BellRing,
@@ -9,17 +9,22 @@ import {
   AlertOctagon,
   ShieldCheck,
   Sparkles,
-  Heart,
-  User,
+  Search,
   Bell,
-  ChevronRight,
+  ChevronDown,
   LogOut
 } from 'lucide-react';
 
-export default function CoordinatorLayout() {
+/**
+ * CoordinatorLayout Component (Aura HealthTech Theme - Matches Doctor Portal)
+ * Clean, structured clinical focus with crisp white cards,
+ * soft mint accents (#e6f7f2), and deep pine teal (#044e42) navigation.
+ */
+export default function CoordinatorLayout({ children }) {
+  const navigate = useNavigate();
   const location = useLocation();
   const [activeEscalationCount, setActiveEscalationCount] = useState(4);
-  const [selectedLang, setSelectedLang] = useState('EN');
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Read active escalation count from localStorage
   useEffect(() => {
@@ -48,178 +53,336 @@ export default function CoordinatorLayout() {
 
   const navItems = [
     {
-      to: '/coordinator',
+      path: '/coordinator/operations',
       label: 'Operations Overview',
       icon: Activity,
-      end: true,
-      badge: activeEscalationCount > 0 ? activeEscalationCount : null,
+      exact: true,
     },
     {
-      to: '/coordinator/reminders',
+      path: '/coordinator/reminders',
       label: '30-Min Reminder Queue',
       icon: BellRing,
     },
     {
-      to: '/coordinator/transport',
+      path: '/coordinator/transport',
       label: 'Transport Barriers',
       icon: Car,
     },
     {
-      to: '/coordinator/medication',
+      path: '/coordinator/medication',
       label: 'Medication Adherence',
       icon: Pill,
     },
     {
-      to: '/coordinator/followups',
+      path: '/coordinator/followups',
       label: 'Follow-up Tracking',
       icon: ClipboardList,
     },
     {
-      to: '/coordinator/escalations',
+      path: '/coordinator/escalations',
       label: 'Escalations & Tasks',
       icon: AlertOctagon,
+      badge: activeEscalationCount > 0 ? activeEscalationCount : null,
     },
     {
-      to: '/coordinator/audit',
+      path: '/coordinator/audit',
       label: 'Rules & Audit Log',
       icon: ShieldCheck,
     },
   ];
 
+  const isCurrentPath = (path) => {
+    if (path === '/coordinator/operations') {
+      return location.pathname === '/coordinator' || location.pathname === '/coordinator/operations';
+    }
+    return location.pathname.startsWith(path);
+  };
+
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-slate-800 font-sans flex flex-col md:flex-row">
-      {/* Left Sidebar (Matching Screenshot: Rounded geometry, soft card, clean icons) */}
-      <aside className="w-full md:w-72 bg-white border-r border-slate-100 flex flex-col justify-between p-5 md:min-h-screen md:sticky md:top-0 md:h-screen z-30 shadow-xs overflow-y-auto">
-        <div className="space-y-5">
-          {/* Top Brand Logo */}
-          <div className="flex items-center gap-3 px-1 pt-1">
-            <div className="w-11 h-11 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-xs">
-              <Heart className="w-6 h-6 fill-white" />
+    <div
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        background: '#f4f8f6',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+        color: '#1e293b',
+      }}
+    >
+      {/* Top Global Bar (Matches Doctor Portal) */}
+      <header
+        style={{
+          height: '70px',
+          background: '#ffffff',
+          borderBottom: '1px solid #eef2f6',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '0 2rem',
+          position: 'sticky',
+          top: 0,
+          zIndex: 40,
+        }}
+      >
+        {/* Brand & Portal Title */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+          <div
+            style={{
+              width: '42px',
+              height: '42px',
+              borderRadius: '12px',
+              background: '#044e42',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#ffffff',
+            }}
+          >
+            <Sparkles size={22} />
+          </div>
+          <div>
+            <h1
+              style={{
+                margin: 0,
+                fontSize: '1.25rem',
+                fontWeight: '800',
+                color: '#0f172a',
+                letterSpacing: '-0.02em',
+                lineHeight: 1.2,
+              }}
+            >
+              AI Coordinator Portal
+            </h1>
+            <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b' }}>
+              Autonomous Care Orchestration & Triage
+            </p>
+          </div>
+        </div>
+
+        {/* Global Search & Coordinator Profile */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+          {/* Global search */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              background: '#f8fafc',
+              border: '1px solid #e2e8f0',
+              borderRadius: '24px',
+              padding: '0.5rem 1rem',
+              width: '260px',
+            }}
+          >
+            <Search size={16} color="#94a3b8" />
+            <input
+              type="text"
+              placeholder="Search patients, alerts, tasks..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{
+                border: 'none',
+                outline: 'none',
+                background: 'transparent',
+                fontSize: '0.84rem',
+                color: '#1e293b',
+                width: '100%',
+              }}
+            />
+          </div>
+
+          {/* VeyoraAI Badge */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              background: '#e6f7f2',
+              border: '1px solid #cceee5',
+              padding: '0.35rem 0.75rem',
+              borderRadius: '20px',
+              fontSize: '0.78rem',
+              fontWeight: '700',
+              color: '#044e42',
+            }}
+          >
+            <span
+              style={{
+                width: '6px',
+                height: '6px',
+                borderRadius: '50%',
+                background: '#10b981',
+                boxShadow: '0 0 6px rgba(16, 185, 129, 0.6)',
+              }}
+            />
+            VeyoraAI Node Online
+          </div>
+
+          {/* Bell notification */}
+          <button
+            style={{
+              width: '38px',
+              height: '38px',
+              borderRadius: '50%',
+              border: '1px solid #e2e8f0',
+              background: '#ffffff',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              color: '#64748b',
+              position: 'relative',
+            }}
+          >
+            <Bell size={18} />
+            <span
+              style={{
+                position: 'absolute',
+                top: '7px',
+                right: '8px',
+                width: '7px',
+                height: '7px',
+                borderRadius: '50%',
+                background: '#ef4444',
+              }}
+            />
+          </button>
+
+          {/* User Info Card */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.65rem',
+              background: '#ffffff',
+              padding: '0.35rem 0.65rem',
+              borderRadius: '12px',
+              cursor: 'pointer',
+            }}
+          >
+            <div
+              style={{
+                width: '38px',
+                height: '38px',
+                borderRadius: '50%',
+                background: '#044e42',
+                color: '#ffffff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: '700',
+                fontSize: '0.85rem',
+              }}
+            >
+              AC
             </div>
             <div>
-              <div className="font-bold text-lg text-slate-900 tracking-tight leading-none">
-                Veyora
+              <div style={{ fontSize: '0.86rem', fontWeight: '700', color: '#0f172a' }}>
+                AI Coordinator
               </div>
-              <div className="text-[10px] tracking-widest text-slate-400 font-semibold uppercase mt-1">
-                HEALTHCARE
-              </div>
+              <div style={{ fontSize: '0.72rem', color: '#64748b' }}>Operations Lead</div>
             </div>
+            <ChevronDown size={14} color="#94a3b8" style={{ marginLeft: '4px' }} />
           </div>
+        </div>
+      </header>
 
-          {/* User Profile / Portal Card */}
-          <div className="p-3 rounded-2xl bg-blue-50/70 border border-blue-100/60 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm shadow-xs">
-                <User className="w-5 h-5 text-white" />
-              </div>
-              <div>
-                <div className="font-bold text-sm text-slate-900 leading-tight">Coordinator</div>
-                <div className="text-[11px] text-blue-600 font-medium">VeyoraAI Portal</div>
-              </div>
-            </div>
-            <button
-              title="Notifications"
-              className="relative p-1.5 text-slate-500 hover:text-slate-800 rounded-xl hover:bg-white/80 transition-colors"
-            >
-              <Bell className="w-4 h-4 text-slate-600" />
-              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#d97706]"></span>
-            </button>
-          </div>
-
-          {/* Language Switcher & VeyoraAI Status Badge */}
-          <div className="flex items-center justify-between px-1">
-            <div className="flex items-center gap-1 bg-slate-100/80 p-0.5 rounded-full border border-slate-200/60 text-xs font-semibold">
-              <button
-                onClick={() => setSelectedLang('EN')}
-                className={`px-3 py-1 rounded-full transition-all ${
-                  selectedLang === 'EN'
-                    ? 'bg-blue-600 text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                EN
-              </button>
-              <button
-                onClick={() => setSelectedLang('HI')}
-                className={`px-3 py-1 rounded-full transition-all ${
-                  selectedLang === 'HI'
-                    ? 'bg-blue-600 text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                हि
-              </button>
-            </div>
-
-            {/* Changed from SwasthyaSetu Node to VeyoraAI */}
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-800 border border-amber-200">
-              <span className="w-2 h-2 rounded-full bg-[#d97706] animate-pulse"></span>
-              VeyoraAI
-            </span>
-          </div>
-
-          {/* Vertical Navigation Links (Matching Screenshot Active Pill + Chevron) */}
-          <nav className="space-y-1.5 pt-2">
+      {/* Main Layout Container */}
+      <div style={{ display: 'flex', flex: 1 }}>
+        {/* Clean Light Sidebar (Matches Doctor Portal) */}
+        <aside
+          style={{
+            width: '250px',
+            background: '#ffffff',
+            borderRight: '1px solid #eef2f6',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            padding: '1.5rem 0.85rem',
+            boxSizing: 'border-box',
+          }}
+        >
+          <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
             {navItems.map((item) => {
-              const Icon = item.icon;
+              const active = isCurrentPath(item.path);
+              const IconComponent = item.icon;
               return (
                 <NavLink
-                  key={item.to}
-                  to={item.to}
-                  end={item.end}
-                  className={({ isActive }) =>
-                    `group flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-medium transition-all duration-200 ${
-                      isActive
-                        ? 'bg-blue-50 text-blue-600 font-bold shadow-xs border border-blue-100/60'
-                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50/90'
-                    }`
-                  }
+                  key={item.label}
+                  to={item.path}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '0.65rem 0.85rem',
+                    borderRadius: '10px',
+                    textDecoration: 'none',
+                    fontSize: '0.88rem',
+                    fontWeight: active ? '700' : '500',
+                    color: active ? '#044e42' : '#475569',
+                    background: active ? '#e6f7f2' : 'transparent',
+                    transition: 'all 0.15s ease',
+                  }}
                 >
-                  {({ isActive }) => (
-                    <>
-                      <div className="flex items-center gap-3">
-                        <Icon
-                          className={`w-4 h-4 transition-colors ${
-                            isActive ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-600'
-                          }`}
-                        />
-                        <span className="truncate">{item.label}</span>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        {item.badge && !isActive && (
-                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#d97706] text-white">
-                            {item.badge}
-                          </span>
-                        )}
-                        {isActive ? (
-                          <ChevronRight className="w-4 h-4 text-blue-600 flex-shrink-0" />
-                        ) : null}
-                      </div>
-                    </>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <IconComponent size={18} color={active ? '#044e42' : '#64748b'} />
+                    <span>{item.label}</span>
+                  </div>
+                  {item.badge && (
+                    <span
+                      style={{
+                        padding: '0.15rem 0.5rem',
+                        borderRadius: '12px',
+                        fontSize: '0.72rem',
+                        fontWeight: '700',
+                        background: active ? '#044e42' : '#fee2e2',
+                        color: active ? '#ffffff' : '#dc2626',
+                      }}
+                    >
+                      {item.badge}
+                    </span>
                   )}
                 </NavLink>
               );
             })}
           </nav>
-        </div>
 
-        {/* Bottom Sign Out Link (Matching Screenshot) */}
-        <div className="pt-4 border-t border-slate-100 mt-6">
-          <Link
-            to="/"
-            className="flex items-center gap-2 px-3 py-2 text-sm font-semibold text-rose-500 hover:text-rose-600 hover:bg-rose-50/80 rounded-xl transition-colors"
+          {/* Bottom Logout */}
+          <button
+            onClick={() => navigate('/')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              padding: '0.65rem 0.85rem',
+              borderRadius: '10px',
+              border: 'none',
+              background: 'transparent',
+              color: '#64748b',
+              fontSize: '0.88rem',
+              fontWeight: '500',
+              cursor: 'pointer',
+            }}
           >
-            <LogOut className="w-4 h-4 text-rose-500" />
-            <span>Sign Out</span>
-          </Link>
-        </div>
-      </aside>
+            <LogOut size={18} />
+            <span>Return to Home</span>
+          </button>
+        </aside>
 
-      {/* Main Page Content (Theme matching picture: Clean, spacious, rounded-3xl cards) */}
-      <main className="flex-1 min-w-0 bg-[#f8fafc] min-h-screen overflow-y-auto">
-        <Outlet />
-      </main>
+        {/* Page Content Canvas */}
+        <main
+          style={{
+            flex: 1,
+            padding: '2rem',
+            overflowY: 'auto',
+            background: '#f4f8f6',
+          }}
+        >
+          <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+            {children ? children : <Outlet />}
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

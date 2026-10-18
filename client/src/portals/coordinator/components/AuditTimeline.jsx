@@ -13,26 +13,44 @@ import {
   Sparkles
 } from 'lucide-react';
 
-export default function AuditTimeline({ events = [], logs = [], onFilterTag }) {
+/**
+ * AuditTimeline (Aura HealthTech Theme - Doctor Portal Aligned)
+ * Clean clinical timeline with pine teal accents, soft pill badges, and structured metadata.
+ */
+export default function AuditTimeline({ events = [], logs = [], filterCategory = 'ALL' }) {
   const normalizedEvents = events.length > 0 ? events : logs.map((l, i) => ({
     id: `log-${i}`,
     title: l.event || l.title || 'System Trigger',
     description: l.details || l.description || '',
     timestamp: l.timestamp || 'Recent',
-    category: 'system',
-    severity: 'warning',
-    source: 'VeyoraAI Engine'
+    category: l.category || 'system',
+    severity: l.severity || 'warning',
+    source: l.source || 'VeyoraAI Protocol Engine',
+    actor: l.actor || 'System'
   }));
 
-  if (!normalizedEvents || normalizedEvents.length === 0) {
+  const filteredEvents = normalizedEvents.filter(evt => {
+    if (!filterCategory || filterCategory === 'ALL') return true;
+    return evt.category?.toLowerCase() === filterCategory.toLowerCase();
+  });
+
+  if (!filteredEvents || filteredEvents.length === 0) {
     return (
-      <div className="p-8 text-center text-sm text-slate-500 rounded-3xl bg-slate-50 border border-slate-100">
-        No audit log records found.
+      <div style={{
+        padding: '2.5rem',
+        textAlign: 'center',
+        fontSize: '0.88rem',
+        color: '#64748b',
+        borderRadius: '14px',
+        background: '#f8fafc',
+        border: '1px solid #eef2f6'
+      }}>
+        No audit log records found for this filter.
       </div>
     );
   }
 
-  const getEventIcon = (type, category) => {
+  const getEventIcon = (category) => {
     switch (category) {
       case 'transport':
         return Car;
@@ -52,87 +70,153 @@ export default function AuditTimeline({ events = [], logs = [], onFilterTag }) {
     }
   };
 
-  const getSeverityStyle = (severity) => {
+  const getSeverityPill = (severity) => {
     switch (severity) {
       case 'critical':
-        return 'bg-rose-50 text-rose-700 border-rose-200';
-      case 'warning':
+        return { bg: '#fee2e2', text: '#dc2626', border: '#fecaca', label: 'CRITICAL' };
       case 'high':
-        return 'bg-amber-500/10 text-amber-800 border-amber-200';
+      case 'warning':
+        return { bg: '#fef3c7', text: '#b45309', border: '#fde68a', label: 'WARNING' };
       case 'success':
-        return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+        return { bg: '#dcfce7', text: '#15803d', border: '#bbf7d0', label: 'RESOLVED' };
       default:
-        return 'bg-blue-50 text-blue-900 border-blue-100';
+        return { bg: '#e8f7f2', text: '#044e42', border: '#cceee5', label: 'INFO' };
     }
   };
 
   return (
-    <div className="relative pl-6 sm:pl-8 space-y-6 before:absolute before:left-3 sm:before:left-4 before:top-3 before:bottom-3 before:w-0.5 before:bg-gradient-to-b before:from-amber-400 before:via-blue-300 before:to-slate-200">
-      {events.map((evt) => {
-        const IconComponent = getEventIcon(evt.type, evt.category);
-        const severityClass = getSeverityStyle(evt.severity);
+    <div style={{
+      position: 'relative',
+      paddingLeft: '2.5rem',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '1.25rem'
+    }}>
+      {/* Vertical Timeline Guide Line */}
+      <div style={{
+        position: 'absolute',
+        left: '1.15rem',
+        top: '1rem',
+        bottom: '1rem',
+        width: '2px',
+        background: '#e2e8f0',
+        borderRadius: '2px'
+      }} />
+
+      {filteredEvents.map((evt) => {
+        const IconComponent = getEventIcon(evt.category);
+        const pill = getSeverityPill(evt.severity);
 
         return (
-          <div key={evt.id} className="relative group">
+          <div key={evt.id} style={{ position: 'relative' }}>
             {/* Timeline Node Dot */}
-            <div className="absolute -left-6 sm:-left-8 top-1.5 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white border-2 border-amber-500 text-[#d97706] flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform">
-              <IconComponent className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+            <div style={{
+              position: 'absolute',
+              left: '-2.5rem',
+              top: '0.75rem',
+              width: '32px',
+              height: '32px',
+              borderRadius: '50%',
+              background: '#ffffff',
+              border: '2px solid #044e42',
+              color: '#044e42',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 2px 6px rgba(4, 78, 66, 0.15)',
+              zIndex: 1
+            }}>
+              <IconComponent size={15} />
             </div>
 
-            {/* Event Card (Frosted Glass) */}
-            <div className="rounded-2xl bg-white/75 backdrop-blur-md border border-white/85 shadow-xs p-4 sm:p-5 hover:shadow-md transition-all">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span
-                    className={`text-[11px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${severityClass}`}
-                  >
-                    {evt.ruleId || evt.category}
+            {/* Event Card */}
+            <div
+              style={{
+                background: '#ffffff',
+                borderRadius: '14px',
+                border: '1px solid #eef2f6',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.02)',
+                padding: '1.25rem 1.5rem',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.6rem',
+                transition: 'box-shadow 0.15s ease'
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.boxShadow = '0 4px 14px rgba(0, 0, 0, 0.05)')}
+              onMouseLeave={(e) => (e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.02)')}
+            >
+              {/* Top row */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.5rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
+                  <span style={{
+                    padding: '0.2rem 0.6rem',
+                    borderRadius: '20px',
+                    fontSize: '0.7rem',
+                    fontWeight: '800',
+                    background: pill.bg,
+                    color: pill.text,
+                    border: `1px solid ${pill.border}`,
+                    letterSpacing: '0.5px'
+                  }}>
+                    {pill.label}
                   </span>
-                  <h4 className="text-sm font-bold text-slate-900 font-display">
+
+                  <span style={{
+                    padding: '0.2rem 0.6rem',
+                    borderRadius: '6px',
+                    fontSize: '0.72rem',
+                    fontWeight: '700',
+                    background: '#f1f5f9',
+                    color: '#475569',
+                    textTransform: 'uppercase'
+                  }}>
+                    {evt.category || 'System'}
+                  </span>
+
+                  <h4 style={{ margin: 0, fontSize: '0.98rem', fontWeight: '800', color: '#0f172a' }}>
                     {evt.title}
                   </h4>
-                  {evt.patientName && (
-                    <span className="text-xs font-medium text-slate-600 bg-slate-100 px-2 py-0.5 rounded">
-                      Patient: {evt.patientName}
-                    </span>
-                  )}
                 </div>
 
-                <div className="flex items-center gap-1.5 text-xs text-slate-400 whitespace-nowrap">
-                  <Clock className="w-3.5 h-3.5 text-slate-400" />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.78rem', color: '#64748b', whiteSpace: 'nowrap' }}>
+                  <Clock size={13} color="#94a3b8" />
                   <span>{evt.timestamp}</span>
                 </div>
               </div>
 
-              {/* Event Details */}
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-3">
+              {/* Event Description */}
+              <p style={{ margin: 0, fontSize: '0.85rem', color: '#334155', lineHeight: '1.5' }}>
                 {evt.description}
               </p>
 
-              {/* Metadata / Tags */}
-              <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 text-[11px] text-slate-500">
-                <div className="flex items-center gap-3">
+              {/* Bottom metadata tags */}
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                gap: '0.5rem',
+                paddingTop: '0.5rem',
+                borderTop: '1px solid #f8fafc',
+                fontSize: '0.75rem',
+                color: '#64748b'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                   <span>
-                    Source:{' '}
-                    <strong className="text-slate-700 font-medium">
-                      {evt.source || 'Care Coordinator Agent'}
-                    </strong>
+                    Source: <strong style={{ color: '#044e42' }}>{evt.source || 'VeyoraAI Gateway'}</strong>
                   </span>
                   {evt.encounterId && (
                     <span>
-                      Encounter:{' '}
-                      <code className="text-blue-900 font-mono font-medium">
-                        {evt.encounterId}
-                      </code>
+                      Encounter: <code style={{ color: '#044e42', fontFamily: 'monospace' }}>{evt.encounterId}</code>
                     </span>
                   )}
                 </div>
 
                 {evt.actor && (
-                  <span className="inline-flex items-center gap-1 text-slate-600">
-                    <UserCheck className="w-3 h-3 text-slate-400" />
-                    Triggered by: <strong>{evt.actor}</strong>
-                  </span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: '#475569' }}>
+                    <UserCheck size={13} color="#044e42" />
+                    <span>Actor: <strong style={{ color: '#0f172a' }}>{evt.actor}</strong></span>
+                  </div>
                 )}
               </div>
             </div>

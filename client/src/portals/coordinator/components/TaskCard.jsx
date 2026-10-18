@@ -42,73 +42,87 @@ export default function TaskCard({
 
   return (
     <div
-      className={`rounded-3xl transition-all duration-300 relative border ${
-        isResolved
-          ? 'bg-white/60 border-slate-200/60 opacity-65 hover:opacity-90 shadow-none'
-          : 'bg-white border-slate-100 shadow-xs hover:shadow-md'
-      } ${compact ? 'p-4' : 'p-5 sm:p-6'}`}
+      style={{
+        background: isResolved ? '#fafcfb' : '#ffffff',
+        borderRadius: '16px',
+        border: '1px solid #eef2f6',
+        boxShadow: isResolved ? 'none' : '0 2px 10px rgba(0, 0, 0, 0.03)',
+        padding: compact ? '1rem' : '1.35rem',
+        opacity: isResolved ? 0.75 : 1,
+        transition: 'all 0.2s ease',
+        position: 'relative',
+      }}
     >
-      <div className="space-y-3.5">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
         {/* Top Header Row */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="flex items-start gap-3">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
             <div
-              className={`p-2.5 rounded-2xl flex-shrink-0 mt-0.5 ${
-                isResolved
-                  ? 'bg-emerald-50 text-emerald-600 border border-emerald-100'
-                  : task.priority === 'High' || task.priority === 'Critical'
-                  ? 'bg-amber-50 text-[#d97706] border border-amber-200'
-                  : 'bg-blue-50 text-blue-600 border border-blue-100'
-              }`}
+              style={{
+                width: '40px',
+                height: '40px',
+                borderRadius: '10px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: isResolved ? '#e8f7f2' : task.priority === 'High' ? '#fffbeb' : '#eff6ff',
+                color: isResolved ? '#044e42' : task.priority === 'High' ? '#b45309' : '#1d4ed8',
+                flexShrink: 0,
+              }}
             >
-              {isResolved ? (
-                <CheckCircle2 className="w-5 h-5 text-emerald-600" />
-              ) : (
-                <IconComponent className="w-5 h-5" />
-              )}
+              {isResolved ? <CheckCircle2 size={20} /> : <IconComponent size={20} />}
             </div>
 
             <div>
-              <div className="flex flex-wrap items-center gap-2">
-                <h3 className="text-base font-bold text-slate-900 font-display">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: '800', color: '#0f172a' }}>
                   {patientDisplayName}
                 </h3>
                 {(task.patientAge || task.patientGender) && (
-                  <span className="text-xs text-slate-500 font-medium">
+                  <span style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: '500' }}>
                     ({task.patientAge ? `${task.patientAge}y` : ''}
                     {task.patientAge && task.patientGender ? ' · ' : ''}
                     {task.patientGender})
                   </span>
                 )}
                 {task.tokenNumber && (
-                  <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200/60">
+                  <span
+                    style={{
+                      fontSize: '0.72rem',
+                      fontFamily: 'monospace',
+                      fontWeight: '700',
+                      background: '#f1f5f9',
+                      color: '#475569',
+                      padding: '0.15rem 0.5rem',
+                      borderRadius: '8px',
+                      border: '1px solid #e2e8f0',
+                    }}
+                  >
                     {task.tokenNumber}
                   </span>
                 )}
               </div>
 
-              <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 mt-1">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.75rem', color: '#64748b', marginTop: '0.25rem', flexWrap: 'wrap' }}>
                 {task.village && (
-                  <span className="inline-flex items-center gap-1 text-slate-600">
-                    <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+                    <MapPin size={12} color="#94a3b8" />
                     {task.village}
                   </span>
                 )}
                 {task.timestamp && (
                   <>
-                    <span className="text-slate-300">·</span>
-                    <span className="inline-flex items-center gap-1 text-slate-500">
-                      <Clock className="w-3.5 h-3.5 text-slate-400" />
+                    <span>·</span>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+                      <Clock size={12} color="#94a3b8" />
                       {task.timestamp}
                     </span>
                   </>
                 )}
                 {task.encounterId && (
                   <>
-                    <span className="text-slate-300">·</span>
-                    <span className="text-slate-500 font-mono text-[11px]">
-                      {task.encounterId}
-                    </span>
+                    <span>·</span>
+                    <span style={{ fontFamily: 'monospace' }}>{task.encounterId}</span>
                   </>
                 )}
               </div>
@@ -116,45 +130,73 @@ export default function TaskCard({
           </div>
 
           {/* Badges: Category, Priority, Status */}
-          <div className="flex flex-wrap items-center gap-2 self-start sm:self-center">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
             {task.categoryLabel && (
-              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">
+              <span
+                style={{
+                  fontSize: '0.72rem',
+                  fontWeight: '600',
+                  padding: '0.25rem 0.65rem',
+                  borderRadius: '12px',
+                  background: '#f8fafc',
+                  border: '1px solid #e2e8f0',
+                  color: '#475569',
+                }}
+              >
                 {task.categoryLabel}
-              </span>
-            )}
-            {task.category && !task.categoryLabel && (
-              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">
-                {task.category}
-              </span>
-            )}
-
-            {task.priority === 'Critical' && (
-              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-rose-100 text-rose-800 border border-rose-200">
-                <span className="w-1.5 h-1.5 rounded-full bg-rose-600 animate-ping"></span>
-                Critical
               </span>
             )}
 
             {task.priority === 'High' && (
-              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-800 border border-amber-200">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#d97706] animate-pulse"></span>
+              <span
+                style={{
+                  fontSize: '0.72rem',
+                  fontWeight: '700',
+                  padding: '0.25rem 0.65rem',
+                  borderRadius: '12px',
+                  background: '#fffbeb',
+                  border: '1px solid #fef3c7',
+                  color: '#b45309',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.3rem',
+                }}
+              >
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#d97706' }} />
                 High Priority
               </span>
             )}
 
-            {task.priority === 'Medium' && (
-              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-900 border border-blue-200">
-                Medium
-              </span>
-            )}
-
             {isResolved ? (
-              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
-                <Check className="w-3 h-3 text-emerald-700" />
+              <span
+                style={{
+                  fontSize: '0.72rem',
+                  fontWeight: '700',
+                  padding: '0.25rem 0.65rem',
+                  borderRadius: '12px',
+                  background: '#e8f7f2',
+                  border: '1px solid #cceee5',
+                  color: '#044e42',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.3rem',
+                }}
+              >
+                <Check size={12} />
                 Resolved
               </span>
             ) : (
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+              <span
+                style={{
+                  fontSize: '0.72rem',
+                  fontWeight: '700',
+                  padding: '0.25rem 0.65rem',
+                  borderRadius: '12px',
+                  background: '#eff6ff',
+                  border: '1px solid #dbeafe',
+                  color: '#1d4ed8',
+                }}
+              >
                 Active
               </span>
             )}
@@ -162,34 +204,69 @@ export default function TaskCard({
         </div>
 
         {/* Narrative / Description */}
-        <div className="space-y-2 pt-1">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           {task.title && (
-            <h4 className="text-sm font-semibold text-slate-900 leading-snug">
+            <h4 style={{ margin: 0, fontSize: '0.88rem', fontWeight: '700', color: '#0f172a' }}>
               {task.title}
             </h4>
           )}
-          <p className="text-sm text-slate-600 leading-relaxed bg-slate-50/70 p-3 rounded-2xl border border-slate-100">
+          <p
+            style={{
+              margin: 0,
+              fontSize: '0.84rem',
+              color: '#475569',
+              lineHeight: 1.5,
+              background: '#f8fafc',
+              padding: '0.75rem 0.9rem',
+              borderRadius: '10px',
+              border: '1px solid #eef2f6',
+            }}
+          >
             {task.description}
           </p>
 
           {task.actionRequired && (
-            <div className="flex items-start gap-2 bg-amber-50/80 border border-amber-200/60 rounded-2xl p-2.5 text-xs text-amber-900">
-              <Info className="w-4 h-4 text-amber-700 flex-shrink-0 mt-0.5" />
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '0.5rem',
+                background: '#fffbeb',
+                border: '1px solid #fef3c7',
+                borderRadius: '10px',
+                padding: '0.65rem 0.85rem',
+                fontSize: '0.78rem',
+                color: '#92400e',
+              }}
+            >
+              <Info size={15} color="#b45309" style={{ flexShrink: 0, marginTop: '2px' }} />
               <div>
-                <strong className="font-semibold text-amber-950">Recommended Action: </strong>
+                <strong style={{ color: '#78350f' }}>Recommended Action: </strong>
                 <span>{task.actionRequired}</span>
               </div>
             </div>
           )}
 
           {isResolved && task.resolutionNote && (
-            <div className="flex items-start gap-2 bg-emerald-50/70 border border-emerald-200/60 rounded-2xl p-2.5 text-xs text-emerald-900">
-              <CheckCircle2 className="w-4 h-4 text-emerald-700 flex-shrink-0 mt-0.5" />
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '0.5rem',
+                background: '#e8f7f2',
+                border: '1px solid #cceee5',
+                borderRadius: '10px',
+                padding: '0.65rem 0.85rem',
+                fontSize: '0.78rem',
+                color: '#065f46',
+              }}
+            >
+              <CheckCircle2 size={15} color="#044e42" style={{ flexShrink: 0, marginTop: '2px' }} />
               <div>
-                <strong className="font-semibold text-emerald-950">Resolution Note: </strong>
+                <strong style={{ color: '#044e42' }}>Resolution Note: </strong>
                 <span>{task.resolutionNote}</span>
                 {task.resolvedAt && (
-                  <span className="text-emerald-700 ml-2 italic">({task.resolvedAt})</span>
+                  <span style={{ marginLeft: '6px', fontStyle: 'italic', opacity: 0.8 }}>({task.resolvedAt})</span>
                 )}
               </div>
             </div>
@@ -197,22 +274,45 @@ export default function TaskCard({
         </div>
 
         {/* Footer / Assignee / Action */}
-        <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-t border-slate-100">
-          <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs">
+        <div
+          style={{
+            paddingTop: '0.75rem',
+            borderTop: '1px solid #f1f5f9',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '0.75rem',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <div
+              style={{
+                width: '28px',
+                height: '28px',
+                borderRadius: '50%',
+                background: '#044e42',
+                color: '#ffffff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: '700',
+                fontSize: '0.75rem',
+              }}
+            >
               {assignedAgent ? assignedAgent.charAt(0) : 'V'}
             </div>
             <div>
-              <div className="text-xs text-slate-700 font-semibold flex items-center gap-1.5">
-                <span>VeyoraAI: {assignedAgent}</span>
+              <div style={{ fontSize: '0.8rem', fontWeight: '700', color: '#0f172a' }}>
+                {assignedAgent}
                 {task.ashaSector && (
-                  <span className="text-[11px] text-slate-400 font-normal">
+                  <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: '400', marginLeft: '4px' }}>
                     ({task.ashaSector})
                   </span>
                 )}
               </div>
               {task.ashaPhone && (
-                <div className="text-[11px] text-slate-500 flex items-center gap-2">
+                <div style={{ fontSize: '0.72rem', color: '#64748b', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                   <span>{task.ashaPhone}</span>
                   <a
                     href={`tel:${task.ashaPhone}`}
@@ -222,30 +322,56 @@ export default function TaskCard({
                         onCallAsha(task);
                       }
                     }}
-                    className="text-blue-600 hover:underline font-medium inline-flex items-center gap-0.5"
+                    style={{ color: '#044e42', fontWeight: '600', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '2px' }}
                   >
-                    <PhoneCall className="w-3 h-3" /> Call VeyoraAI
+                    <PhoneCall size={10} /> Call
                   </a>
                 </div>
               )}
             </div>
           </div>
 
-          <div className="flex items-center gap-2 self-end sm:self-auto">
+          <div>
             {!isResolved ? (
               <button
                 onClick={() => onResolve && onResolve(task.id)}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-2xl text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-all shadow-xs active:scale-95"
+                style={{
+                  background: '#044e42',
+                  color: '#ffffff',
+                  border: 'none',
+                  borderRadius: '10px',
+                  padding: '0.5rem 1rem',
+                  fontSize: '0.8rem',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  boxShadow: '0 2px 6px rgba(4, 78, 66, 0.2)',
+                  transition: 'all 0.15s ease',
+                }}
               >
-                <CheckCircle2 className="w-3.5 h-3.5 text-white" />
+                <CheckCircle2 size={14} />
                 Mark Resolved
               </button>
             ) : (
               <button
                 onClick={() => onReopen && onReopen(task.id)}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-2xl text-xs font-medium text-slate-600 bg-white hover:bg-slate-100 border border-slate-200 transition-all"
+                style={{
+                  background: '#f8fafc',
+                  color: '#475569',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '10px',
+                  padding: '0.45rem 0.85rem',
+                  fontSize: '0.78rem',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.35rem',
+                }}
               >
-                <RotateCcw className="w-3.5 h-3.5 text-slate-400" />
+                <RotateCcw size={12} color="#64748b" />
                 Reopen Task
               </button>
             )}

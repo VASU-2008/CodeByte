@@ -167,36 +167,89 @@ export default function TransportBarriers() {
       )}
 
       {/* Header Card */}
-      <section className="rounded-3xl bg-white p-6 sm:p-8 border border-slate-100 shadow-xs relative overflow-hidden">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-800 border border-amber-200">
-                <Car className="w-3.5 h-3.5 text-[#d97706]" />
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+      {/* Toast Alert */}
+      {toastMessage && (
+        <div
+          style={{
+            position: 'fixed',
+            top: '20px',
+            right: '20px',
+            zIndex: 50,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.65rem',
+            background: '#044e42',
+            color: '#ffffff',
+            padding: '0.75rem 1.25rem',
+            borderRadius: '12px',
+            boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
+            fontSize: '0.88rem',
+            fontWeight: '600',
+          }}
+        >
+          <CheckCircle2 size={18} color="#a7f3d0" />
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
+      {/* Header Card */}
+      <section
+        style={{
+          background: '#ffffff',
+          borderRadius: '18px',
+          padding: '1.75rem',
+          border: '1px solid #eef2f6',
+          boxShadow: '0 2px 12px rgba(0, 0, 0, 0.03)',
+        }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
+              <span
+                style={{
+                  background: '#e6f7f2',
+                  color: '#044e42',
+                  fontSize: '0.75rem',
+                  fontWeight: '700',
+                  padding: '0.2rem 0.65rem',
+                  borderRadius: '20px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.35rem',
+                }}
+              >
+                <Car size={13} />
                 VeyoraAI Rural Transit Desk
               </span>
-              <span className="text-xs text-slate-400 font-medium">MediKiosk Barrier Protocol</span>
+              <span style={{ fontSize: '0.75rem', color: '#64748b' }}>MediKiosk Barrier Protocol</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-display font-bold text-slate-900 tracking-tight">
+            <h1 style={{ margin: 0, fontSize: '1.35rem', fontWeight: '800', color: '#0f172a' }}>
               Transport Barrier Intake & Dispatch
             </h1>
-            <p className="text-sm text-slate-500 max-w-2xl leading-relaxed">
+            <p style={{ margin: '0.35rem 0 0', fontSize: '0.85rem', color: '#64748b', maxWidth: '650px' }}>
               Autonomous capture of geographic, flood, and connectivity barriers identified during kiosk triage or
-              IVR outreach. Authorizes subsidized Gram Panchayat EV vouchers and dispatches VeyoraAI driver assistance.
+              IVR outreach. Authorizes subsidized Gram Panchayat EV vouchers and dispatches driver assistance.
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="px-4 py-2.5 rounded-2xl bg-slate-50 border border-slate-200/80 shadow-xs text-xs">
-              <span className="text-slate-500">Active VeyoraAI Fleet: </span>
-              <strong className="text-blue-600 font-bold">12 Registered Drivers</strong>
-            </div>
+          <div
+            style={{
+              padding: '0.6rem 1rem',
+              borderRadius: '12px',
+              background: '#f8fafc',
+              border: '1px solid #e2e8f0',
+              fontSize: '0.82rem',
+              color: '#64748b',
+            }}
+          >
+            Active Fleet: <strong style={{ color: '#044e42' }}>12 Registered Drivers</strong>
           </div>
         </div>
       </section>
 
       {/* Request Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.25rem' }}>
         {requests.map((req) => {
           const isDispatched = req.status === 'Vehicle Dispatched';
           const isArrived = req.status === 'Arrived at Facility';
@@ -204,30 +257,37 @@ export default function TransportBarriers() {
           return (
             <div
               key={req.id}
-              className={`rounded-3xl transition-all p-6 border flex flex-col justify-between ${
-                isArrived
-                  ? 'bg-white/60 border-slate-200/60 opacity-75'
-                  : 'bg-white border-slate-100 shadow-xs hover:shadow-md'
-              }`}
+              style={{
+                background: '#ffffff',
+                borderRadius: '16px',
+                border: '1px solid #eef2f6',
+                boxShadow: isArrived ? 'none' : '0 2px 10px rgba(0, 0, 0, 0.03)',
+                padding: '1.5rem',
+                opacity: isArrived ? 0.75 : 1,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                transition: 'all 0.15s ease',
+              }}
             >
-              <div className="space-y-4">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
                 {/* Header Row */}
-                <div className="flex items-start justify-between gap-3">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.75rem' }}>
                   <div>
-                    <div className="flex items-center gap-2">
-                      <h3 className="text-lg font-bold text-slate-900 font-display">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: '800', color: '#0f172a' }}>
                         {req.patientName || req.patient}
                       </h3>
                       {req.patientAge && (
-                        <span className="text-xs text-slate-500">({req.patientAge}y)</span>
+                        <span style={{ fontSize: '0.78rem', color: '#64748b' }}>({req.patientAge}y)</span>
                       )}
                     </div>
-                    <div className="text-xs text-slate-500 flex items-center gap-2 mt-0.5">
-                      {req.patientPhone && <span>Phone: {req.patientPhone}</span>}
+                    <div style={{ fontSize: '0.75rem', color: '#64748b', display: 'flex', alignItems: 'center', gap: '0.4rem', marginTop: '0.2rem' }}>
+                      {req.patientPhone && <span>{req.patientPhone}</span>}
                       {req.voucherNumber && (
                         <>
-                          <span className="text-slate-300">·</span>
-                          <span className="font-mono text-[11px] text-slate-400">{req.voucherNumber}</span>
+                          <span>·</span>
+                          <span style={{ fontFamily: 'monospace', fontWeight: '600' }}>{req.voucherNumber}</span>
                         </>
                       )}
                     </div>
@@ -236,42 +296,92 @@ export default function TransportBarriers() {
                   {/* Status Badge */}
                   <div>
                     {req.status === 'Pending Dispatch' && (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-800 border border-amber-200">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#d97706] animate-pulse"></span>
+                      <span
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.35rem',
+                          padding: '0.25rem 0.65rem',
+                          borderRadius: '12px',
+                          fontSize: '0.75rem',
+                          fontWeight: '700',
+                          background: '#fffbeb',
+                          border: '1px solid #fef3c7',
+                          color: '#b45309',
+                        }}
+                      >
+                        <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#d97706' }} />
                         Pending Dispatch
                       </span>
                     )}
                     {req.status === 'Vehicle Dispatched' && (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-600 border border-blue-200">
-                        <Navigation className="w-3.5 h-3.5 text-blue-600 animate-spin" />
+                      <span
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.35rem',
+                          padding: '0.25rem 0.65rem',
+                          borderRadius: '12px',
+                          fontSize: '0.75rem',
+                          fontWeight: '700',
+                          background: '#eff6ff',
+                          border: '1px solid #dbeafe',
+                          color: '#1d4ed8',
+                        }}
+                      >
+                        <Navigation size={12} color="#1d4ed8" />
                         Dispatched
                       </span>
                     )}
                     {req.status === 'Arrived at Facility' && (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                      <span
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.35rem',
+                          padding: '0.25rem 0.65rem',
+                          borderRadius: '12px',
+                          fontSize: '0.75rem',
+                          fontWeight: '700',
+                          background: '#e8f7f2',
+                          border: '1px solid #cceee5',
+                          color: '#044e42',
+                        }}
+                      >
+                        <CheckCircle2 size={12} color="#044e42" />
                         Arrived
                       </span>
                     )}
                   </div>
                 </div>
 
-                {/* Route Pill Box */}
+                {/* Route Box */}
                 {(req.pickupVillage || req.location) && (
-                  <div className="p-3 bg-slate-50/80 rounded-2xl border border-slate-200/60 space-y-2 text-xs">
-                    <div className="flex items-start gap-2 text-slate-700">
-                      <MapPin className="w-4 h-4 text-[#d97706] flex-shrink-0 mt-0.5" />
+                  <div
+                    style={{
+                      background: '#f8fafc',
+                      borderRadius: '12px',
+                      border: '1px solid #eef2f6',
+                      padding: '0.75rem 0.85rem',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '0.4rem',
+                      fontSize: '0.78rem',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.4rem', color: '#334155' }}>
+                      <MapPin size={14} color="#044e42" style={{ flexShrink: 0, marginTop: '2px' }} />
                       <div>
-                        <span className="text-slate-400 font-medium">Pickup: </span>
-                        <span className="font-medium text-slate-800">{req.pickupVillage || req.location}</span>
+                        <span style={{ color: '#64748b', fontWeight: '500' }}>Pickup: </span>
+                        <strong style={{ color: '#0f172a' }}>{req.pickupVillage || req.location}</strong>
                       </div>
                     </div>
                     {req.destinationFacility && (
-                      <div className="flex items-start gap-2 text-slate-700">
-                        <Navigation className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.4rem', color: '#334155' }}>
+                        <Navigation size={14} color="#1d4ed8" style={{ flexShrink: 0, marginTop: '2px' }} />
                         <div>
-                          <span className="text-slate-400 font-medium">Drop: </span>
-                          <span className="font-medium text-slate-800">{req.destinationFacility}</span>
+                          <span style={{ color: '#64748b', fontWeight: '500' }}>Destination: </span>
+                          <strong style={{ color: '#0f172a' }}>{req.destinationFacility}</strong>
                         </div>
                       </div>
                     )}
@@ -279,50 +389,66 @@ export default function TransportBarriers() {
                 )}
 
                 {/* Reason & Need */}
-                <div className="space-y-2 text-xs">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', fontSize: '0.78rem' }}>
                   {req.barrierReason && (
-                    <div className="p-2.5 rounded-2xl bg-amber-500/10 border border-amber-200 text-amber-900">
-                      <strong className="text-amber-950">Barrier Description: </strong>
+                    <div
+                      style={{
+                        background: '#fffbeb',
+                        border: '1px solid #fef3c7',
+                        borderRadius: '10px',
+                        padding: '0.65rem 0.85rem',
+                        color: '#92400e',
+                      }}
+                    >
+                      <strong style={{ color: '#78350f' }}>Barrier: </strong>
                       <span>{req.barrierReason}</span>
                     </div>
                   )}
-                  <div className="flex items-center justify-between text-slate-600">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', color: '#64748b' }}>
                     {req.mobilityNeed && (
-                      <span>
-                        Need: <strong>{req.mobilityNeed}</strong>
-                      </span>
+                      <span>Need: <strong style={{ color: '#0f172a' }}>{req.mobilityNeed}</strong></span>
                     )}
                     {req.appointmentType && (
-                      <span>
-                        Goal: <strong className="text-slate-800">{req.appointmentType}</strong>
-                      </span>
+                      <span>Goal: <strong style={{ color: '#0f172a' }}>{req.appointmentType}</strong></span>
                     )}
                   </div>
                 </div>
 
                 {/* Driver Info if Dispatched */}
                 {isDispatched && (
-                  <div className="p-3 bg-blue-50/80 rounded-2xl border border-blue-200 space-y-1.5 text-xs text-blue-950">
-                    <div className="flex items-center justify-between font-bold">
-                      <span className="flex items-center gap-1.5">
-                        <Car className="w-4 h-4 text-blue-600" />
+                  <div
+                    style={{
+                      background: '#e8f7f2',
+                      border: '1px solid #cceee5',
+                      borderRadius: '12px',
+                      padding: '0.75rem 0.85rem',
+                      fontSize: '0.78rem',
+                      color: '#065f46',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '0.35rem',
+                    }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: '700' }}>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                        <Car size={14} color="#044e42" />
                         Driver Assigned: {req.driverAssigned || req.driver}
                       </span>
                       {req.dispatchedAt && (
-                        <span className="text-[11px] text-blue-800 font-normal">
+                        <span style={{ fontSize: '0.72rem', color: '#044e42', fontWeight: '500' }}>
                           {req.dispatchedAt}
                         </span>
                       )}
                     </div>
                     {req.vehicleNumber && (
-                      <div className="flex items-center justify-between text-blue-800">
+                      <div style={{ display: 'flex', justifyContent: 'space-between', color: '#044e42' }}>
                         <span>Vehicle: {req.vehicleNumber}</span>
                         {req.driverPhone && (
                           <a
                             href={`tel:${req.driverPhone}`}
-                            className="font-medium text-blue-600 hover:underline flex items-center gap-1"
+                            style={{ color: '#044e42', fontWeight: '700', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '2px' }}
                           >
-                            <PhoneCall className="w-3 h-3" /> {req.driverPhone}
+                            <PhoneCall size={11} /> {req.driverPhone}
                           </a>
                         )}
                       </div>
@@ -332,35 +458,69 @@ export default function TransportBarriers() {
               </div>
 
               {/* Bottom Actions */}
-              <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between gap-3">
-                <span className="text-[11px] text-slate-400">
+              <div
+                style={{
+                  paddingTop: '0.85rem',
+                  marginTop: '0.85rem',
+                  borderTop: '1px solid #f1f5f9',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
                   {req.assignedAsha || 'VeyoraAI Assistance Desk'}
                 </span>
 
-                <div className="flex items-center gap-2">
+                <div>
                   {!isDispatched && !isArrived && (
                     <button
                       onClick={() => handleDispatchVehicle(req.id)}
-                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-2xl text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-all shadow-xs"
+                      style={{
+                        background: '#044e42',
+                        color: '#ffffff',
+                        border: 'none',
+                        borderRadius: '10px',
+                        padding: '0.5rem 1rem',
+                        fontSize: '0.78rem',
+                        fontWeight: '700',
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.4rem',
+                        boxShadow: '0 2px 6px rgba(4, 78, 66, 0.2)',
+                      }}
                     >
-                      <Send className="w-3.5 h-3.5 text-white" />
-                      Dispatch VeyoraAI Vehicle Assistance
+                      <Send size={12} color="#ffffff" />
+                      Dispatch Vehicle
                     </button>
                   )}
 
                   {isDispatched && (
                     <button
                       onClick={() => handleMarkCompleted(req.id)}
-                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-2xl text-xs font-semibold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition-all"
+                      style={{
+                        background: '#e8f7f2',
+                        color: '#044e42',
+                        border: '1px solid #cceee5',
+                        borderRadius: '10px',
+                        padding: '0.5rem 1rem',
+                        fontSize: '0.78rem',
+                        fontWeight: '700',
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.35rem',
+                      }}
                     >
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                      Mark Arrived at Facility
+                      <CheckCircle2 size={13} color="#044e42" />
+                      Mark Arrived
                     </button>
                   )}
 
                   {isArrived && (
-                    <span className="text-xs text-emerald-700 font-medium inline-flex items-center gap-1">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                    <span style={{ fontSize: '0.75rem', color: '#044e42', fontWeight: '700', display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
+                      <CheckCircle2 size={13} color="#044e42" />
                       Transit Complete
                     </span>
                   )}
@@ -370,6 +530,7 @@ export default function TransportBarriers() {
           );
         })}
       </div>
+    </div>
     </div>
   );
 }

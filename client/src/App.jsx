@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import Navbar from './components/Navbar';
 import PatientPortal from './portals/patient/PatientPortal';
 import DoctorPortal from './portals/doctor/DoctorPortal';
 
@@ -17,7 +16,6 @@ import RulesAndAuditLog from './portals/coordinator/pages/RulesAndAuditLog';
 export default function App() {
     return (
         <Router>
-            <Navbar />
             <Routes>
                 <Route path="/" element={
                     <div style={{ padding: '2rem', textAlign: 'center' }}>
@@ -32,7 +30,7 @@ export default function App() {
                 } />
                 <Route path="/patient/*" element={<PatientPortal />} />
                 <Route path="/doctor/*" element={<DoctorPortal />} />
-                
+
                 {/* Coordinator Portal Nested Routes */}
                 <Route path="/coordinator" element={<CoordinatorLayout />}>
                     <Route index element={<OperationsOverview />} />
@@ -47,4 +45,4 @@ export default function App() {
             </Routes>
         </Router>
     );
-}
+}

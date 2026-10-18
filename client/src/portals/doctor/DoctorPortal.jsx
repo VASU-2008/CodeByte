@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import DoctorLayout from './DoctorLayout';
 import DoctorDashboard from './pages/DoctorDashboard';
+import PatientQueue from './pages/PatientQueue';
 import TokenLookupScan from './pages/TokenLookupScan';
 import ClinicalBriefing from './pages/ClinicalBriefing';
 import ConsultationNotes from './pages/ConsultationNotes';
@@ -19,7 +20,7 @@ export default function DoctorPortal() {
             <Routes>
                 <Route path="/" element={<DoctorDashboard />} />
                 <Route path="/dashboard" element={<DoctorDashboard />} />
-                <Route path="/queue" element={<DoctorDashboard />} />
+                <Route path="/queue" element={<PatientQueue />} />
                 <Route path="/scan" element={<TokenLookupScan />} />
                 <Route path="/briefing" element={<ClinicalBriefing />} />
                 <Route path="/consultation" element={<ConsultationNotes />} />

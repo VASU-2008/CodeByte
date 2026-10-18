@@ -1,260 +1,375 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
+    User, 
+    Building2, 
+    LogOut, 
     Users, 
     UserCheck, 
     Clock, 
-    Search, 
+    ArrowRight, 
+    QrCode, 
     Calendar,
-    ChevronDown
+    Stethoscope,
+    ShieldCheck,
+    CheckCircle2
 } from 'lucide-react';
+import { getPatientByToken, getLoggedInDoctor, getDoctorQueue } from '../../../api/doctorApi';
 
 /**
- * DoctorDashboard Component (Aura HealthTech Theme)
- * Exact match for "Today's Patient Queue" with 3 KPI metric cards,
- * search & filter dropdown, and structured patient queue table.
+ * DoctorDashboard Component (Minimal & Dynamic Professional Home)
+ * Doctor username, hospital affiliation, live patient queue metrics,
+ * dynamic next patient spotlight, and logout.
  */
 export default function DoctorDashboard() {
     const navigate = useNavigate();
-    const [searchTerm, setSearchTerm] = useState('');
-    const [statusFilter, setStatusFilter] = useState('ALL');
 
-    const patientQueue = [
-        { id: 1, name: 'Ravi Kumar', ageGender: '42 / M', token: 'P-001', status: 'Waiting' },
-        { id: 2, name: 'Sunita Devi', ageGender: '36 / F', token: 'P-002', status: 'In Consultation' },
-        { id: 3, name: 'Mohan Singh', ageGender: '28 / M', token: 'P-003', status: 'Waiting' },
-        { id: 4, name: 'Asha Patel', ageGender: '55 / F', token: 'P-004', status: 'Completed' },
-        { id: 5, name: 'Imran Khan', ageGender: '31 / M', token: 'P-005', status: 'Waiting' }
-    ];
+    // Dynamic Doctor Identity
+    const doctor = getLoggedInDoctor();
 
-    const filteredPatients = patientQueue.filter(p => {
-        const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                              p.token.toLowerCase().includes(searchTerm.toLowerCase());
-        if (!matchesSearch) return false;
-        if (statusFilter === 'WAITING') return p.status === 'Waiting';
-        if (statusFilter === 'IN_CONSULTATION') return p.status === 'In Consultation';
-        if (statusFilter === 'COMPLETED') return p.status === 'Completed';
-        return true;
-    });
+    // Dynamic Patient Queue & Counts
+    const [queue, setQueue] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const handlePatientAction = (patient) => {
-        localStorage.setItem('activeDoctorEncounterId', patient.token);
-        navigate(`/doctor/briefing?encounterId=${patient.token}`);
+    useEffect(() => {
+        let isMounted = true;
+        getDoctorQueue().then(data => {
+            if (isMounted) {
+                setQueue(data || []);
+                setLoading(false);
+            }
+        }).catch(err => {
+            console.error(err);
+            if (isMounted) setLoading(false);
+        });
+        return () => { isMounted = false; };
+    }, []);
+
+    const totalCount = queue.length;
+    const completedCount = queue.filter(p => p.status === 'Completed').length;
+    const inConsultCount = queue.filter(p => p.status === 'In Consultation').length;
+    const waitingCount = queue.filter(p => p.status === 'Waiting').length;
+
+    // Distinct patient resolutions for In Consultation vs Next Waiting
+    const inConsultationPatient = queue.find(p => p.status === 'In Consultation');
+    const nextWaitingPatient = queue.find(p => p.status === 'Waiting');
+
+    // Spotlight prioritizes the active in-consultation patient, then the next waiting patient
+    const spotlightData = inConsultationPatient || nextWaitingPatient || queue[0];
+    const activePatient = getPatientByToken(spotlightData ? spotlightData.token : 'P-002');
+    const isCurrentlyAttending = Boolean(inConsultationPatient && spotlightData?.token === inConsultationPatient.token);
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        navigate('/');
+    };
+
+    const cardStyle = {
+        background: 'rgba(255, 255, 255, 0.88)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+        borderRadius: '24px',
+        border: '1px solid rgba(148, 163, 184, 0.25)',
+        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.05)',
+        padding: '1.75rem',
+        marginBottom: '1.5rem'
     };
 
     return (
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-            {/* Top Queue Header Card */}
+            {/* Top Clinician Header Card */}
             <div style={{
+                ...cardStyle,
                 background: '#ffffff',
-                borderRadius: '18px',
-                padding: '1.75rem',
-                border: '1px solid #eef2f6',
-                boxShadow: '0 2px 12px rgba(0, 0, 0, 0.03)',
-                marginBottom: '1.5rem'
+                border: '1px solid rgba(148, 163, 184, 0.25)',
+                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.05)'
             }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                    <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '800', color: '#0f172a' }}>
-                        Today's Patient Queue
-                    </h2>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: '#64748b' }}>
-                        <Calendar size={15} color="#64748b" />
-                        <span>Mon, 13 Jan 2025</span>
-                    </div>
-                </div>
-
-                {/* 3 Metric Summary Cards */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem', marginBottom: '1.75rem' }}>
-                    {/* Total Patients */}
-                    <div style={{
-                        background: '#e8f7f2',
-                        borderRadius: '14px',
-                        padding: '1.25rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between'
-                    }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '1.25rem' }}>
+                    {/* Doctor Info & Hospital Affiliation */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+                        <div style={{
+                            width: '64px',
+                            height: '64px',
+                            borderRadius: '50%',
+                            background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                            color: '#ffffff',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '1.4rem',
+                            fontWeight: '800',
+                            boxShadow: '0 6px 18px rgba(37, 99, 235, 0.3)'
+                        }}>
+                            {doctor.avatar}
+                        </div>
                         <div>
-                            <div style={{ fontSize: '1.75rem', fontWeight: '800', color: '#044e42', lineHeight: '1' }}>12</div>
-                            <div style={{ fontSize: '0.82rem', fontWeight: '600', color: '#044e42', marginTop: '0.35rem' }}>Total Patients</div>
-                        </div>
-                        <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#cceee5', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#044e42' }}>
-                            <Users size={20} />
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                                <h1 style={{ margin: 0, fontSize: '1.45rem', fontWeight: '800', color: '#0f172a' }}>
+                                    {doctor.name}
+                                </h1>
+                                <span style={{
+                                    background: 'rgba(237, 242, 254, 0.9)',
+                                    color: '#2563eb',
+                                    padding: '0.2rem 0.65rem',
+                                    borderRadius: '12px',
+                                    fontSize: '0.75rem',
+                                    fontWeight: '700',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.3rem',
+                                    border: '1px solid rgba(191, 219, 254, 0.6)'
+                                }}>
+                                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 6px #10b981' }}></span>
+                                    On Duty
+                                </span>
+                            </div>
+
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#475569', fontSize: '0.88rem', marginTop: '0.35rem' }}>
+                                <Building2 size={16} color="#2563eb" />
+                                <span><strong>{doctor.hospital}</strong> · {doctor.cabin}</span>
+                            </div>
+
+                            <div style={{ fontSize: '0.78rem', color: '#64748b', marginTop: '0.2rem' }}>
+                                {doctor.department} · Reg ID: <strong>{doctor.regNumber}</strong>
+                            </div>
                         </div>
                     </div>
 
-                    {/* In Consultation */}
-                    <div style={{
-                        background: '#eff6ff',
-                        borderRadius: '14px',
-                        padding: '1.25rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between'
-                    }}>
-                        <div>
-                            <div style={{ fontSize: '1.75rem', fontWeight: '800', color: '#1d4ed8', lineHeight: '1' }}>5</div>
-                            <div style={{ fontSize: '0.82rem', fontWeight: '600', color: '#1d4ed8', marginTop: '0.35rem' }}>In Consultation</div>
-                        </div>
-                        <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#dbeafe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1d4ed8' }}>
-                            <UserCheck size={20} />
-                        </div>
-                    </div>
-
-                    {/* Waiting */}
-                    <div style={{
-                        background: '#fffbeb',
-                        borderRadius: '14px',
-                        padding: '1.25rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between'
-                    }}>
-                        <div>
-                            <div style={{ fontSize: '1.75rem', fontWeight: '800', color: '#b45309', lineHeight: '1' }}>3</div>
-                            <div style={{ fontSize: '0.82rem', fontWeight: '600', color: '#b45309', marginTop: '0.35rem' }}>Waiting</div>
-                        </div>
-                        <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#fef3c7', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#b45309' }}>
-                            <Clock size={20} />
-                        </div>
-                    </div>
-                </div>
-
-                {/* Filter and Search Row */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', marginBottom: '1.25rem' }}>
-                    <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem',
-                        background: '#f8fafc',
-                        border: '1px solid #e2e8f0',
-                        borderRadius: '10px',
-                        padding: '0.6rem 0.9rem',
-                        flex: 1
-                    }}>
-                        <Search size={16} color="#94a3b8" />
-                        <input
-                            type="text"
-                            placeholder="Search by patient name or token..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
+                    {/* Quick Log Out Button */}
+                    <div>
+                        <button
+                            onClick={handleLogout}
                             style={{
-                                border: 'none',
-                                outline: 'none',
-                                background: 'transparent',
-                                fontSize: '0.88rem',
-                                color: '#1e293b',
-                                width: '100%'
-                            }}
-                        />
-                    </div>
-
-                    <div style={{ position: 'relative' }}>
-                        <select
-                            value={statusFilter}
-                            onChange={(e) => setStatusFilter(e.target.value)}
-                            style={{
-                                appearance: 'none',
-                                background: '#f8fafc',
-                                border: '1px solid #e2e8f0',
-                                borderRadius: '10px',
-                                padding: '0.6rem 2.2rem 0.6rem 1rem',
-                                fontSize: '0.88rem',
-                                color: '#475569',
-                                fontWeight: '500',
-                                outline: 'none',
-                                cursor: 'pointer'
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.5rem',
+                                background: 'rgba(255, 255, 255, 0.9)',
+                                backdropFilter: 'blur(8px)',
+                                WebkitBackdropFilter: 'blur(8px)',
+                                border: '1.5px solid #fee2e2',
+                                color: '#ef4444',
+                                padding: '0.65rem 1.25rem',
+                                borderRadius: '14px',
+                                fontWeight: '700',
+                                fontSize: '0.86rem',
+                                cursor: 'pointer',
+                                transition: 'all 0.15s ease'
                             }}
                         >
-                            <option value="ALL">All Status</option>
-                            <option value="WAITING">Waiting</option>
-                            <option value="IN_CONSULTATION">In Consultation</option>
-                            <option value="COMPLETED">Completed</option>
-                        </select>
-                        <ChevronDown size={14} color="#94a3b8" style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
+                            <LogOut size={16} />
+                            Log Out
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {/* 3 Simple Metric Cards - Dynamic Counts (Matching Veyora Card Aesthetic) */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem', marginBottom: '1.5rem' }}>
+                <div style={{
+                    background: '#ffffff',
+                    borderRadius: '20px',
+                    border: '1px solid rgba(148, 163, 184, 0.25)',
+                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.04)',
+                    padding: '1.5rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
+                }}>
+                    <div>
+                        <div style={{ fontSize: '2rem', fontWeight: '800', color: '#0f172a', lineHeight: '1' }}>{totalCount}</div>
+                        <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#475569', marginTop: '0.4rem' }}>Total Patients Today</div>
+                        <div style={{ fontSize: '0.72rem', color: '#64748b', marginTop: '0.15rem' }}>Completed: {completedCount} · In Consultation: {inConsultCount}</div>
+                    </div>
+                    <div style={{ width: '48px', height: '48px', borderRadius: '16px', background: '#eff6ff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3b82f6' }}>
+                        <Users size={22} />
                     </div>
                 </div>
 
-                {/* Patients Table */}
-                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.88rem' }}>
-                    <thead>
-                        <tr style={{ borderBottom: '1px solid #e2e8f0', color: '#64748b', fontSize: '0.78rem', textAlign: 'left' }}>
-                            <th style={{ padding: '0.75rem 0.5rem' }}>#</th>
-                            <th style={{ padding: '0.75rem 0.5rem' }}>Patient</th>
-                            <th style={{ padding: '0.75rem 0.5rem' }}>Age/Gender</th>
-                            <th style={{ padding: '0.75rem 0.5rem' }}>Token</th>
-                            <th style={{ padding: '0.75rem 0.5rem' }}>Status</th>
-                            <th style={{ padding: '0.75rem 0.5rem', textAlign: 'right' }}>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredPatients.map((patient) => {
-                            const isWaiting = patient.status === 'Waiting';
-                            const isInConsult = patient.status === 'In Consultation';
-                            const isCompleted = patient.status === 'Completed';
+                <div style={{
+                    background: '#ffffff',
+                    borderRadius: '20px',
+                    border: '1px solid rgba(148, 163, 184, 0.25)',
+                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.04)',
+                    padding: '1.5rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
+                }}>
+                    <div>
+                        <div style={{ fontSize: '2rem', fontWeight: '800', color: '#2563eb', lineHeight: '1' }}>{inConsultCount}</div>
+                        <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#2563eb', marginTop: '0.4rem' }}>In Consultation</div>
+                        <div style={{ fontSize: '0.72rem', color: '#64748b', marginTop: '0.15rem' }}>
+                            {inConsultationPatient ? `Active: ${inConsultationPatient.name} (${inConsultationPatient.token})` : 'No Active Session'}
+                        </div>
+                    </div>
+                    <div style={{ width: '48px', height: '48px', borderRadius: '16px', background: '#ede9fe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#8b5cf6' }}>
+                        <UserCheck size={22} />
+                    </div>
+                </div>
 
-                            const statusBg = isWaiting ? '#fef3c7' : isInConsult ? '#dbeafe' : '#dcfce7';
-                            const statusColor = isWaiting ? '#b45309' : isInConsult ? '#1d4ed8' : '#15803d';
+                <div style={{
+                    background: '#ffffff',
+                    borderRadius: '20px',
+                    border: '1px solid rgba(148, 163, 184, 0.25)',
+                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.04)',
+                    padding: '1.5rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
+                }}>
+                    <div>
+                        <div style={{ fontSize: '2rem', fontWeight: '800', color: '#d97706', lineHeight: '1' }}>{waitingCount}</div>
+                        <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#d97706', marginTop: '0.4rem' }}>Waiting in Queue</div>
+                        <div style={{ fontSize: '0.72rem', color: '#64748b', marginTop: '0.15rem' }}>
+                            Next: {nextWaitingPatient ? `${nextWaitingPatient.name} (${nextWaitingPatient.token})` : 'Queue Clear'}
+                        </div>
+                    </div>
+                    <div style={{ width: '48px', height: '48px', borderRadius: '16px', background: '#fef3c7', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f59e0b' }}>
+                        <Clock size={22} />
+                    </div>
+                </div>
+            </div>
 
-                            return (
-                                <tr key={patient.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                                    <td style={{ padding: '1rem 0.5rem', color: '#64748b' }}>{patient.id}</td>
-                                    <td style={{ padding: '1rem 0.5rem', fontWeight: '700', color: '#0f172a' }}>{patient.name}</td>
-                                    <td style={{ padding: '1rem 0.5rem', color: '#64748b' }}>{patient.ageGender}</td>
-                                    <td style={{ padding: '1rem 0.5rem', color: '#475569', fontWeight: '600' }}>{patient.token}</td>
-                                    <td style={{ padding: '1rem 0.5rem' }}>
-                                        <span style={{
-                                            background: statusBg,
-                                            color: statusColor,
-                                            padding: '0.25rem 0.65rem',
-                                            borderRadius: '12px',
-                                            fontSize: '0.75rem',
-                                            fontWeight: '600',
-                                            display: 'inline-block'
-                                        }}>
-                                            {patient.status}
-                                        </span>
-                                    </td>
-                                    <td style={{ padding: '1rem 0.5rem', textAlign: 'right' }}>
-                                        {isWaiting ? (
-                                            <button
-                                                onClick={() => handlePatientAction(patient)}
-                                                style={{
-                                                    background: '#044e42',
-                                                    color: '#ffffff',
-                                                    border: 'none',
-                                                    padding: '0.45rem 1.15rem',
-                                                    borderRadius: '8px',
-                                                    fontWeight: '600',
-                                                    fontSize: '0.82rem',
-                                                    cursor: 'pointer'
-                                                }}
-                                            >
-                                                Start
-                                            </button>
-                                        ) : (
-                                            <button
-                                                onClick={() => handlePatientAction(patient)}
-                                                style={{
-                                                    background: '#ffffff',
-                                                    color: '#044e42',
-                                                    border: '1px solid #e2e8f0',
-                                                    padding: '0.45rem 1.15rem',
-                                                    borderRadius: '8px',
-                                                    fontWeight: '600',
-                                                    fontSize: '0.82rem',
-                                                    cursor: 'pointer'
-                                                }}
-                                            >
-                                                View
-                                            </button>
-                                        )}
-                                    </td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
+            {/* Next Up Patient Spotlight Card */}
+            <div style={{
+                background: '#ffffff',
+                borderRadius: '24px',
+                border: isCurrentlyAttending ? '1.5px solid #3b82f6' : '1px solid rgba(148, 163, 184, 0.25)',
+                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.05)',
+                padding: '1.75rem',
+                marginBottom: '1.5rem',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                gap: '1.25rem'
+            }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+                    <div style={{
+                        width: '56px',
+                        height: '56px',
+                        borderRadius: '16px',
+                        background: isCurrentlyAttending ? '#edf2fe' : '#f1f5f9',
+                        color: isCurrentlyAttending ? '#2563eb' : '#475569',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '1.2rem',
+                        fontWeight: '800'
+                    }}>
+                        P{activePatient.id}
+                    </div>
+                    <div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span style={{
+                                fontSize: '0.72rem',
+                                background: isCurrentlyAttending ? '#edf2fe' : '#fef3c7',
+                                color: isCurrentlyAttending ? '#2563eb' : '#b45309',
+                                padding: '0.15rem 0.55rem',
+                                borderRadius: '8px',
+                                fontWeight: '700'
+                            }}>
+                                {isCurrentlyAttending ? 'CURRENTLY IN CONSULTATION' : 'NEXT IN LINE'}
+                            </span>
+                            <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Token: <strong>{activePatient.token}</strong></span>
+                        </div>
+                        <h3 style={{ margin: '0.25rem 0 0.15rem 0', fontSize: '1.15rem', fontWeight: '800', color: '#0f172a' }}>
+                            {activePatient.name} ({activePatient.age} / {activePatient.gender})
+                        </h3>
+                        <p style={{ margin: 0, fontSize: '0.84rem', color: '#475569' }}>
+                            <strong>Chief Complaint:</strong> {activePatient.complaint}
+                        </p>
+                    </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                    <button
+                        onClick={() => {
+                            localStorage.setItem('activeDoctorEncounterId', activePatient.token);
+                            navigate(`/doctor/briefing?encounterId=${activePatient.token}`);
+                        }}
+                        style={{
+                            background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+                            color: '#ffffff',
+                            border: 'none',
+                            padding: '0.85rem 1.6rem',
+                            borderRadius: '20px',
+                            fontWeight: '600',
+                            fontSize: '0.9rem',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem',
+                            boxShadow: '0 4px 14px rgba(59, 130, 246, 0.35)',
+                            transition: 'all 0.15s ease'
+                        }}
+                    >
+                        {isCurrentlyAttending ? `Resume Consultation with ${activePatient.name}` : `Attend ${activePatient.name}`}
+                        <ArrowRight size={16} />
+                    </button>
+                </div>
+            </div>
+
+            {/* Quick Portal Navigation Links */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.25rem' }}>
+                <div 
+                    onClick={() => navigate('/doctor/queue')}
+                    style={{
+                        ...cardStyle,
+                        borderRadius: '20px',
+                        marginBottom: 0,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        transition: 'transform 0.15s ease'
+                    }}
+                >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+                        <div style={{ width: '48px', height: '48px', borderRadius: '16px', background: '#eff6ff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3b82f6' }}>
+                            <Users size={22} />
+                        </div>
+                        <div>
+                            <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: '700', color: '#0f172a' }}>
+                                View Full Patient Queue
+                            </h4>
+                            <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.8rem', color: '#64748b' }}>
+                                5 patients waiting and in consultation
+                            </p>
+                        </div>
+                    </div>
+                    <ArrowRight size={18} color="#2563eb" />
+                </div>
+
+                <div 
+                    onClick={() => navigate('/doctor/scan')}
+                    style={{
+                        ...cardStyle,
+                        borderRadius: '20px',
+                        marginBottom: 0,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        transition: 'transform 0.15s ease'
+                    }}
+                >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+                        <div style={{ width: '48px', height: '48px', borderRadius: '16px', background: '#ede9fe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#8b5cf6' }}>
+                            <QrCode size={22} />
+                        </div>
+                        <div>
+                            <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: '700', color: '#0f172a' }}>
+                                Token Lookup & QR Scan
+                            </h4>
+                            <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.8rem', color: '#64748b' }}>
+                                Live optical webcam scanner ready
+                            </p>
+                        </div>
+                    </div>
+                    <ArrowRight size={18} color="#8b5cf6" />
+                </div>
             </div>
         </div>
     );

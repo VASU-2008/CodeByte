@@ -1,26 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { 
     Pill, 
     Trash2, 
     Plus, 
     ArrowLeft, 
-    CheckCircle2 
+    User,
+    CheckCircle2,
+    Calendar,
+    Clock
 } from 'lucide-react';
-import { createPrescription } from '../../../api/doctorApi';
+import { createPrescription, getPatientByToken, getActiveSessionToken } from '../../../api/doctorApi';
 
 /**
- * PrescriptionBuilder Component (Aura HealthTech Theme)
- * Multi-drug e-Rx prescription editor with crisp white styling and pine teal accents.
+ * PrescriptionBuilder Component (Clean, Simple & Dynamic)
+ * Multi-drug e-Rx prescription editor with dynamic patient badge and dosage builder.
  */
 export default function PrescriptionBuilder() {
     const navigate = useNavigate();
     const location = useLocation();
 
     const params = new URLSearchParams(location.search);
-    const encounterId = params.get('encounterId') || 'P-001';
+    const rawToken = params.get('encounterId') || getActiveSessionToken();
+    const encounterId = rawToken.includes('/') ? rawToken.split('/').pop() : rawToken;
 
-    const [medications, setMedications] = useState([
+    const patient = getPatientByToken(encounterId);
+
+    const [medications, setMedications] = useState(() => patient.medications || [
         {
             id: 1,
             name: 'Paracetamol',
@@ -30,28 +36,14 @@ export default function PrescriptionBuilder() {
             timing: 'After Food',
             duration: '3 Days',
             instructions: 'Take after meals for fever/body ache'
-        },
-        {
-            id: 2,
-            name: 'Cetirizine',
-            strength: '10 mg',
-            form: 'Tablet',
-            frequency: '0-0-1',
-            timing: 'Bedtime',
-            duration: '5 Days',
-            instructions: 'Take 1 tablet at night for mild cough/cold'
-        },
-        {
-            id: 3,
-            name: 'Oral Rehydration Salts (ORS)',
-            strength: '1 Sachet',
-            form: 'Powder',
-            frequency: '1-1-1',
-            timing: 'With Water',
-            duration: '2 Days',
-            instructions: 'Mix in 1L clean drinking water and consume throughout day'
         }
     ]);
+
+    useEffect(() => {
+        if (patient && patient.medications) {
+            setMedications(patient.medications);
+        }
+    }, [encounterId]);
 
     const [newMed, setNewMed] = useState({
         name: '',
@@ -82,18 +74,18 @@ export default function PrescriptionBuilder() {
 
     const handleContinue = async () => {
         try {
-            await createPrescription(encounterId, { medications });
+            await createPrescription(patient.token, { medications });
         } catch (e) {
             console.error(e);
         }
-        navigate(`/doctor/plan?encounterId=${encounterId}`);
+        navigate(`/doctor/plan?encounterId=${patient.token}`);
     };
 
     const cardStyle = {
         background: '#ffffff',
-        borderRadius: '18px',
-        border: '1px solid #eef2f6',
-        boxShadow: '0 2px 12px rgba(0, 0, 0, 0.03)',
+        borderRadius: '24px',
+        border: '1px solid rgba(148, 163, 184, 0.25)',
+        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.05)',
         padding: '1.75rem',
         marginBottom: '1.5rem'
     };
@@ -101,8 +93,8 @@ export default function PrescriptionBuilder() {
     const inputStyle = {
         width: '100%',
         padding: '0.65rem 0.85rem',
-        borderRadius: '10px',
-        border: '1px solid #e2e8f0',
+        borderRadius: '14px',
+        border: '1px solid rgba(148, 163, 184, 0.25)',
         background: '#f8fafc',
         fontSize: '0.86rem',
         color: '#1e293b',
@@ -112,44 +104,63 @@ export default function PrescriptionBuilder() {
 
     return (
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-            <button
-                onClick={() => navigate(`/doctor/consultation?encounterId=${encounterId}`)}
-                style={{
+            {/* Top Bar: Back & Patient Badge at Top Right */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                <button
+                    onClick={() => navigate(`/doctor/consultation?encounterId=${patient.token}`)}
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.4rem',
+                        background: 'none',
+                        border: 'none',
+                        color: '#64748b',
+                        fontSize: '0.88rem',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        padding: 0
+                    }}
+                >
+                    <ArrowLeft size={16} />
+                    <span>Back to Consultation Notes</span>
+                </button>
+
+                {/* Patient's Name at Top Right */}
+                <div style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '0.4rem',
-                    background: 'none',
-                    border: 'none',
-                    color: '#64748b',
-                    fontSize: '0.88rem',
+                    gap: '0.55rem',
+                    background: '#e0e7ff',
+                    padding: '0.4rem 0.95rem',
+                    borderRadius: '20px',
+                    fontSize: '0.84rem',
                     fontWeight: '600',
-                    cursor: 'pointer',
-                    marginBottom: '1rem',
-                    padding: 0
-                }}
-            >
-                <ArrowLeft size={16} />
-                <span>Back to Consultation Notes</span>
-            </button>
+                    color: '#0f172a',
+                    border: '1px solid #bfdbfe'
+                }}>
+                    <User size={15} color="#2563eb" />
+                    <span>Patient: <strong>{patient.name}</strong> ({patient.age} / {patient.gender === 'Female' ? 'F' : 'M'}) · Token: <strong style={{ color: '#2563eb' }}>{patient.token}</strong></span>
+                </div>
+            </div>
 
             {/* Add Medication Card */}
             <div style={cardStyle}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
-                    <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#e6f7f2', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#044e42' }}>
+                    <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: '#edf2fe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2563eb' }}>
                         <Pill size={20} />
                     </div>
                     <div>
-                        <h2 style={{ margin: 0, fontSize: '1.2rem', fontWeight: '800', color: '#0f172a' }}>
+                        <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '800', color: '#0f172a' }}>
                             Prescription Builder
                         </h2>
                         <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b' }}>
-                            Add multi-drug items to Ravi Kumar's e-prescription
+                            Add items to {patient.name}'s digital prescription
                         </p>
                     </div>
                 </div>
 
                 <form onSubmit={handleAddMed}>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.85rem', marginBottom: '1rem' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: '0.85rem', marginBottom: '1rem' }}>
                         <div>
                             <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#475569', marginBottom: '0.3rem' }}>Medication Name</label>
                             <input
@@ -181,7 +192,7 @@ export default function PrescriptionBuilder() {
                             >
                                 <option value="1-0-1">1-0-1 (Morning & Night)</option>
                                 <option value="1-0-0">1-0-0 (Morning only)</option>
-                                <option value="1-1-1">1-1-1 (TDS: Morning, Noon, Night)</option>
+                                <option value="1-1-1">1-1-1 (Morning, Noon, Night)</option>
                                 <option value="0-0-1">0-0-1 (Night only)</option>
                                 <option value="SOS">SOS (As needed)</option>
                             </select>
@@ -220,17 +231,19 @@ export default function PrescriptionBuilder() {
                         <button
                             type="submit"
                             style={{
-                                background: '#044e42',
+                                background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
                                 color: '#ffffff',
                                 border: 'none',
-                                padding: '0.55rem 1.25rem',
-                                borderRadius: '8px',
+                                padding: '0.65rem 1.4rem',
+                                borderRadius: '16px',
                                 fontWeight: '600',
                                 fontSize: '0.84rem',
                                 cursor: 'pointer',
                                 display: 'flex',
                                 alignItems: 'center',
-                                gap: '0.35rem'
+                                gap: '0.35rem',
+                                boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)',
+                                transition: 'all 0.15s ease'
                             }}
                         >
                             <Plus size={16} />
@@ -240,10 +253,10 @@ export default function PrescriptionBuilder() {
                 </form>
             </div>
 
-            {/* Prescribed Items Table */}
+            {/* Active Prescribed Items Table */}
             <div style={cardStyle}>
                 <h3 style={{ margin: '0 0 1rem 0', fontSize: '1rem', fontWeight: '800', color: '#0f172a' }}>
-                    Current Medications ({medications.length})
+                    Prescribed Medications ({medications.length})
                 </h3>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.75rem' }}>
@@ -252,9 +265,9 @@ export default function PrescriptionBuilder() {
                             key={m.id}
                             style={{
                                 background: '#f8fafc',
-                                border: '1px solid #f1f5f9',
-                                borderRadius: '12px',
-                                padding: '0.85rem 1rem',
+                                border: '1px solid rgba(148, 163, 184, 0.25)',
+                                borderRadius: '16px',
+                                padding: '0.9rem 1.15rem',
                                 display: 'flex',
                                 justifyContent: 'space-between',
                                 alignItems: 'center'
@@ -262,10 +275,12 @@ export default function PrescriptionBuilder() {
                         >
                             <div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                    <span style={{ fontWeight: '700', color: '#0f172a', fontSize: '0.92rem' }}>{m.name}</span>
-                                    <span style={{ fontSize: '0.75rem', background: '#e6f7f2', color: '#044e42', padding: '0.1rem 0.45rem', borderRadius: '6px', fontWeight: '600' }}>{m.strength}</span>
+                                    <span style={{ fontWeight: '700', color: '#0f172a', fontSize: '0.95rem' }}>{m.name}</span>
+                                    <span style={{ fontSize: '0.75rem', background: '#e0e7ff', color: '#2563eb', padding: '0.15rem 0.5rem', borderRadius: '6px', fontWeight: '600', border: '1px solid #bfdbfe' }}>
+                                        {m.strength}
+                                    </span>
                                 </div>
-                                <div style={{ fontSize: '0.78rem', color: '#64748b', marginTop: '0.2rem' }}>
+                                <div style={{ fontSize: '0.78rem', color: '#64748b', marginTop: '0.25rem' }}>
                                     {m.frequency} · {m.timing} · {m.duration}
                                 </div>
                             </div>
@@ -289,18 +304,20 @@ export default function PrescriptionBuilder() {
                     onClick={handleContinue}
                     style={{
                         width: '100%',
-                        background: '#044e42',
+                        background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
                         color: '#ffffff',
                         border: 'none',
-                        padding: '0.9rem',
-                        borderRadius: '12px',
-                        fontWeight: '700',
-                        fontSize: '0.95rem',
+                        padding: '1rem',
+                        borderRadius: '20px',
+                        fontWeight: '600',
+                        fontSize: '0.96rem',
                         cursor: 'pointer',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        gap: '0.5rem'
+                        gap: '0.5rem',
+                        boxShadow: '0 4px 14px rgba(59, 130, 246, 0.35)',
+                        transition: 'all 0.15s ease'
                     }}
                 >
                     Continue to Plan & Follow-up →

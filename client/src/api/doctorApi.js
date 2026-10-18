@@ -1,72 +1,445 @@
 import api from './axiosInstance';
 
 /**
- * Doctor Portal API Client (Shreyas - Member 3)
- * Handles all clinical interactions: Queue, QR tokens, Briefing,
- * Consultation Notes, Vitals, Prescriptions, Follow-up plans, and Sign-off.
+ * Doctor Portal API Client (Aura HealthTech)
+ * Standardized demo data with Doctor 1, Doctor 2... and Patient 1, Patient 2...
  */
+
+/**
+ * Dynamic Patient Resolver
+ * Resolves patient data based on token (P-001, P-002, P-003, etc.)
+ */
+export const getPatientByToken = (tokenId) => {
+    const token = tokenId || localStorage.getItem('activeDoctorEncounterId') || 'P-001';
+    const cleanToken = token.includes('/') ? token.split('/').pop() : token;
+    
+    const patientsMap = {
+        'P-001': { 
+            id: 1, 
+            name: 'Patient 1', 
+            age: 42, 
+            gender: 'Male', 
+            token: 'P-001', 
+            abhaId: 'ABHA-9821-4402-9912',
+            complaint: 'Fever and body ache since 2 days. Mild dry cough, worse at night.', 
+            bp: '120/80', 
+            temp: '101.2°F', 
+            pulse: '98 bpm', 
+            spo2: '97%', 
+            weight: '68 kg', 
+            bmi: '23.5', 
+            allergy: 'Penicillin Allergy',
+            hasAllergy: true,
+            diagnosis: 'Acute Viral URTI with Reactive Myalgia',
+            findings: 'Throat congested, tonsils non-enlarged. Clear breath sounds bilaterally. Normal heart sounds. Temperature 101.2°F.',
+            notes: 'Patient presents with moderate fever, headache, and body aches for 2 days. No respiratory distress. Prescribed symptomatic antipyretics and advised oral hydration.',
+            advice: 'Warm saline gargles twice daily. Increase oral fluids (2.5L/day). Rest for 48 hours.',
+            medications: [
+                { id: 1, name: 'Paracetamol', strength: '500 mg', form: 'Tablet', frequency: '1-0-1', timing: 'After Food', duration: '3 Days', instructions: 'Take after meals for fever/body ache' },
+                { id: 2, name: 'Cetirizine', strength: '10 mg', form: 'Tablet', frequency: '0-0-1', timing: 'Bedtime', duration: '5 Days', instructions: 'Take 1 tablet at night for mild cough/cold' },
+                { id: 3, name: 'Oral Rehydration Salts (ORS)', strength: '1 Sachet', form: 'Powder', frequency: '1-1-1', timing: 'With Water', duration: '2 Days', instructions: 'Mix in 1L clean drinking water and consume throughout day' }
+            ],
+            pastVisits: [
+                { date: '05 Oct 2024', facility: 'CHC Visit', doctor: 'Doctor 2', diagnosis: 'Viral fever, symptomatic treatment', rx: 'Paracetamol 500mg, Cetirizine 10mg' },
+                { date: '10 Aug 2024', facility: 'Follow-up', doctor: 'Doctor 3', diagnosis: 'Recovered, no new complaints', rx: 'Multivitamin B-Complex' },
+                { date: '12 Jun 2024', facility: 'General OPD', doctor: 'Doctor 2', diagnosis: 'Hypertension follow-up', rx: 'Amlodipine 5mg' }
+            ]
+        },
+        'P-002': { 
+            id: 2, 
+            name: 'Patient 2', 
+            age: 36, 
+            gender: 'Female', 
+            token: 'P-002', 
+            abhaId: 'ABHA-3310-5591-1024',
+            complaint: 'Severe throbbing headache, dizziness and elevated blood pressure.', 
+            bp: '145/95', 
+            temp: '98.6°F', 
+            pulse: '84 bpm', 
+            spo2: '98%', 
+            weight: '62 kg', 
+            bmi: '22.8', 
+            allergy: 'Sulfa Drugs Allergy',
+            hasAllergy: true,
+            diagnosis: 'Essential Hypertension (Stage 2) with Cephalea',
+            findings: 'Bilateral temporal pulse bounding. Neurological screen intact. Chest clear, S1/S2 present without murmur.',
+            notes: 'Patient reports persistent headache radiating from occiput. Elevated BP 145/95. Commenced antihypertensive therapy and ordered renal function panel.',
+            advice: 'Low sodium DASH diet. Daily BP charting morning and evening. Avoid stress and heavy physical exertion.',
+            medications: [
+                { id: 1, name: 'Telmisartan', strength: '40 mg', form: 'Tablet', frequency: '1-0-0', timing: 'Morning Before Food', duration: '30 Days', instructions: 'Take regularly at 8 AM' },
+                { id: 2, name: 'Amlodipine', strength: '5 mg', form: 'Tablet', frequency: '0-0-1', timing: 'Night After Food', duration: '30 Days', instructions: 'Take at night if BP remains above 140/90' },
+                { id: 3, name: 'Paracetamol', strength: '650 mg', form: 'Tablet', frequency: 'SOS', timing: 'After Food', duration: '3 Days', instructions: 'Take only when headache is severe' }
+            ],
+            pastVisits: [
+                { date: '18 Nov 2024', facility: 'PHC North Main', doctor: 'Doctor 1', diagnosis: 'Borderline hypertension screening', rx: 'Dietary sodium reduction' },
+                { date: '04 Sep 2024', facility: 'District Hospital', doctor: 'Doctor 2', diagnosis: 'Tension-type headache review', rx: 'Analgesics & Stress counseling' }
+            ]
+        },
+        'P-003': { 
+            id: 3, 
+            name: 'Patient 3', 
+            age: 28, 
+            gender: 'Male', 
+            token: 'P-003', 
+            abhaId: 'ABHA-7744-8821-3301',
+            complaint: 'Acute stomach cramps, watery diarrhea and nausea since yesterday.', 
+            bp: '118/76', 
+            temp: '99.1°F', 
+            pulse: '76 bpm', 
+            spo2: '99%', 
+            weight: '71 kg', 
+            bmi: '24.1', 
+            allergy: 'No Known Drug Allergies (NKDA)',
+            hasAllergy: false,
+            diagnosis: 'Acute Gastroenteritis with Mild Dehydration',
+            findings: 'Abdomen soft, diffuse periumbilical tenderness, hyperactive bowel sounds. No rebound or rigidity.',
+            notes: 'Patient had outside food 24 hours ago. Vomiting subsided, mild low-grade pyrexia. Hydration maintained.',
+            advice: 'Bland BRAT diet. Strict oral rehydration therapy. Avoid dairy and spicy foods.',
+            medications: [
+                { id: 1, name: 'Oral Rehydration Salts (ORS)', strength: '2 Sachets', form: 'Powder', frequency: '1-1-1', timing: 'With Water', duration: '3 Days', instructions: 'Dissolve 1 sachet in 1 liter clean drinking water' },
+                { id: 2, name: 'Ofloxacin + Ornidazole', strength: '200/500 mg', form: 'Tablet', frequency: '1-0-1', timing: 'After Food', duration: '5 Days', instructions: 'Take after food for gut infection' },
+                { id: 3, name: 'Dicyclomine', strength: '10 mg', form: 'Tablet', frequency: 'SOS', timing: 'Before Food', duration: '2 Days', instructions: 'Take for severe abdominal cramps' }
+            ],
+            pastVisits: [
+                { date: '15 Jul 2024', facility: 'General OPD', doctor: 'Doctor 3', diagnosis: 'Food poisoning recovery', rx: 'Probiotics' }
+            ]
+        },
+        'P-004': { 
+            id: 4, 
+            name: 'Patient 4', 
+            age: 55, 
+            gender: 'Female', 
+            token: 'P-004', 
+            abhaId: 'ABHA-5522-1109-6644',
+            complaint: 'Routine diabetes and lipid profile check-up with refill prescription.', 
+            bp: '130/82', 
+            temp: '98.4°F', 
+            pulse: '72 bpm', 
+            spo2: '98%', 
+            weight: '70 kg', 
+            bmi: '26.0', 
+            allergy: 'NSAIDs Allergy',
+            hasAllergy: true,
+            diagnosis: 'Type 2 Diabetes Mellitus - Stable Glycemic Control',
+            findings: 'Pedal pulses palpable. No peripheral neuropathy or skin ulcers. Heart and lungs clear.',
+            notes: 'Fasting blood glucose 118 mg/dL, HbA1c 6.8%. Medication adherence good. Routine refill issued.',
+            advice: 'Maintain 30 mins brisk walking daily. Low glycemic index diet.',
+            medications: [
+                { id: 1, name: 'Metformin', strength: '500 mg', form: 'Tablet', frequency: '1-0-1', timing: 'After Food', duration: '30 Days', instructions: 'Take with or immediately after meals' },
+                { id: 2, name: 'Glimepiride', strength: '1 mg', form: 'Tablet', frequency: '1-0-0', timing: 'Before Breakfast', duration: '30 Days', instructions: 'Take 15 mins before breakfast' },
+                { id: 3, name: 'Atorvastatin', strength: '10 mg', form: 'Tablet', frequency: '0-0-1', timing: 'Bedtime', duration: '30 Days', instructions: 'Take at night' }
+            ],
+            pastVisits: [
+                { date: '14 Oct 2024', facility: 'PHC North Main', doctor: 'Doctor 1', diagnosis: 'Diabetes 3-month review', rx: 'Metformin 500mg' }
+            ]
+        },
+        'P-005': { 
+            id: 5, 
+            name: 'Patient 5', 
+            age: 31, 
+            gender: 'Male', 
+            token: 'P-005', 
+            abhaId: 'ABHA-6631-9988-2211',
+            complaint: 'Persistent sore throat, difficulty swallowing and mild earache since 3 days.', 
+            bp: '115/75', 
+            temp: '100.4°F', 
+            pulse: '88 bpm', 
+            spo2: '98%', 
+            weight: '65 kg', 
+            bmi: '22.1', 
+            allergy: 'No Known Drug Allergies (NKDA)',
+            hasAllergy: false,
+            diagnosis: 'Acute Streptococcal Pharyngotonsillitis',
+            findings: 'Pharyngeal erythema with bilateral follicular tonsillar exudate. Tender anterior cervical lymphadenopathy.',
+            notes: 'Patient reports severe odynophagia. Low-grade pyrexia. Started oral antibiotic and analgesics.',
+            advice: 'Warm salt water gargle 3-4 times daily. Soft warm foods. Adequate hydration.',
+            medications: [
+                { id: 1, name: 'Amoxicillin + Clavulanic Acid', strength: '625 mg', form: 'Tablet', frequency: '1-0-1', timing: 'After Food', duration: '5 Days', instructions: 'Complete full 5-day antibiotic course' },
+                { id: 2, name: 'Paracetamol', strength: '500 mg', form: 'Tablet', frequency: '1-0-1', timing: 'After Food', duration: '3 Days', instructions: 'Take for pain and throat relief' },
+                { id: 3, name: 'Chlorhexidine Mouthwash', strength: '0.2%', form: 'Liquid', frequency: '1-0-1', timing: 'After Food', duration: '5 Days', instructions: 'Gargle for 30 seconds twice daily' }
+            ],
+            pastVisits: [
+                { date: '20 Sep 2024', facility: 'CHC Visit', doctor: 'Doctor 2', diagnosis: 'Seasonal pharyngitis', rx: 'Antihistamines' }
+            ]
+        },
+        'VY-TOK-DEMO-7G8H9I': {
+            id: 6,
+            name: 'Patient 6',
+            age: 29,
+            gender: 'Female',
+            token: 'VY-TOK-DEMO-7G8H9I',
+            abhaId: 'ABHA-9821-4402-7891',
+            complaint: 'Seasonal allergic rhinitis, persistent sneezing and bilateral nasal congestion.',
+            bp: '118/76',
+            temp: '98.4°F',
+            pulse: '74 bpm',
+            spo2: '99%',
+            weight: '58 kg',
+            bmi: '21.5',
+            allergy: 'Dust & Pollen Allergy',
+            hasAllergy: true,
+            diagnosis: 'Allergic Rhinitis with Mild Sinus Congestion',
+            findings: 'Nasal mucosa pale and boggy. Bilateral turbinate hypertrophy. Chest clear to auscultation.',
+            notes: 'Patient scanned via Veyora mobile QR pass. Symptoms peak during morning hours. Started antihistamine and nasal spray.',
+            advice: 'Avoid dust and environmental allergens. Steam inhalation twice daily.',
+            medications: [
+                { id: 1, name: 'Levocetirizine', strength: '5 mg', form: 'Tablet', frequency: '0-0-1', timing: 'Bedtime', duration: '10 Days', instructions: 'Take 1 tablet at night' },
+                { id: 2, name: 'Fluticasone Propionate Nasal Spray', strength: '50 mcg', form: 'Spray', frequency: '1-0-1', timing: 'Both Nostrils', duration: '15 Days', instructions: '1 spray each nostril twice daily' },
+                { id: 3, name: 'Saline Nasal Drops', strength: '0.9%', form: 'Drops', frequency: '2-2-2', timing: 'As Needed', duration: '7 Days', instructions: 'Instill 2 drops in each nostril for congestion' }
+            ],
+            pastVisits: [
+                { date: '12 Aug 2024', facility: 'Primary Health Centre', doctor: 'Doctor 1', diagnosis: 'Seasonal allergic rhinitis', rx: 'Cetirizine 10mg' }
+            ]
+        }
+    };
+
+    // Direct match
+    if (patientsMap[cleanToken]) {
+        return patientsMap[cleanToken];
+    }
+
+    // Normalized match (e.g., "1" -> "P-001", "P-1" -> "P-001")
+    const numOnly = cleanToken.replace(/\D/g, '');
+    if (numOnly) {
+        const paddedKey = `P-00${parseInt(numOnly, 10)}`;
+        if (patientsMap[paddedKey]) {
+            return patientsMap[paddedKey];
+        }
+    }
+
+    // Dynamic resolution for arbitrary / newly registered tokens
+    let hash = 0;
+    for (let i = 0; i < cleanToken.length; i++) {
+        hash = (hash << 5) - hash + cleanToken.charCodeAt(i);
+        hash |= 0;
+    }
+    const derivedNum = numOnly ? parseInt(numOnly, 10) : (Math.abs(hash) % 15 + 7);
+    const isFemale = derivedNum % 2 === 0;
+
+    const complaintsBank = [
+        'Persistent knee joint stiffness and mild swelling, exacerbated after morning walks.',
+        'Spasmodic dry cough and throat irritation without wheeze for 4 days.',
+        'Postprandial epigastric burning, acid reflux and occasional dyspepsia.',
+        'Intermittent tension headaches, neck muscle tightness and blurred near vision.',
+        'Pruritic erythematous rash across bilateral forearms following outdoor work.'
+    ];
+
+    const diagnosisBank = [
+        'Early Osteoarthritis of Bilateral Knees',
+        'Post-Infectious Dry Bronchitis',
+        'Gastroesophageal Reflux Disease (GERD)',
+        'Cervicogenic Tension Headache',
+        'Contact Dermatitis'
+    ];
+
+    const pickIdx = derivedNum % complaintsBank.length;
+
+    return {
+        id: derivedNum,
+        name: `Patient ${derivedNum}`,
+        age: 24 + ((derivedNum * 5) % 46),
+        gender: isFemale ? 'Female' : 'Male',
+        token: cleanToken,
+        abhaId: `ABHA-9821-${1000 + (derivedNum * 137) % 8999}-${cleanToken.replace(/[^0-9]/g, '').slice(-4) || '5501'}`,
+        complaint: complaintsBank[pickIdx],
+        bp: `${114 + (derivedNum * 3) % 24}/${74 + (derivedNum * 2) % 18}`,
+        temp: `${98.2 + ((derivedNum % 4) * 0.4).toFixed(1)}°F`,
+        pulse: `${72 + (derivedNum * 3) % 20} bpm`,
+        spo2: `${97 + (derivedNum % 3)}%`,
+        weight: `${58 + (derivedNum * 2) % 26} kg`,
+        bmi: `${21.5 + ((derivedNum % 6) * 0.7).toFixed(1)}`,
+        allergy: isFemale ? 'No Known Drug Allergies (NKDA)' : 'Ciprofloxacin Allergy',
+        hasAllergy: !isFemale,
+        diagnosis: diagnosisBank[pickIdx],
+        findings: 'Systemic vitals reviewed. Heart and lung sounds within expected limits. Clinical signs localized to presenting complaint.',
+        notes: `Patient assessed for ${complaintsBank[pickIdx].toLowerCase()} Conservative management initiated.`,
+        advice: 'Maintain balanced hydration, adequate rest, and report if symptoms persist past 5 days.',
+        medications: [
+            { id: 1, name: 'Paracetamol', strength: '650 mg', form: 'Tablet', frequency: 'SOS', timing: 'After Food', duration: '3 Days', instructions: 'Take for symptom relief' },
+            { id: 2, name: 'Pantoprazole', strength: '40 mg', form: 'Tablet', frequency: '1-0-0', timing: 'Morning Empty Stomach', duration: '7 Days', instructions: 'Take 30 mins before breakfast' }
+        ],
+        pastVisits: [
+            { date: '10 Jan 2025', facility: 'Primary Health Centre', doctor: 'Doctor 1', diagnosis: 'Initial consultation', rx: 'Symptomatic therapy' }
+        ]
+    };
+};
+
+/**
+ * Return all demo patients for quick selection and queue display
+ */
+export const getAllDemoPatients = () => {
+    return [
+        { id: 1, token: 'P-001', name: 'Patient 1', ageGender: '42 / M', status: 'Waiting', priority: 'Moderate', complaint: 'Fever and body ache since 2 days' },
+        { id: 2, token: 'P-002', name: 'Patient 2', ageGender: '36 / F', status: 'In Consultation', priority: 'High', complaint: 'Severe headache and elevated BP' },
+        { id: 3, token: 'P-003', name: 'Patient 3', ageGender: '28 / M', status: 'Waiting', priority: 'Routine', complaint: 'Acute stomach cramps and nausea' },
+        { id: 4, token: 'P-004', name: 'Patient 4', ageGender: '55 / F', status: 'Completed', priority: 'Routine', complaint: 'Diabetes check-up & refill' },
+        { id: 5, token: 'P-005', name: 'Patient 5', ageGender: '31 / M', status: 'Waiting', priority: 'Routine', complaint: 'Sore throat and mild cough' },
+        { id: 6, token: 'VY-TOK-DEMO-7G8H9I', name: 'Patient 6', ageGender: '29 / F', status: 'Waiting', priority: 'Routine', complaint: 'Seasonal allergic rhinitis' }
+    ];
+};
+
+/**
+ * Resolve the active session patient token (prioritizing active consultation or storage)
+ */
+export const getActiveSessionToken = () => {
+    try {
+        const stored = localStorage.getItem('activeDoctorEncounterId');
+        if (stored && stored.trim()) return stored.trim();
+    } catch (e) {
+        // ignore
+    }
+    return 'P-002'; // Patient 2 is actively in consultation in the current session
+};
+
+// 0. Dynamic Doctor Identity Resolver
+export const getLoggedInDoctor = () => {
+    try {
+        const userStr = localStorage.getItem('user');
+        if (userStr) {
+            const user = JSON.parse(userStr);
+            if (user && (user.name || user.role === 'doctor')) {
+                const name = user.name || 'Doctor 1';
+                const idMatch = name.match(/\d+/);
+                const docNumber = idMatch ? idMatch[0] : '1';
+                return {
+                    name: name.startsWith('Doctor') ? name : `Doctor ${docNumber}`,
+                    cabin: user.cabin || user.room || `OPD Cabin #${100 + parseInt(docNumber, 10)}`,
+                    hospital: user.hospital || 'Primary Health Centre (PHC North Main)',
+                    department: user.department || 'Department of General Medicine',
+                    regNumber: user.regNumber || `MCI-9844${docNumber}`,
+                    avatar: `D${docNumber}`
+                };
+            }
+        }
+    } catch (e) {
+        console.warn('[doctorApi] Could not parse user session:', e);
+    }
+
+    return {
+        name: 'Doctor 1',
+        cabin: 'OPD Cabin #104',
+        hospital: 'Primary Health Centre (PHC North Main)',
+        department: 'Department of General Medicine',
+        regNumber: 'MCI-98442',
+        avatar: 'D1'
+    };
+};
 
 // 1. Retrieve the doctor's patient queue
 export const getDoctorQueue = async (facilityId = 'PHC_MAIN') => {
+    let rawList = [];
     try {
         const response = await api.get('/doctor/queue', {
             params: { facilityId }
         });
-        return response.data;
+        rawList = response.data;
     } catch (error) {
         console.warn('[doctorApi] getDoctorQueue error, returning mock queue for dev:', error.message);
-        // Fallback demo queue so UI is immediately testable
-        return [
+        rawList = [
             {
+                id: 1,
                 _id: 'enc-101',
-                token_id: 'TKN-8821',
-                patient_id: {
-                    _id: 'pat-001',
-                    name: 'Ramesh Kumar',
-                    age: 54,
-                    gender: 'Male',
-                    phone: '+91 98765 43210'
-                },
-                chief_complaint: 'Severe chest discomfort and shortness of breath for 2 days',
-                status: 'IN_QUEUE',
-                priority: 'URGENT',
-                triage_result: 'PHC_PRIORITY',
+                token: 'P-001',
+                token_id: 'P-001',
+                name: 'Patient 1',
+                ageGender: '42 / M',
+                complaint: 'Fever and body ache since 2 days. Mild cough.',
+                chief_complaint: 'Fever and body ache since 2 days. Mild cough.',
+                status: 'Waiting',
+                priority: 'Moderate',
                 createdAt: new Date().toISOString()
             },
             {
+                id: 2,
                 _id: 'enc-102',
-                token_id: 'TKN-3342',
-                patient_id: {
-                    _id: 'pat-002',
-                    name: 'Sunita Devi',
-                    age: 42,
-                    gender: 'Female',
-                    phone: '+91 91234 56789'
-                },
-                chief_complaint: 'Chronic joint pain in both knees and morning stiffness',
-                status: 'IN_QUEUE',
-                priority: 'ROUTINE',
-                triage_result: 'PHC_GENERAL',
+                token: 'P-002',
+                token_id: 'P-002',
+                name: 'Patient 2',
+                ageGender: '36 / F',
+                complaint: 'Severe headache and elevated blood pressure.',
+                chief_complaint: 'Severe headache and elevated blood pressure.',
+                status: 'In Consultation',
+                priority: 'High',
                 createdAt: new Date(Date.now() - 3600000).toISOString()
             },
             {
+                id: 3,
                 _id: 'enc-103',
-                token_id: 'TKN-7719',
-                patient_id: {
-                    _id: 'pat-003',
-                    name: 'Aakash Verma',
-                    age: 29,
-                    gender: 'Male',
-                    phone: '+91 94567 12340'
-                },
-                chief_complaint: 'High grade fever with chills and persistent headache',
-                status: 'IN_CONSULTATION',
-                priority: 'MODERATE',
-                triage_result: 'PHC_GENERAL',
+                token: 'P-003',
+                token_id: 'P-003',
+                name: 'Patient 3',
+                ageGender: '28 / M',
+                complaint: 'Acute stomach cramps and mild vomiting since yesterday.',
+                chief_complaint: 'Acute stomach cramps and mild vomiting since yesterday.',
+                status: 'Waiting',
+                priority: 'Routine',
                 createdAt: new Date(Date.now() - 7200000).toISOString()
+            },
+            {
+                id: 4,
+                _id: 'enc-104',
+                token: 'P-004',
+                token_id: 'P-004',
+                name: 'Patient 4',
+                ageGender: '55 / F',
+                complaint: 'Routine diabetes check-up and refill prescription.',
+                chief_complaint: 'Routine diabetes check-up and refill prescription.',
+                status: 'Completed',
+                priority: 'Routine',
+                createdAt: new Date(Date.now() - 10800000).toISOString()
+            },
+            {
+                id: 5,
+                _id: 'enc-105',
+                token: 'P-005',
+                token_id: 'P-005',
+                name: 'Patient 5',
+                ageGender: '31 / M',
+                complaint: 'Persistent sore throat and mild difficulty swallowing.',
+                chief_complaint: 'Persistent sore throat and mild difficulty swallowing.',
+                status: 'Waiting',
+                priority: 'Routine',
+                createdAt: new Date(Date.now() - 14400000).toISOString()
+            },
+            {
+                id: 6,
+                _id: 'enc-106',
+                token: 'VY-TOK-DEMO-7G8H9I',
+                token_id: 'VY-TOK-DEMO-7G8H9I',
+                name: 'Patient 6',
+                ageGender: '29 / F',
+                complaint: 'Seasonal allergic rhinitis and nasal congestion.',
+                chief_complaint: 'Seasonal allergic rhinitis and nasal congestion.',
+                status: 'Waiting',
+                priority: 'Routine',
+                createdAt: new Date(Date.now() - 1800000).toISOString()
             }
         ];
     }
+
+    // Standardize all patient objects so components receive consistent fields
+    return (Array.isArray(rawList) ? rawList : []).map((item, index) => {
+        const id = item.id || index + 1;
+        const token = item.token || item.token_id || `P-00${id}`;
+        const patientName = item.name || item.patient_id?.name || (token.startsWith('P-') ? `Patient ${token.replace(/\D/g, '').replace(/^0+/, '')}` : `Patient ${id}`);
+        const ageGender = item.ageGender || (item.patient_id ? `${item.patient_id.age || '40'} / ${item.patient_id.gender?.charAt(0) || 'M'}` : '40 / M');
+        const complaint = item.complaint || item.chief_complaint || 'Routine clinical consultation.';
+        const status = item.status || 'Waiting';
+        const priority = item.priority || 'Routine';
+
+        return {
+            ...item,
+            id,
+            token,
+            token_id: token,
+            name: patientName,
+            ageGender,
+            complaint,
+            chief_complaint: complaint,
+            status,
+            priority
+        };
+    });
 };
 
 // 2. Look up authorized encounters using QR tokens
@@ -76,97 +449,79 @@ export const lookupEncounterByToken = async (tokenId) => {
         return response.data;
     } catch (error) {
         console.warn(`[doctorApi] lookupEncounterByToken fallback for "${tokenId}":`, error.message);
+        const p = getPatientByToken(tokenId);
         return {
-            _id: 'enc-101',
-            token_id: tokenId,
+            _id: `enc-${p.id}`,
+            token_id: p.token,
             patient_id: {
-                _id: 'pat-001',
-                name: 'Ramesh Kumar',
-                age: 54,
-                gender: 'Male',
-                phone: '+91 98765 43210',
+                _id: `pat-00${p.id}`,
+                name: p.name,
+                age: p.age,
+                gender: p.gender,
+                phone: `+91 98765 0000${p.id}`,
                 bloodGroup: 'B+',
-                allergies: ['Penicillin', 'Sulfa drugs'],
-                chronicConditions: ['Hypertension', 'Type 2 Diabetes']
+                allergies: [p.allergy],
+                chronicConditions: ['Hypertension']
             },
-            chief_complaint: 'Severe chest discomfort and shortness of breath for 2 days',
-            status: 'IN_QUEUE',
+            chief_complaint: p.complaint,
+            status: 'Waiting',
             is_signed_off: false,
             createdAt: new Date().toISOString()
         };
     }
 };
 
-// 3. Retrieve clinical briefing information (vitals, allergies, past visits)
+// 3. Retrieve clinical briefing information
 export const getClinicalBriefing = async (encounterId) => {
     try {
         const response = await api.get(`/doctor/encounter/${encounterId}/briefing`);
         return response.data;
     } catch (error) {
         console.warn(`[doctorApi] getClinicalBriefing fallback for "${encounterId}":`, error.message);
+        const p = getPatientByToken(encounterId);
         return {
-            encounterId,
+            encounterId: p.token,
             patient: {
-                _id: 'pat-001',
-                name: 'Ramesh Kumar',
-                age: 54,
-                gender: 'Male',
-                abhaId: 'ABHA-9821-4402-9912',
+                _id: `pat-00${p.id}`,
+                name: p.name,
+                age: p.age,
+                gender: p.gender,
+                abhaId: p.abhaId,
                 bloodGroup: 'B+',
-                allergies: ['Penicillin', 'Sulfa drugs'],
-                chronicConditions: ['Hypertension', 'Type 2 Diabetes'],
-                languagePreference: 'Hindi'
+                allergies: [p.allergy],
+                chronicConditions: [],
+                languagePreference: 'Hindi / English'
             },
             currentEncounter: {
-                chief_complaint: 'Severe chest discomfort and shortness of breath for 2 days',
-                triage_result: 'PHC_PRIORITY',
-                token_id: 'TKN-8821',
-                intakeSummary: 'Patient reports radiating ache to left arm upon exertion. Takes Amlodipine 5mg irregularly.'
+                chief_complaint: p.complaint,
+                triage_result: 'PHC_GENERAL',
+                token_id: p.token,
+                intakeSummary: `Patient reports: ${p.complaint}`
             },
             vitals: {
-                bloodPressureSys: 148,
-                bloodPressureDia: 92,
-                heartRate: 88,
-                temperature: 98.6,
-                spo2: 96,
-                respiratoryRate: 18,
-                weightKg: 74,
+                bloodPressure: p.bp,
+                temperature: p.temp,
+                pulse: p.pulse,
+                spo2: p.spo2,
+                weight: p.weight,
+                bmi: p.bmi,
                 recordedAt: new Date().toISOString()
             },
-            pastVisits: [
-                {
-                    encounterId: 'enc-090',
-                    date: '2026-08-14',
-                    facility: 'PHC North',
-                    diagnosis: 'Essential Hypertension - Uncontrolled',
-                    prescribedBy: 'Dr. Neha Sharma',
-                    medicines: ['Amlodipine 5mg (1-0-0)', 'Metformin 500mg (1-0-1)']
-                },
-                {
-                    encounterId: 'enc-062',
-                    date: '2026-03-22',
-                    facility: 'District Hospital',
-                    diagnosis: 'Routine Health Checkup',
-                    prescribedBy: 'Dr. Rajesh Patel',
-                    medicines: ['Multivitamin (0-1-0)']
-                }
-            ]
+            pastVisits: p.pastVisits
         };
     }
 };
 
-// 4. Save consultation notes and clinical findings
+// 4. Save consultation notes
 export const saveConsultationNotes = async (encounterId, notesData) => {
     try {
         const response = await api.post(`/doctor/encounter/${encounterId}/notes`, notesData);
         return response.data;
     } catch (error) {
-        console.warn(`[doctorApi] saveConsultationNotes fallback for "${encounterId}":`, error.message);
         return {
             success: true,
-            message: 'Consultation notes recorded successfully',
+            message: 'Consultation notes recorded',
             encounterId,
-            savedAt: new Date().toISOString(),
             ...notesData
         };
     }
@@ -178,13 +533,11 @@ export const saveVitals = async (encounterId, vitalsData) => {
         const response = await api.post(`/doctor/encounter/${encounterId}/vitals`, vitalsData);
         return response.data;
     } catch (error) {
-        console.warn(`[doctorApi] saveVitals fallback for "${encounterId}":`, error.message);
         return {
             success: true,
-            message: 'Vitals recorded successfully',
+            message: 'Vitals recorded',
             encounterId,
-            vitals: vitalsData,
-            savedAt: new Date().toISOString()
+            vitals: vitalsData
         };
     }
 };
@@ -195,32 +548,27 @@ export const createPrescription = async (encounterId, prescriptionData) => {
         const response = await api.post(`/doctor/encounter/${encounterId}/prescription`, prescriptionData);
         return response.data;
     } catch (error) {
-        console.warn(`[doctorApi] createPrescription fallback for "${encounterId}":`, error.message);
         return {
             success: true,
-            message: 'Prescription recorded successfully',
+            message: 'Prescription recorded',
             encounterId,
             prescriptionId: 'rx-' + Math.random().toString(36).substring(2, 9),
-            medications: prescriptionData.medications || [],
-            createdAt: new Date().toISOString()
+            ...prescriptionData
         };
     }
 };
 
-// 7. Record follow-up schedule and instructions
+// 7. Record follow-up schedule
 export const recordFollowupPlan = async (encounterId, followupData) => {
     try {
         const response = await api.post(`/doctor/encounter/${encounterId}/followup`, followupData);
         return response.data;
     } catch (error) {
-        console.warn(`[doctorApi] recordFollowupPlan fallback for "${encounterId}":`, error.message);
         return {
             success: true,
-            message: 'Follow-up plan scheduled',
+            message: 'Follow-up plan recorded',
             encounterId,
-            followupPlanId: 'flw-' + Math.random().toString(36).substring(2, 9),
-            ...followupData,
-            createdAt: new Date().toISOString()
+            ...followupData
         };
     }
 };
@@ -231,19 +579,22 @@ export const signOffEncounter = async (encounterId, signOffData) => {
         const response = await api.post(`/doctor/encounter/${encounterId}/sign-off`, signOffData);
         return response.data;
     } catch (error) {
-        console.warn(`[doctorApi] signOffEncounter fallback for "${encounterId}":`, error.message);
         return {
             success: true,
-            message: 'Encounter successfully locked and signed off',
+            message: 'Encounter successfully locked',
             encounterId,
             is_signed_off: true,
-            signed_at: new Date().toISOString(),
-            clinician_id: signOffData?.clinician_id || 'DOC-CURRENT'
+            clinician_id: signOffData?.doctorName || 'Doctor 1',
+            signed_at: new Date().toISOString()
         };
     }
 };
 
 export default {
+    getPatientByToken,
+    getActiveSessionToken,
+    getAllDemoPatients,
+    getLoggedInDoctor,
     getDoctorQueue,
     lookupEncounterByToken,
     getClinicalBriefing,
